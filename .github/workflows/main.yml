@@ -1,31 +1,28 @@
-# .github/workflows/main.yml
-
 name: Deploy to Netlify
 
 on:
   push:
     branches:
-      - main  # أو غيّرها حسب الفرع الذي تعمل عليه
+      - main  # غيّرها إن كنت تستخدم فرعًا آخر
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - name: Install Node
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Install Netlify CLI
         run: npm install -g netlify-cli
 
       - name: Deploy to Netlify
-        run: |
-          netlify deploy --dir=public --functions=netlify/functions --prod
+        run: netlify deploy --auth $NETLIFY_AUTH_TOKEN --site $NETLIFY_SITE_ID --dir=public --functions=netlify/functions --prod
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
