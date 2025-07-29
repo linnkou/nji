@@ -1,0 +1,808 @@
+﻿<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>محول وحدات القياس - تطبيق تعليمي</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+
+<style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .lesson-gradient {
+            background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .animate-bounce-slow {
+            animation: bounce 2s infinite;
+        }
+        
+        .main-input {
+            padding: 20px 24px;
+            font-size: 20px;
+            font-weight: 600;
+            border-radius: 16px;
+            border: 3px solid #e5e7eb;
+            background: white;
+            color: #374151;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .main-input:focus {
+            outline: none;
+            border-color: #5D5CDE;
+            box-shadow: 0 0 0 4px rgba(93, 92, 222, 0.1);
+            transform: scale(1.02);
+        }
+        
+        .convert-button {
+            padding: 20px 40px;
+            font-size: 22px;
+            font-weight: 800;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .convert-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(16, 185, 129, 0.5);
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+        
+        .convert-button:active {
+            transform: translateY(-1px);
+        }
+        
+        table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            margin: 25px 0; 
+            background-color: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            table {
+                overflow-x: auto;
+                display: block;
+                white-space: nowrap;
+                touch-action: pan-x;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            table tbody, table thead {
+                display: table;
+                width: 100%;
+                min-width: 800px;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                touch-action: pan-x;
+                border-radius: 12px;
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            }
+            
+            .table-container::-webkit-scrollbar {
+                height: 8px;
+            }
+            
+            .table-container::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 4px;
+            }
+            
+            .table-container::-webkit-scrollbar-thumb {
+                background: #888;
+                border-radius: 4px;
+            }
+            
+            .table-container::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+        }
+        
+        th, td {
+            border: 1px solid #e5e7eb;
+            padding: 12px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            min-width: 60px;
+            height: 50px;
+        }
+        
+        /* تحسين خط الوحدات */
+        th {
+            font-size: 20px;
+            font-weight: 800;
+            color: #374151;
+        }
+        
+        td {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        /* الوحدات الفرعية في الجداول */
+        tr:nth-child(2) td {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        
+        th[colspan] {
+            background-color: #fef3c7;
+            font-weight: 800;
+            font-size: 22px;
+            color: #92400e;
+        }
+        
+        /* عناوين الجداول بألوان مختلفة */
+        .length-caption {
+            caption-side: top;
+            font-weight: 800;
+            margin-bottom: 15px;
+            font-size: 20px;
+            color: #1e40af;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            padding: 16px;
+            border-radius: 12px;
+            border: 2px solid #3b82f6;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .area-caption {
+            caption-side: top;
+            font-weight: 800;
+            margin-bottom: 15px;
+            font-size: 20px;
+            color: #059669;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            padding: 16px;
+            border-radius: 12px;
+            border: 2px solid #10b981;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .volume-caption {
+            caption-side: top;
+            font-weight: 800;
+            margin-bottom: 15px;
+            font-size: 20px;
+            color: #c2410c;
+            background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+            padding: 16px;
+            border-radius: 12px;
+            border: 2px solid #ea580c;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* منطقة الحل */
+        .solution-area {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 16px;
+            border: 2px solid #0ea5e9;
+            display: none;
+        }
+        
+        .solution-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0c4a6e;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .solution-content {
+            font-size: 20px;
+            font-weight: 600;
+            color: #075985;
+            text-align: center;
+            direction: ltr;
+            font-family: 'Courier New', monospace;
+        }
+
+        .conversion-tabs {
+            display: flex;
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 4px;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            gap: 4px;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 16px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: max(16px, 1rem);
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-button.length.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+        
+        .tab-button.area.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+        
+        .tab-button.volume.active {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        }
+
+        .tab-button:hover:not(.active) {
+            background: #e2e8f0;
+            color: #475569;
+            transform: translateY(-2px);
+        }
+
+        .unit-group {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        .unit-group.active {
+            border-color: #5D5CDE;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+        }
+
+        select, input:not(.main-input) {
+            padding: 12px 16px;
+            font-size: max(16px, 1rem);
+            margin: 8px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            background: white;
+            color: #374151;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        select:focus, input:not(.main-input):focus {
+            outline: none;
+            border-color: #5D5CDE;
+            box-shadow: 0 0 0 3px rgba(93, 92, 222, 0.1);
+        }
+
+        button:not(.convert-button):not(.decimal-btn) {
+            background: linear-gradient(135deg, #5D5CDE 0%, #8B5CF6 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: max(16px, 1rem);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(93, 92, 222, 0.3);
+        }
+
+        button:not(.convert-button):not(.decimal-btn):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(93, 92, 222, 0.4);
+        }
+
+        .decimal-btn {
+            background: linear-gradient(135deg, #06D6A0 0%, #059669 100%);
+            padding: 16px 20px;
+            font-size: 20px;
+            font-weight: 700;
+            min-width: 60px;
+            border-radius: 12px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(6, 214, 160, 0.3);
+        }
+
+        .decimal-btn:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            box-shadow: 0 6px 16px rgba(6, 214, 160, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .digit {
+            font-weight: 900;
+            font-size: 22px;
+            opacity: 0;
+            animation: fadeIn 0.8s forwards;
+            color: #1f2937;
+        }
+        
+        .digit.delay-1 { animation-delay: 0.5s; }
+        .digit.delay-2 { animation-delay: 1s; }
+        .digit.delay-3 { animation-delay: 1.5s; }
+        .digit.delay-4 { animation-delay: 2s; }
+        .digit.delay-5 { animation-delay: 2.5s; }
+        .digit.delay-6 { animation-delay: 3s; }
+        .digit.delay-7 { animation-delay: 3.5s; }
+        .digit.delay-8 { animation-delay: 4s; }
+        .digit.delay-9 { animation-delay: 4.5s; }
+        .digit.delay-10 { animation-delay: 5s; }
+        .digit.delay-11 { animation-delay: 5.5s; }
+        .digit.delay-12 { animation-delay: 6s; }
+        .digit.delay-13 { animation-delay: 6.5s; }
+        .digit.delay-14 { animation-delay: 7s; }
+        .digit.delay-15 { animation-delay: 7.5s; }
+
+        .decimal {
+            color: #ef4444;
+            font-weight: 900;
+            font-size: 28px;
+            animation: blink 1s 2s forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes blink {
+            0% { opacity: 0; }
+            50% { opacity: 1; color: #f59e0b; }
+            100% { opacity: 1; color: #ef4444; }
+        }
+
+        .converter-icon {
+            font-size: 5rem;
+            color: #06D6A0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .scroll-smooth {
+            scroll-behavior: smooth;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+                color: #ffffff;
+            }
+            
+            .main-input {
+                background-color: #4b5563;
+                color: #ffffff;
+                border-color: #6b7280;
+            }
+            
+            .input-panel, table {
+                background-color: #374151;
+                color: #ffffff;
+            }
+            
+            th, td {
+                border-color: #4b5563;
+                background-color: #374151;
+                color: #f9fafb;
+            }
+            
+            th[colspan] {
+                background-color: #451a03;
+                color: #fbbf24;
+            }
+            
+            .length-caption {
+                background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+                color: #bfdbfe;
+                border-color: #2563eb;
+            }
+            
+            .area-caption {
+                background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+                color: #a7f3d0;
+                border-color: #059669;
+            }
+            
+            .volume-caption {
+                background: linear-gradient(135deg, #9a3412 0%, #c2410c 100%);
+                color: #fdba74;
+                border-color: #ea580c;
+            }
+            
+            .solution-area {
+                background: linear-gradient(135deg, #0c4a6e 0%, #075985 100%);
+                border-color: #0ea5e9;
+            }
+            
+            .solution-title {
+                color: #bae6fd;
+            }
+            
+            .solution-content {
+                color: #7dd3fc;
+            }
+            
+            select, input:not(.main-input) {
+                background-color: #4b5563;
+                color: #ffffff;
+                border-color: #6b7280;
+            }
+            
+            .conversion-tabs {
+                background: #374151;
+            }
+            
+            .tab-button {
+                color: #9ca3af;
+            }
+            
+            .tab-button:hover:not(.active) {
+                background: #4b5563;
+                color: #d1d5db;
+            }
+            
+            .unit-group {
+                background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+                border-color: #6b7280;
+            }
+            
+            .unit-group.active {
+                border-color: #8B5CF6;
+                background: linear-gradient(135deg, #312e81 0%, #3730a3 100%);
+            }
+            
+            .digit {
+                color: #f9fafb;
+            }
+            
+            .table-container::-webkit-scrollbar-track {
+                background: #374151;
+            }
+            
+            .table-container::-webkit-scrollbar-thumb {
+                background: #6b7280;
+            }
+            
+            .table-container::-webkit-scrollbar-thumb:hover {
+                background: #9ca3af;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-blue-900 min-h-screen scroll-smooth">
+<!-- Header -->
+<div class="lesson-gradient text-white py-12 px-4">
+<div class="max-w-6xl mx-auto text-center">
+<!-- أيقونة المحول -->
+<div class="converter-icon mb-8">🔄</div>
+<!-- العنوان الرئيسي -->
+<h1 class="text-4xl md:text-6xl font-black mb-6 text-white">
+                محول وحدات القياس
+            </h1>
+<div class="text-xl md:text-2xl opacity-90 mb-4">
+                🏗️ إجراء تحويلات لوحدات الأطوال والمساحات والحجوم
+            </div>
+<p class="text-lg opacity-80">
+                تطبيق تعليمي تفاعلي لتعلم تحويل الوحدات بطريقة بصرية ممتعة
+            </p>
+</div>
+</div>
+<div class="max-w-6xl mx-auto px-4 py-8">
+<!-- لوحة التحكم الرئيسية -->
+<div class="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-2xl mb-8">
+<h2 class="text-3xl font-bold text-center mb-8 text-gray-800 dark:text-white">
+                🎛️ لوحة التحكم
+            </h2>
+<!-- إدخال القيمة -->
+<div class="mb-8">
+<div class="bg-blue-50 dark:bg-blue-900/30 rounded-2xl p-8">
+<label class="block text-xl font-semibold text-blue-700 dark:text-blue-300 mb-6 text-center">
+                        🔢 أدخل القيمة المراد تحويلها
+                    </label>
+<div class="flex items-center gap-6 flex-wrap justify-center">
+<input class="main-input flex-1 min-w-64 max-w-md" id="inputValue" placeholder="مثال: 55.45 أو 123.789" step="any" type="number"/>
+<button class="decimal-btn" onclick="addDecimalPoint()">.</button>
+<button class="convert-button" onclick="convert()">🚀 تحويل الآن</button>
+</div>
+</div>
+</div>
+<!-- أزرار التنقل -->
+<div class="conversion-tabs">
+<button class="tab-button length active" data-type="length" onclick="switchConversionType('length')">
+                    📏 الأطوال
+                </button>
+<button class="tab-button area" data-type="area" onclick="switchConversionType('area')">
+                    📐 المساحات
+                </button>
+<button class="tab-button volume" data-type="volume" onclick="switchConversionType('volume')">
+                    🧊 الحجوم والسعة
+                </button>
+</div>
+<!-- وحدات الطول -->
+<div class="unit-group active" id="lengthUnits">
+<h3 class="text-xl font-bold text-center mb-6 text-gray-700 dark:text-gray-300">
+                    📏 تحويل وحدات الطول
+                </h3>
+<div class="grid md:grid-cols-2 gap-6">
+<div>
+<label class="block text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">من:</label>
+<select class="w-full" id="fromLengthUnit">
+<option value="mm">ميليمتر (mm)</option>
+<option selected="" value="cm">سنتيمتر (cm)</option>
+<option value="dm">ديسيمتر (dm)</option>
+<option value="m">متر (m)</option>
+<option value="dam">ديكامتر (dam)</option>
+<option value="hm">هكتومتر (hm)</option>
+<option value="km">كيلومتر (km)</option>
+</select>
+</div>
+<div>
+<label class="block text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">إلى:</label>
+<select class="w-full" id="toLengthUnit">
+<option value="mm">ميليمتر (mm)</option>
+<option value="cm">سنتيمتر (cm)</option>
+<option value="dm">ديسيمتر (dm)</option>
+<option selected="" value="m">متر (m)</option>
+<option value="dam">ديكامتر (dam)</option>
+<option value="hm">هكتومتر (hm)</option>
+<option value="km">كيلومتر (km)</option>
+</select>
+</div>
+</div>
+</div>
+<!-- وحدات المساحة -->
+<div class="unit-group" id="areaUnits" style="display: none;">
+<h3 class="text-xl font-bold text-center mb-6 text-gray-700 dark:text-gray-300">
+                    📐 تحويل وحدات المساحة
+                </h3>
+<div class="grid md:grid-cols-2 gap-6">
+<div>
+<label class="block text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">من:</label>
+<select class="w-full" id="fromAreaUnit">
+<option value="mm2">ميليمتر مربع (mm²)</option>
+<option value="cm2">سنتيمتر مربع (cm²)</option>
+<option value="dm2">ديسيمتر مربع (dm²)</option>
+<option value="m2">متر مربع (m²)</option>
+<option value="ca">سنتيار (ca)</option>
+<option value="dam2">ديكامتر مربع (dam²)</option>
+<option value="a">آر (a)</option>
+<option value="hm2">هكتومتر مربع (hm²)</option>
+<option value="ha">هكتار (ha)</option>
+<option value="km2">كيلومتر مربع (km²)</option>
+</select>
+</div>
+<div>
+<label class="block text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">إلى:</label>
+<select class="w-full" id="toAreaUnit">
+<option value="mm2">ميليمتر مربع (mm²)</option>
+<option value="cm2">سنتيمتر مربع (cm²)</option>
+<option value="dm2">ديسيمتر مربع (dm²)</option>
+<option selected="" value="m2">متر مربع (m²)</option>
+<option value="ca">سنتيار (ca)</option>
+<option value="dam2">ديكامتر مربع (dam²)</option>
+<option value="a">آر (a)</option>
+<option value="hm2">هكتومتر مربع (hm²)</option>
+<option value="ha">هكتار (ha)</option>
+<option value="km2">كيلومتر مربع (km²)</option>
+</select>
+</div>
+</div>
+</div>
+<!-- وحدات الحجم -->
+<div class="unit-group" id="volumeUnits" style="display: none;">
+<h3 class="text-xl font-bold text-center mb-6 text-gray-700 dark:text-gray-300">
+                    🧊 تحويل وحدات الحجم والسعة
+                </h3>
+<div class="grid md:grid-cols-2 gap-6">
+<div>
+<label class="block text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">من:</label>
+<select class="w-full" id="fromVolumeUnit">
+<option value="mm3">ميليمتر مكعب (mm³)</option>
+<option value="cm3">سنتيمتر مكعب (cm³)</option>
+<option value="ml">ميليلتر (ml)</option>
+<option value="cl">سنتيلتر (cl)</option>
+<option value="dm3">ديسيمتر مكعب (dm³)</option>
+<option value="dl">ديسيلتر (dl)</option>
+<option value="l">لتر (l)</option>
+<option value="dal">ديكالتر (dal)</option>
+<option value="hl">هكتولتر (hl)</option>
+<option value="m3">متر مكعب (m³)</option>
+<option value="dam3">ديكامتر مكعب (dam³)</option>
+<option value="hm3">هكتومتر مكعب (hm³)</option>
+<option value="km3">كيلومتر مكعب (km³)</option>
+</select>
+</div>
+<div>
+<label class="block text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">إلى:</label>
+<select class="w-full" id="toVolumeUnit">
+<option value="mm3">ميليمتر مكعب (mm³)</option>
+<option value="cm3">سنتيمتر مكعب (cm³)</option>
+<option value="ml">ميليلتر (ml)</option>
+<option value="cl">سنتيلتر (cl)</option>
+<option value="dm3">ديسيمتر مكعب (dm³)</option>
+<option value="dl">ديسيلتر (dl)</option>
+<option selected="" value="l">لتر (l)</option>
+<option value="dal">ديكالتر (dal)</option>
+<option value="hl">هكتولتر (hl)</option>
+<option value="m3">متر مكعب (m³)</option>
+<option value="dam3">ديكامتر مكعب (dam³)</option>
+<option value="hm3">هكتومتر مكعب (hm³)</option>
+<option value="km3">كيلومتر مكعب (km³)</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+<!-- جداول التحويل -->
+<div class="space-y-8">
+<!-- جدول الأطوال -->
+<div class="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-2xl" id="lengthTable">
+<div class="table-container">
+<table>
+<caption class="length-caption">📏 جدول تحويل وحدات قياس الأطوال (mm → km)</caption>
+<tr>
+<th>mm</th>
+<th>cm</th>
+<th>dm</th>
+<th>m</th>
+<th>dam</th>
+<th>hm</th>
+<th>km</th>
+</tr>
+<tr>
+<td id="mmCell"></td><td id="cmCell"></td><td id="dmCell"></td><td id="mCell"></td><td id="damCell"></td><td id="hmCell"></td><td id="kmCell"></td>
+</tr>
+</table>
+</div>
+<!-- منطقة الحل للأطوال -->
+<div class="solution-area" id="lengthSolution">
+<div class="solution-title">📏 الحل:</div>
+<div class="solution-content" id="lengthSolutionContent"></div>
+</div>
+</div>
+<!-- جدول المساحة + الوحدات الزراعية -->
+<div class="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-2xl" id="areaTable">
+<div class="table-container">
+<table>
+<caption class="area-caption">📐 جدول تحويل وحدات قياس المساحة والوحدات الزراعية</caption>
+<tr>
+<th colspan="2">mm²</th>
+<th colspan="2">cm²</th>
+<th colspan="2">dm²</th>
+<th colspan="2">m²</th>
+<th colspan="2">dam²</th>
+<th colspan="2">hm²</th>
+<th colspan="2">km²</th>
+</tr>
+<tr>
+<td></td><td></td>
+<td></td><td></td>
+<td></td><td></td>
+<td>ca</td><td></td>
+<td>a</td><td></td>
+<td>ha</td><td></td>
+<td></td><td></td>
+</tr>
+<tr>
+<td id="mm2Cell1"></td><td id="mm2Cell2"></td>
+<td id="cm2Cell1"></td><td id="cm2Cell2"></td>
+<td id="dm2Cell1"></td><td id="dm2Cell2"></td>
+<td id="m2Cell1"></td><td id="m2Cell2"></td>
+<td id="dam2Cell1"></td><td id="dam2Cell2"></td>
+<td id="hm2Cell1"></td><td id="hm2Cell2"></td>
+<td id="km2Cell1"></td><td id="km2Cell2"></td>
+</tr>
+</table>
+</div>
+<!-- منطقة الحل للمساحات -->
+<div class="solution-area" id="areaSolution">
+<div class="solution-title">📐 الحل:</div>
+<div class="solution-content" id="areaSolutionContent"></div>
+</div>
+</div>
+<!-- جدول الحجم والسعة -->
+<div class="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-2xl" id="volumeTable">
+<div class="table-container">
+<table>
+<caption class="volume-caption">🧊 جدول تحويل وحدات قياس السعة والحجم</caption>
+<tr>
+<th colspan="3">mm³</th>
+<th colspan="3">cm³</th>
+<th colspan="3">dm³</th>
+<th colspan="3">m³</th>
+<th colspan="3">dam³</th>
+<th colspan="3">hm³</th>
+<th colspan="3">km³</th>
+</tr>
+<tr>
+<td></td><td></td><td></td>
+<td>ml</td><td>cl</td><td>dl</td>
+<td>l</td><td>dal</td><td>hl</td>
+<td></td><td></td><td></td>
+<td></td><td></td><td></td>
+<td></td><td></td><td></td>
+<td></td><td></td><td></td>
+</tr>
+<tr>
+<td id="mm3Cell1"></td><td id="mm3Cell2"></td><td id="mm3Cell3"></td>
+<td id="mlCell"></td><td id="clCell"></td><td id="dlCell"></td>
+<td id="lCell"></td><td id="dalCell"></td><td id="hlCell"></td>
+<td id="m3Cell1"></td><td id="m3Cell2"></td><td id="m3Cell3"></td>
+<td id="dam3Cell1"></td><td id="dam3Cell2"></td><td id="dam3Cell3"></td>
+<td id="hm3Cell1"></td><td id="hm3Cell2"></td><td id="hm3Cell3"></td>
+<td id="km3Cell1"></td><td id="km3Cell2"></td><td id="km3Cell3"></td>
+</tr>
+</table>
+</div>
+<!-- منطقة الحل للحجوم -->
+<div class="solution-area" id="volumeSolution">
+<div class="solution-title">🧊 الحل:</div>
+<div class="solution-content" id="volumeSolutionContent"></div>
+</div>
+</div>
+</div>
+<!-- ملخص التطبيق -->
+<div class="bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-3xl p-8 shadow-2xl mt-8">
+<h2 class="text-3xl font-bold text-center mb-8">📝 ميزات التطبيق</h2>
+<div class="grid md:grid-cols-3 gap-8">
+<div class="text-center">
+<div class="text-6xl mb-4">📏</div>
+<h3 class="text-xl font-semibold mb-2">تحويل الأطوال</h3>
+<p>من الميليمتر إلى الكيلومتر</p>
+</div>
+<div class="text-center">
+<div class="text-6xl mb-4">📐</div>
+<h3 class="text-xl font-semibold mb-2">تحويل المساحات</h3>
+<p>مع الوحدات الزراعية المختلفة</p>
+</div>
+<div class="text-center">
+<div class="text-6xl mb-4">🧊</div>
+<h3 class="text-xl font-semibold mb-2">تحويل الحجوم</h3>
+<p>وحدات السعة والحجم المكعب</p>
+</div>
+</div>
+</div>
+</div>
+
+<pre id="result"></pre><button onclick="run()">تشغيل الدرس</button>
+<script>
+async function run() {
+    const res = await fetch("/.netlify/functions/unit-conversions");
+    const text = await res.text();
+    document.getElementById("result").textContent = text;
+}
+</script>
+</body>
+</html>

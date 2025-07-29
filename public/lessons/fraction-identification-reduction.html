@@ -1,0 +1,362 @@
+﻿<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>التعرف على الكتابات الكسرية لعدد - اختزال كسر</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+        
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 1.5em;
+            margin: 0 10px;
+            direction: ltr;
+        }
+        
+        .fraction .numerator {
+            border-bottom: 2px solid #374151;
+            padding: 0 10px 2px;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .fraction .denominator {
+            padding: 2px 10px 0;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .fraction-large {
+            font-size: 2em;
+        }
+        
+        .fraction-small {
+            font-size: 1.2em;
+        }
+        
+        .step-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-left: 4px solid #3b82f6;
+            transition: all 0.3s ease;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+        }
+        
+        .equivalent-fraction {
+            background: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%);
+            border: 2px solid #0ea5e9;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 8px;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .equivalent-fraction:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        }
+        
+        .method-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 16px;
+            padding: 24px;
+            margin: 16px 0;
+            border: 2px solid #cbd5e1;
+        }
+        
+        .input-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .section-title {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin: 24px 0 16px 0;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        }
+        
+        .reduction-steps {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid #f59e0b;
+        }
+        
+        .arrow {
+            font-size: 1.5em;
+            color: #3b82f6;
+            margin: 0 10px;
+        }
+        
+        .bounce-in {
+            animation: bounceIn 0.6s ease-out;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .gcd-highlight {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            border: 2px solid #10b981;
+            border-radius: 8px;
+            padding: 8px;
+            margin: 4px 0;
+        }
+        
+        .fractions-container {
+            direction: ltr;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        @media (max-width: 768px) {
+            .fraction {
+                font-size: 1.2em;
+                margin: 0 5px;
+            }
+            
+            .fraction-large {
+                font-size: 1.5em;
+            }
+            
+            .arrow {
+                font-size: 1.2em;
+                margin: 0 5px;
+            }
+            
+            .section-title {
+                font-size: 1.2rem;
+                padding: 12px;
+            }
+            
+            .method-section {
+                padding: 16px;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .equivalent-fraction {
+                margin: 4px;
+                padding: 10px;
+            }
+            
+            .step-card {
+                padding: 15px;
+            }
+            
+            .fraction {
+                font-size: 1em;
+            }
+            
+            .fraction-large {
+                font-size: 1.3em;
+            }
+            
+            .fractions-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-purple-100 min-h-screen">
+<div class="container mx-auto px-4 py-6 max-w-6xl">
+<!-- Header -->
+<div class="text-center mb-8">
+<h1 class="text-xl md:text-4xl font-bold text-purple-800 mb-2">🔢 التعرف على الكتابات الكسرية لعدد - اختزال كسر</h1>
+<p class="text-sm md:text-lg text-gray-600">تعلم كيفية كتابة العدد بصور كسرية مختلفة وطرق اختزال الكسور</p>
+</div>
+<!-- Input Section -->
+<div class="input-section rounded-xl shadow-lg p-4 md:p-6 text-white mb-6">
+<h2 class="text-xl md:text-2xl font-bold mb-4 text-center">📝 أدخل كسرًا</h2>
+<div class="bg-white/10 rounded-lg p-4">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+<div class="flex items-center justify-center gap-2 sm:gap-4">
+<div class="text-center">
+<label class="block text-xs sm:text-sm font-semibold mb-2">البسط</label>
+<input class="w-16 sm:w-20 px-2 sm:px-3 py-2 text-black text-lg sm:text-xl text-center rounded-lg border-2 border-white/20 focus:border-white focus:outline-none" id="numerator" min="1" type="number" value="12"/>
+</div>
+<div class="text-2xl sm:text-3xl font-bold">÷</div>
+<div class="text-center">
+<label class="block text-xs sm:text-sm font-semibold mb-2">المقام</label>
+<input class="w-16 sm:w-20 px-2 sm:px-3 py-2 text-black text-lg sm:text-xl text-center rounded-lg border-2 border-white/20 focus:border-white focus:outline-none" id="denominator" min="1" type="number" value="18"/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<button class="bg-white/20 hover:bg-white/30 backdrop-blur text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm sm:text-base" onclick="generateEquivalentFractions()">
+                            ✨ معالجة الكسر
+                        </button>
+<button class="bg-white/20 hover:bg-white/30 backdrop-blur text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm sm:text-base" onclick="generateRandomFraction()">
+                            🎲 كسر عشوائي
+                        </button>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col sm:flex-row gap-3 mt-4">
+<button class="flex-1 bg-red-500/80 hover:bg-red-600/80 backdrop-blur text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm sm:text-base" onclick="clearAll()">
+                    🗑️ مسح الكل
+                </button>
+</div>
+</div>
+<!-- Section Title: Different Writings -->
+<div class="section-title hidden" id="equivalentTitle">
+            🔄 الكتابات الكسرية المختلفة
+        </div>
+<!-- Equivalent Fractions Display -->
+<div class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-6 hidden" id="equivalentSection">
+<div class="fractions-container" id="equivalentFractions">
+<!-- Dynamic content will be added here -->
+</div>
+<div class="text-center text-xs sm:text-sm text-gray-600 mt-4">
+                جميع هذه الكسور تمثل نفس القيمة، تم الحصول عليها بضرب أو قسمة البسط والمقام على نفس العدد
+            </div>
+</div>
+<!-- Section Title: Reduction -->
+<div class="section-title hidden" id="reductionTitle">
+            ✂️ طرق اختزال الكسر
+        </div>
+<!-- Reduction Methods Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6 hidden" id="reductionSection">
+<!-- Method 1: Direct Reduction -->
+<div class="method-section">
+<h3 class="text-lg md:text-xl font-bold text-gray-800 mb-4 text-center">🎯 الطريقة الأولى: الاختزال المباشر</h3>
+<div class="space-y-4" id="directMethod">
+<div class="text-center text-gray-600 text-sm">أدخل كسرًا لرؤية الاختزال المباشر</div>
+</div>
+</div>
+<!-- Method 2: Step by Step Reduction -->
+<div class="method-section">
+<h3 class="text-lg md:text-xl font-bold text-gray-800 mb-4 text-center">🔢 الطريقة الثانية: الاختزال المتدرج</h3>
+<div class="space-y-4" id="stepByStepMethod">
+<div class="text-center text-gray-600 text-sm">أدخل كسرًا لرؤية الاختزال المتدرج</div>
+</div>
+</div>
+</div>
+<!-- Interactive Examples -->
+<div class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-6">
+<h3 class="text-xl md:text-2xl font-bold text-gray-800 mb-4 text-center">📚 أمثلة تفاعلية</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+<button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 md:py-3 px-3 md:px-4 rounded-lg transition duration-300 text-sm md:text-base" onclick="loadExample(24, 36)">
+                    مثال 1: <span class="fraction fraction-small"><span class="numerator">24</span><span class="denominator">36</span></span>
+</button>
+<button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 md:py-3 px-3 md:px-4 rounded-lg transition duration-300 text-sm md:text-base" onclick="loadExample(15, 25)">
+                    مثال 2: <span class="fraction fraction-small"><span class="numerator">15</span><span class="denominator">25</span></span>
+</button>
+<button class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 md:py-3 px-3 md:px-4 rounded-lg transition duration-300 text-sm md:text-base" onclick="loadExample(20, 30)">
+                    مثال 3: <span class="fraction fraction-small"><span class="numerator">20</span><span class="denominator">30</span></span>
+</button>
+<button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 md:py-3 px-3 md:px-4 rounded-lg transition duration-300 text-sm md:text-base" onclick="loadExample(6, 9)">
+                    مثال 4: <span class="fraction fraction-small"><span class="numerator">6</span><span class="denominator">9</span></span>
+</button>
+<button class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 md:py-3 px-3 md:px-4 rounded-lg transition duration-300 text-sm md:text-base" onclick="loadExample(8, 12)">
+                    مثال 5: <span class="fraction fraction-small"><span class="numerator">8</span><span class="denominator">12</span></span>
+</button>
+<button class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 md:py-3 px-3 md:px-4 rounded-lg transition duration-300 text-sm md:text-base" onclick="loadExample(18, 24)">
+                    مثال 6: <span class="fraction fraction-small"><span class="numerator">18</span><span class="denominator">24</span></span>
+</button>
+</div>
+</div>
+<!-- Educational Content -->
+<div class="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-6">
+<h3 class="text-xl md:text-2xl font-bold text-gray-800 mb-4 text-center">📖 القواعد الأساسية</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+<div class="space-y-4">
+<h4 class="text-base md:text-lg font-bold text-blue-600">🔄 الكتابات المتكافئة</h4>
+<div class="bg-blue-50 p-3 md:p-4 rounded-lg">
+<p class="text-xs md:text-sm mb-2"><strong>القاعدة:</strong> يمكن ضرب أو قسمة البسط والمقام على نفس العدد دون تغيير قيمة الكسر</p>
+<div class="text-center text-xs md:text-sm">
+<div class="fractions-container">
+<span class="fraction fraction-small">
+<span class="numerator">a</span>
+<span class="denominator">b</span>
+</span>
+<span class="mx-2">=</span>
+<span class="fraction fraction-small">
+<span class="numerator">a×n</span>
+<span class="denominator">b×n</span>
+</span>
+<span class="mx-2">=</span>
+<span class="fraction fraction-small">
+<span class="numerator">a÷n</span>
+<span class="denominator">b÷n</span>
+</span>
+</div>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<h4 class="text-base md:text-lg font-bold text-green-600">✂️ اختزال الكسر</h4>
+<div class="bg-green-50 p-3 md:p-4 rounded-lg">
+<p class="text-xs md:text-sm mb-2"><strong>الهدف:</strong> الحصول على أبسط صورة للكسر بقسمة البسط والمقام على أكبر قاسم مشترك بينهما</p>
+<div class="text-xs space-y-1">
+<div>• <strong>الطريقة المباشرة:</strong> إيجاد ق.م.أ مباشرة</div>
+<div>• <strong>الطريقة المتدرجة:</strong> القسمة المتكررة على الأعداد الصغيرة</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quiz Section -->
+<div class="bg-gradient-to-r from-orange-100 to-yellow-100 rounded-xl shadow-lg p-4 md:p-6">
+<h3 class="text-xl md:text-2xl font-bold text-gray-800 mb-4 text-center">🧩 اختبر معلوماتك</h3>
+<div class="space-y-4" id="quizContainer">
+<div class="bg-white rounded-lg p-3 md:p-4">
+<p class="text-base md:text-lg font-semibold mb-3" id="quizQuestion">اضغط على "سؤال جديد" لبدء الاختبار</p>
+<div class="grid grid-cols-2 gap-2 md:gap-3 mb-4" id="quizOptions">
+<!-- Quiz options will be added here -->
+</div>
+<div class="flex flex-col sm:flex-row justify-between items-center gap-3">
+<button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm md:text-base" onclick="generateQuiz()">
+                            🔄 سؤال جديد
+                        </button>
+<div class="text-center sm:text-right">
+<span class="text-sm text-gray-600">النقاط: </span>
+<span class="font-bold text-lg text-orange-600" id="score">0</span>
+</div>
+</div>
+</div>
+<div class="hidden bg-white rounded-lg p-3 md:p-4 border-l-4" id="quizFeedback">
+<p class="font-semibold" id="feedbackText"></p>
+<p class="text-xs md:text-sm text-gray-600 mt-1" id="explanationText"></p>
+</div>
+</div>
+</div>
+</div>
+
+<pre id="result"></pre><button onclick="run()">تشغيل الدرس</button>
+<script>
+async function run() {
+    const res = await fetch("/.netlify/functions/fraction-identification-reduction");
+    const text = await res.text();
+    document.getElementById("result").textContent = text;
+}
+</script>
+</body>
+</html>

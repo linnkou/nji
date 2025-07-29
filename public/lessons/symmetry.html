@@ -1,0 +1,860 @@
+﻿<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>برنامج التناظر - الهندسة للسنة الأولى متوسط</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+
+<style>
+        body {
+            font-family: 'Noto Sans Arabic', sans-serif;
+        }
+        .shape-animation {
+            transition: all 0.3s ease;
+        }
+        .shape-animation:hover {
+            transform: scale(1.05);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #E11D48 0%, #F59E0B 50%, #8B5CF6 100%);
+        }
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(225, 29, 72, 0.2);
+        }
+        .dark .glass-effect {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(225, 29, 72, 0.3);
+        }
+        .symmetry-line {
+            stroke-dasharray: 5,5;
+            stroke: #DC2626;
+            stroke-width: 2;
+            animation: dash 1s linear infinite;
+        }
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -10;
+            }
+        }
+        @keyframes pointAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        @keyframes lineGrow {
+            from {
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
+            }
+            to {
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 0;
+            }
+        }
+        .animate-point {
+            animation: pointAppear 0.8s ease-out;
+        }
+        .animate-line {
+            animation: lineGrow 1.5s ease-out;
+        }
+        .draggable {
+            cursor: move;
+            user-select: none;
+        }
+        .interactive-point {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .interactive-point:hover {
+            r: 8;
+            fill: #8B5CF6;
+        }
+        .construction-line {
+            stroke: #F59E0B;
+            stroke-width: 1;
+            stroke-dasharray: 3,3;
+            opacity: 0.7;
+        }
+        .pattern-bg {
+            background-image: 
+                radial-gradient(circle at 1px 1px, rgba(225, 29, 72, 0.1) 1px, transparent 0);
+            background-size: 30px 30px;
+        }
+        .modern-btn {
+            background: linear-gradient(145deg, #E11D48, #F59E0B);
+            box-shadow: 0 8px 16px rgba(225, 29, 72, 0.3);
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .modern-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(225, 29, 72, 0.4);
+        }
+        .modern-btn:active {
+            transform: translateY(0);
+        }
+        .success-zone {
+            fill: rgba(34, 197, 94, 0.2);
+            stroke: #22C55E;
+            stroke-width: 2;
+            stroke-dasharray: 4,4;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 pattern-bg transition-colors duration-300">
+<!-- Header -->
+<header class="gradient-bg text-white p-8 text-center relative overflow-hidden">
+<div class="absolute inset-0 opacity-20">
+<svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="40" id="headerGrid" patternunits="userSpaceOnUse" width="40">
+<path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#headerGrid)" height="100%" width="100%"></rect>
+</svg>
+</div>
+<h1 class="text-4xl md:text-5xl font-bold mb-3 relative z-10">🔄 التناظر</h1>
+<p class="text-xl opacity-90 relative z-10">دروس تفاعلية في الهندسة والتناظر</p>
+<div class="mt-6 flex justify-center space-x-reverse space-x-8 relative z-10">
+<div class="text-center">
+<div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-2">
+<span class="text-2xl">🪞</span>
+</div>
+<p class="text-sm">الأشكال المتناظرة</p>
+</div>
+<div class="text-center">
+<div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-2">
+<span class="text-2xl">📐</span>
+</div>
+<p class="text-sm">محاور التناظر</p>
+</div>
+<div class="text-center">
+<div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-2">
+<span class="text-2xl">🎯</span>
+</div>
+<p class="text-sm">الإنشاءات الهندسية</p>
+</div>
+</div>
+</header>
+<!-- Navigation -->
+<nav class="bg-white dark:bg-gray-800 shadow-2xl sticky top-0 z-50 border-b-4 border-primary">
+<div class="max-w-7xl mx-auto px-4">
+<div class="flex justify-center overflow-x-auto">
+<div class="flex space-x-reverse space-x-2 py-4">
+<button class="nav-btn px-4 py-3 rounded-xl text-base font-bold whitespace-nowrap border-2 border-transparent hover:border-primary transition-all duration-300" onclick="showSection('concept')">مفهوم التناظر</button>
+<button class="nav-btn px-4 py-3 rounded-xl text-base font-bold whitespace-nowrap border-2 border-transparent hover:border-primary transition-all duration-300" onclick="showSection('axes')">محاور التناظر</button>
+<button class="nav-btn px-4 py-3 rounded-xl text-base font-bold whitespace-nowrap border-2 border-transparent hover:border-primary transition-all duration-300" onclick="showSection('point-reflection')">نظيرة نقطة</button>
+<button class="nav-btn px-4 py-3 rounded-xl text-base font-bold whitespace-nowrap border-2 border-transparent hover:border-primary transition-all duration-300" onclick="showSection('shape-reflection')">نظير الأشكال</button>
+<button class="nav-btn px-4 py-3 rounded-xl text-base font-bold whitespace-nowrap border-2 border-transparent hover:border-primary transition-all duration-300" onclick="showSection('properties')">خواص التناظر</button>
+<button class="nav-btn px-4 py-3 rounded-xl text-base font-bold whitespace-nowrap border-2 border-transparent hover:border-primary transition-all duration-300" onclick="showSection('exercises')">تمارين تفاعلية</button>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-4 py-8">
+<!-- Concept Section -->
+<section class="section" id="concept">
+<div class="glass-effect rounded-3xl p-8 mb-8">
+<h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-8 text-center">🎯 مفهوم التناظر</h2>
+<div class="grid lg:grid-cols-2 gap-8 mb-8">
+<div class="bg-gradient-to-br from-rose-50 to-rose-100 dark:from-rose-900/30 dark:to-rose-800/30 rounded-2xl p-8 border-l-8 border-rose-500">
+<h3 class="text-2xl font-semibold text-rose-800 dark:text-rose-200 mb-6 flex items-center">
+<span class="text-3xl ml-3">🪞</span> تعريف التناظر
+                        </h3>
+<div class="space-y-4">
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+                                التناظر المحوري هو تحويل هندسي يربط كل نقطة من المستوى بنقطة أخرى تسمى نظيرتها بالنسبة إلى مستقيم يسمى محور التناظر.
+                            </p>
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl">
+<svg class="mx-auto" height="200" viewbox="0 0 300 200" width="300">
+<!-- Grid -->
+<defs>
+<pattern height="20" id="grid" patternunits="userSpaceOnUse" width="20">
+<path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e5e7eb" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#grid)" height="100%" width="100%"></rect>
+<!-- Symmetry axis -->
+<line class="symmetry-line" x1="150" x2="150" y1="0" y2="200"></line>
+<text class="fill-red-600 text-sm font-bold" x="155" y="20">محور التناظر</text>
+<!-- Original triangle -->
+<polygon fill="#E11D48" opacity="0.7" points="80,60 120,60 100,100" stroke="#E11D48" stroke-width="2"></polygon>
+<text class="fill-rose-700 text-sm font-bold" x="85" y="50">الشكل الأصلي</text>
+<!-- Reflected triangle -->
+<polygon fill="#F59E0B" opacity="0.7" points="180,60 220,60 200,100" stroke="#F59E0B" stroke-width="2"></polygon>
+<text class="fill-orange-700 text-sm font-bold" x="185" y="50">الشكل النظير</text>
+<!-- Points -->
+<circle cx="100" cy="80" fill="#DC2626" r="4"></circle>
+<circle cx="200" cy="80" fill="#DC2626" r="4"></circle>
+<text class="fill-red-600 text-sm font-bold" x="85" y="95">A</text>
+<text class="fill-red-600 text-sm font-bold" x="205" y="95">A'</text>
+<!-- Distance lines -->
+<line stroke="#8B5CF6" stroke-dasharray="3,3" stroke-width="1" x1="100" x2="150" y1="80" y2="80"></line>
+<line stroke="#8B5CF6" stroke-dasharray="3,3" stroke-width="1" x1="150" x2="200" y1="80" y2="80"></line>
+<text class="fill-purple-600 text-xs font-bold" x="115" y="75">d</text>
+<text class="fill-purple-600 text-xs font-bold" x="165" y="75">d</text>
+</svg>
+</div>
+</div>
+</div>
+<div class="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/30 dark:to-orange-800/30 rounded-2xl p-8 border-l-8 border-orange-500">
+<h3 class="text-2xl font-semibold text-orange-800 dark:text-orange-200 mb-6 flex items-center">
+<span class="text-3xl ml-3">📏</span> خصائص النقطة النظيرة
+                        </h3>
+<div class="space-y-6">
+<div class="bg-orange-200 dark:bg-orange-800/50 p-4 rounded-xl">
+<h4 class="font-bold text-orange-800 dark:text-orange-200 text-lg mb-2">المسافة المتساوية</h4>
+<p class="text-orange-700 dark:text-orange-300">النقطة ونظيرتها على نفس المسافة من محور التناظر</p>
+</div>
+<div class="bg-orange-200 dark:bg-orange-800/50 p-4 rounded-xl">
+<h4 class="font-bold text-orange-800 dark:text-orange-200 text-lg mb-2">العمودية</h4>
+<p class="text-orange-700 dark:text-orange-300">المستقيم الواصل بين النقطة ونظيرتها عمودي على محور التناظر</p>
+</div>
+<div class="bg-orange-200 dark:bg-orange-800/50 p-4 rounded-xl">
+<h4 class="font-bold text-orange-800 dark:text-orange-200 text-lg mb-2">محور التناظر</h4>
+<p class="text-orange-700 dark:text-orange-300">هو المنصف العمودي للقطعة الواصلة بين النقطة ونظيرتها</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Demo -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-8 border-4 border-dashed border-gray-300 dark:border-gray-600">
+<h3 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6 text-center">🎮 تجربة تفاعلية</h3>
+<div class="flex justify-center">
+<svg class="border-4 border-gray-200 dark:border-gray-600 rounded-2xl bg-gray-50 dark:bg-gray-900" height="300" id="interactiveDemo" viewbox="0 0 500 300" width="500">
+<!-- Grid -->
+<defs>
+<pattern height="25" id="demoGrid" patternunits="userSpaceOnUse" width="25">
+<path d="M 25 0 L 0 0 0 25" fill="none" stroke="#d1d5db" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#demoGrid)" height="100%" width="100%"></rect>
+<!-- Symmetry axis -->
+<line class="symmetry-line" x1="250" x2="250" y1="0" y2="300"></line>
+<text class="fill-red-600 text-sm font-bold" x="255" y="20">محور التناظر</text>
+<!-- Interactive point -->
+<circle class="interactive-point draggable" cx="150" cy="150" fill="#E11D48" id="originalPoint" r="6"></circle>
+<circle cx="350" cy="150" fill="#F59E0B" id="reflectedPoint" r="6"></circle>
+<!-- Connection line -->
+<line id="connectionLine" stroke="#8B5CF6" stroke-dasharray="5,5" stroke-width="2" x1="150" x2="350" y1="150" y2="150"></line>
+<!-- Labels -->
+<text class="fill-rose-700 text-sm font-bold" x="130" y="140">A</text>
+<text class="fill-orange-700 text-sm font-bold" x="360" y="140">A'</text>
+</svg>
+</div>
+<p class="text-center text-gray-600 dark:text-gray-400 mt-4">اسحب النقطة الوردية لترى كيف تتحرك نظيرتها</p>
+</div>
+</div>
+</section>
+<!-- Axes Section -->
+<section class="section hidden" id="axes">
+<div class="glass-effect rounded-3xl p-8 mb-8">
+<h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-8 text-center">📐 محاور تناظر الأشكال المألوفة</h2>
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+<!-- Square -->
+<div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 rounded-2xl p-6 border-4 border-purple-400 text-center">
+<h3 class="text-xl font-bold text-purple-800 dark:text-purple-200 mb-4">المربع</h3>
+<svg class="mx-auto mb-4" height="150" viewbox="0 0 150 150" width="150">
+<rect fill="#8B5CF6" height="70" opacity="0.3" stroke="#8B5CF6" stroke-width="2" width="70" x="40" y="40"></rect>
+<!-- 4 axes of symmetry -->
+<line class="symmetry-line" x1="75" x2="75" y1="30" y2="120"></line>
+<line class="symmetry-line" x1="30" x2="120" y1="75" y2="75"></line>
+<line class="symmetry-line" x1="45" x2="105" y1="45" y2="105"></line>
+<line class="symmetry-line" x1="105" x2="45" y1="45" y2="105"></line>
+</svg>
+<p class="text-purple-700 dark:text-purple-300 font-medium">4 محاور تناظر</p>
+</div>
+<!-- Rectangle -->
+<div class="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/30 dark:to-orange-800/30 rounded-2xl p-6 border-4 border-orange-400 text-center">
+<h3 class="text-xl font-bold text-orange-800 dark:text-orange-200 mb-4">المستطيل</h3>
+<svg class="mx-auto mb-4" height="150" viewbox="0 0 150 150" width="150">
+<rect fill="#F59E0B" height="50" opacity="0.3" stroke="#F59E0B" stroke-width="2" width="90" x="30" y="50"></rect>
+<!-- 2 axes of symmetry -->
+<line class="symmetry-line" x1="75" x2="75" y1="40" y2="110"></line>
+<line class="symmetry-line" x1="20" x2="130" y1="75" y2="75"></line>
+</svg>
+<p class="text-orange-700 dark:text-orange-300 font-medium">محوران للتناظر</p>
+</div>
+<!-- Circle -->
+<div class="bg-gradient-to-br from-rose-50 to-rose-100 dark:from-rose-900/30 dark:to-rose-800/30 rounded-2xl p-6 border-4 border-rose-400 text-center">
+<h3 class="text-xl font-bold text-rose-800 dark:text-rose-200 mb-4">الدائرة</h3>
+<svg class="mx-auto mb-4" height="150" viewbox="0 0 150 150" width="150">
+<circle cx="75" cy="75" fill="#E11D48" opacity="0.3" r="35" stroke="#E11D48" stroke-width="2"></circle>
+<!-- Multiple axes -->
+<line class="symmetry-line" x1="75" x2="75" y1="35" y2="115"></line>
+<line class="symmetry-line" x1="35" x2="115" y1="75" y2="75"></line>
+<line class="symmetry-line" x1="50" x2="100" y1="50" y2="100"></line>
+<line class="symmetry-line" x1="100" x2="50" y1="50" y2="100"></line>
+</svg>
+<p class="text-rose-700 dark:text-rose-300 font-medium">محاور لا نهائية</p>
+</div>
+<!-- Triangle -->
+<div class="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/30 dark:to-yellow-800/30 rounded-2xl p-6 border-4 border-yellow-400 text-center">
+<h3 class="text-xl font-bold text-yellow-800 dark:text-yellow-200 mb-4">المثلث المتساوي الأضلاع</h3>
+<svg class="mx-auto mb-4" height="150" viewbox="0 0 150 150" width="150">
+<polygon fill="#EAB308" opacity="0.3" points="75,40 110,100 40,100" stroke="#EAB308" stroke-width="2"></polygon>
+<!-- 3 axes of symmetry -->
+<line class="symmetry-line" x1="75" x2="75" y1="40" y2="100"></line>
+<line class="symmetry-line" x1="75" x2="40" y1="70" y2="100"></line>
+<line class="symmetry-line" x1="75" x2="110" y1="70" y2="100"></line>
+</svg>
+<p class="text-yellow-700 dark:text-yellow-300 font-medium">3 محاور تناظر</p>
+</div>
+<!-- Rhombus -->
+<div class="bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/30 dark:to-pink-800/30 rounded-2xl p-6 border-4 border-pink-400 text-center">
+<h3 class="text-xl font-bold text-pink-800 dark:text-pink-200 mb-4">المعين</h3>
+<svg class="mx-auto mb-4" height="150" viewbox="0 0 150 150" width="150">
+<polygon fill="#EC4899" opacity="0.3" points="75,40 110,75 75,110 40,75" stroke="#EC4899" stroke-width="2"></polygon>
+<!-- 2 axes of symmetry -->
+<line class="symmetry-line" x1="75" x2="75" y1="40" y2="110"></line>
+<line class="symmetry-line" x1="40" x2="110" y1="75" y2="75"></line>
+</svg>
+<p class="text-pink-700 dark:text-pink-300 font-medium">محوران للتناظر</p>
+</div>
+<!-- Pentagon -->
+<div class="bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/30 dark:to-indigo-800/30 rounded-2xl p-6 border-4 border-indigo-400 text-center">
+<h3 class="text-xl font-bold text-indigo-800 dark:text-indigo-200 mb-4">الخماسي المنتظم</h3>
+<svg class="mx-auto mb-4" height="150" viewbox="0 0 150 150" width="150">
+<polygon fill="#6366F1" opacity="0.3" points="75,40 100,60 90,90 60,90 50,60" stroke="#6366F1" stroke-width="2"></polygon>
+<!-- 5 axes of symmetry -->
+<line class="symmetry-line" x1="75" x2="75" y1="40" y2="90"></line>
+<line class="symmetry-line" x1="75" x2="100" y1="65" y2="60"></line>
+<line class="symmetry-line" x1="75" x2="90" y1="65" y2="90"></line>
+<line class="symmetry-line" x1="75" x2="60" y1="65" y2="90"></line>
+<line class="symmetry-line" x1="75" x2="50" y1="65" y2="60"></line>
+</svg>
+<p class="text-indigo-700 dark:text-indigo-300 font-medium">5 محاور تناظر</p>
+</div>
+</div>
+<!-- Interactive Shape Explorer -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-8 border-4 border-dashed border-gray-300 dark:border-gray-600">
+<h3 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6 text-center">🔍 مستكشف محاور التناظر</h3>
+<div class="grid lg:grid-cols-2 gap-8">
+<div class="text-center">
+<div class="mb-4">
+<label class="block text-lg font-bold text-gray-700 dark:text-gray-300 mb-3">اختر الشكل:</label>
+<select class="w-full px-4 py-3 text-base font-medium border-4 border-primary rounded-xl focus:ring-4 focus:ring-primary/50 dark:bg-gray-700 dark:text-white" id="shapeSelector">
+<option value="square">مربع</option>
+<option value="rectangle">مستطيل</option>
+<option value="circle">دائرة</option>
+<option value="triangle">مثلث متساوي الأضلاع</option>
+<option value="rhombus">معين</option>
+<option value="pentagon">خماسي منتظم</option>
+</select>
+</div>
+<svg class="mx-auto border-4 border-gray-200 dark:border-gray-600 rounded-2xl bg-gray-50 dark:bg-gray-900" height="300" id="shapeExplorer" viewbox="0 0 300 300" width="300">
+<!-- Grid -->
+<defs>
+<pattern height="20" id="explorerGrid" patternunits="userSpaceOnUse" width="20">
+<path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e5e7eb" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#explorerGrid)" height="100%" width="100%"></rect>
+<!-- Shape will be drawn here -->
+<g id="selectedShape"></g>
+<g id="symmetryAxes"></g>
+</svg>
+</div>
+<div class="flex items-center">
+<div class="bg-rose-50 dark:bg-rose-900/30 p-6 rounded-xl">
+<h4 class="text-xl font-bold text-rose-800 dark:text-rose-200 mb-4">معلومات الشكل</h4>
+<div class="space-y-3" id="shapeInfo">
+<p class="text-rose-700 dark:text-rose-300"><strong>الشكل:</strong> <span id="shapeName">مربع</span></p>
+<p class="text-rose-700 dark:text-rose-300"><strong>عدد محاور التناظر:</strong> <span id="axesCount">4</span></p>
+<p class="text-rose-700 dark:text-rose-300"><strong>نوع التناظر:</strong> <span id="symmetryType">متعدد المحاور</span></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Point Reflection Section -->
+<section class="section hidden" id="point-reflection">
+<div class="glass-effect rounded-3xl p-8 mb-8">
+<h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-8 text-center">🎯 إنشاء نظيرة نقطة</h2>
+<div class="grid lg:grid-cols-2 gap-8 mb-8">
+<div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 rounded-2xl p-8 border-l-8 border-purple-500">
+<h3 class="text-2xl font-semibold text-purple-800 dark:text-purple-200 mb-6 flex items-center">
+<span class="text-3xl ml-3">📏</span> الأدوات المطلوبة
+                        </h3>
+<div class="space-y-4">
+<div class="bg-purple-200 dark:bg-purple-800/50 p-4 rounded-xl">
+<h4 class="font-bold text-purple-800 dark:text-purple-200 text-lg mb-2">مسطرة غير مدرجة</h4>
+<p class="text-purple-700 dark:text-purple-300">لرسم المستقيمات</p>
+</div>
+<div class="bg-purple-200 dark:bg-purple-800/50 p-4 rounded-xl">
+<h4 class="font-bold text-purple-800 dark:text-purple-200 text-lg mb-2">المدور (البرجار)</h4>
+<p class="text-purple-700 dark:text-purple-300">لرسم الدوائر وقياس المسافات</p>
+</div>
+<div class="bg-purple-200 dark:bg-purple-800/50 p-4 rounded-xl">
+<h4 class="font-bold text-purple-800 dark:text-purple-200 text-lg mb-2">الكوس (الزاوية القائمة)</h4>
+<p class="text-purple-700 dark:text-purple-300">لرسم العمودي</p>
+</div>
+</div>
+</div>
+<div class="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/30 dark:to-orange-800/30 rounded-2xl p-8 border-l-8 border-orange-500">
+<h3 class="text-2xl font-semibold text-orange-800 dark:text-orange-200 mb-6 flex items-center">
+<span class="text-3xl ml-3">📋</span> خطوات الإنشاء
+                        </h3>
+<div class="space-y-4">
+<div class="bg-orange-200 dark:bg-orange-800/50 p-4 rounded-xl">
+<h4 class="font-bold text-orange-800 dark:text-orange-200 text-lg mb-2">الخطوة 1</h4>
+<p class="text-orange-700 dark:text-orange-300">ارسم العمودي من النقطة على محور التناظر</p>
+</div>
+<div class="bg-orange-200 dark:bg-orange-800/50 p-4 rounded-xl">
+<h4 class="font-bold text-orange-800 dark:text-orange-200 text-lg mb-2">الخطوة 2</h4>
+<p class="text-orange-700 dark:text-orange-300">احسب المسافة من النقطة إلى المحور</p>
+</div>
+<div class="bg-orange-200 dark:bg-orange-800/50 p-4 rounded-xl">
+<h4 class="font-bold text-orange-800 dark:text-orange-200 text-lg mb-2">الخطوة 3</h4>
+<p class="text-orange-700 dark:text-orange-300">ارسم نفس المسافة على الجانب الآخر</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Construction -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-8 border-4 border-dashed border-gray-300 dark:border-gray-600">
+<h3 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6 text-center">🛠️ ورشة الإنشاء التفاعلية</h3>
+<div class="grid lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2">
+<svg class="w-full border-4 border-gray-200 dark:border-gray-600 rounded-2xl bg-gray-50 dark:bg-gray-900" height="400" id="constructionArea" viewbox="0 0 400 400" width="400">
+<!-- Grid -->
+<defs>
+<pattern height="20" id="constructionGrid" patternunits="userSpaceOnUse" width="20">
+<path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e5e7eb" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#constructionGrid)" height="100%" width="100%"></rect>
+<!-- Symmetry axis -->
+<line class="symmetry-line" x1="200" x2="200" y1="0" y2="400"></line>
+<text class="fill-red-600 text-sm font-bold" x="205" y="20">محور التناظر</text>
+<!-- Original point -->
+<circle class="interactive-point draggable" cx="120" cy="150" fill="#E11D48" id="constructionPoint" r="6"></circle>
+<text class="fill-rose-700 text-sm font-bold" x="100" y="140">A</text>
+<!-- Construction elements (initially hidden) -->
+<g id="constructionElements" style="display: none;">
+<!-- Perpendicular line -->
+<line class="construction-line" id="perpendicularLine" x1="120" x2="200" y1="150" y2="150"></line>
+<!-- Foot of perpendicular -->
+<circle cx="200" cy="150" fill="#8B5CF6" id="footPoint" r="4"></circle>
+<text class="fill-purple-600 text-xs font-bold" x="205" y="145">H</text>
+<!-- Distance arcs -->
+<circle cx="120" cy="150" fill="none" id="distanceArc1" opacity="0.5" r="80" stroke="#F59E0B" stroke-dasharray="2,2" stroke-width="1"></circle>
+<circle cx="200" cy="150" fill="none" id="distanceArc2" opacity="0.5" r="80" stroke="#F59E0B" stroke-dasharray="2,2" stroke-width="1"></circle>
+<!-- Reflected point -->
+<circle cx="280" cy="150" fill="#F59E0B" id="reflectedConstructionPoint" r="6"></circle>
+<text class="fill-orange-700 text-sm font-bold" x="285" y="145">A'</text>
+</g>
+</svg>
+</div>
+<div class="space-y-4">
+<h4 class="text-xl font-bold text-gray-800 dark:text-white">التحكم في الإنشاء</h4>
+<button class="w-full modern-btn text-white px-6 py-3 rounded-xl font-bold text-lg" id="showConstruction" onclick="toggleConstruction()">إظهار خطوات الإنشاء</button>
+<div class="space-y-3" id="constructionSteps" style="display: none;">
+<div class="bg-orange-50 dark:bg-orange-900/30 p-4 rounded-xl">
+<h5 class="font-bold text-orange-800 dark:text-orange-200 mb-2">المسافة من A إلى المحور:</h5>
+<p class="text-orange-700 dark:text-orange-300" id="distanceValue">80 وحدة</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Shape Reflection Section -->
+<section class="section hidden" id="shape-reflection">
+<div class="glass-effect rounded-3xl p-8 mb-8">
+<h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-8 text-center">🔄 نظير الأشكال الهندسية</h2>
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+<!-- Line Reflection -->
+<div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 rounded-2xl p-6 border-4 border-purple-400">
+<h3 class="text-xl font-bold text-purple-800 dark:text-purple-200 mb-4 text-center">نظير مستقيم</h3>
+<svg class="mx-auto mb-4" height="150" viewbox="0 0 200 150" width="200">
+<!-- Grid -->
+<defs>
+<pattern height="20" id="lineGrid" patternunits="userSpaceOnUse" width="20">
+<path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e5e7eb" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#lineGrid)" height="100%" width="100%"></rect>
+<!-- Symmetry axis -->
+<line class="symmetry-line" x1="100" x2="100" y1="0" y2="150"></line>
+<!-- Original line -->
+<line stroke="#8B5CF6" stroke-width="3" x1="30" x2="80" y1="40" y2="110"></line>
+<!-- Reflected line -->
+<line stroke="#F59E0B" stroke-width="3" x1="120" x2="170" y1="40" y2="110"></line>
+<!-- Labels -->
+<text class="fill-purple-700 text-sm font-bold" x="20" y="30">d</text>
+<text class="fill-orange-700 text-sm font-bold" x="175" y="30">d'</text>
+</svg>
+<div class="text-center">
+<p class="text-purple-700 dark:text-purple-300 font-medium">نظير المستقيم مستقيم</p>
+</div>
+</div>
+<!-- Segment Reflection -->
+<div class="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/30 dark:to-orange-800/30 rounded-2xl p-6 border-4 border-orange-400">
+<h3 class="text-xl font-bold text-orange-800 dark:text-orange-200 mb-4 text-center">نظير قطعة مستقيم</h3>
+<svg class="mx-auto mb-4" height="150" viewbox="0 0 200 150" width="200">
+<!-- Grid -->
+<rect fill="url(#lineGrid)" height="100%" width="100%"></rect>
+<!-- Symmetry axis -->
+<line class="symmetry-line" x1="100" x2="100" y1="0" y2="150"></line>
+<!-- Original segment -->
+<line stroke="#F59E0B" stroke-width="4" x1="40" x2="80" y1="60" y2="90"></line>
+<circle cx="40" cy="60" fill="#F59E0B" r="3"></circle>
+<circle cx="80" cy="90" fill="#F59E0B" r="3"></circle>
+<!-- Reflected segment -->
+<line stroke="#E11D48" stroke-width="4" x1="120" x2="160" y1="60" y2="90"></line>
+<circle cx="120" cy="60" fill="#E11D48" r="3"></circle>
+<circle cx="160" cy="90" fill="#E11D48" r="3"></circle>
+<!-- Labels -->
+<text class="fill-orange-700 text-sm font-bold" x="30" y="50">[AB]</text>
+<text class="fill-rose-700 text-sm font-bold" x="165" y="50">[A'B']</text>
+</svg>
+<div class="text-center">
+<p class="text-orange-700 dark:text-orange-300 font-medium">نظير القطعة قطعة بنفس الطول</p>
+</div>
+</div>
+<!-- Circle Reflection -->
+<div class="bg-gradient-to-br from-rose-50 to-rose-100 dark:from-rose-900/30 dark:to-rose-800/30 rounded-2xl p-6 border-4 border-rose-400">
+<h3 class="text-xl font-bold text-rose-800 dark:text-rose-200 mb-4 text-center">نظير دائرة</h3>
+<svg class="mx-auto mb-4" height="150" viewbox="0 0 200 150" width="200">
+<!-- Grid -->
+<rect fill="url(#lineGrid)" height="100%" width="100%"></rect>
+<!-- Symmetry axis -->
+<line class="symmetry-line" x1="100" x2="100" y1="0" y2="150"></line>
+<!-- Original circle -->
+<circle cx="60" cy="75" fill="#E11D48" opacity="0.3" r="25" stroke="#E11D48" stroke-width="2"></circle>
+<circle cx="60" cy="75" fill="#E11D48" r="2"></circle>
+<!-- Reflected circle -->
+<circle cx="140" cy="75" fill="#8B5CF6" opacity="0.3" r="25" stroke="#8B5CF6" stroke-width="2"></circle>
+<circle cx="140" cy="75" fill="#8B5CF6" r="2"></circle>
+<!-- Labels -->
+<text class="fill-rose-700 text-sm font-bold" x="45" y="105">C₁</text>
+<text class="fill-purple-700 text-sm font-bold" x="125" y="105">C₂</text>
+</svg>
+<div class="text-center">
+<p class="text-rose-700 dark:text-rose-300 font-medium">نظير الدائرة دائرة بنفس نصف القطر</p>
+</div>
+</div>
+</div>
+<!-- Interactive Shape Reflection -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-8 border-4 border-dashed border-gray-300 dark:border-gray-600">
+<h3 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6 text-center">🎨 ورشة انعكاس الأشكال</h3>
+<div class="grid lg:grid-cols-2 gap-8">
+<div class="space-y-4">
+<div>
+<label class="block text-lg font-bold text-gray-700 dark:text-gray-300 mb-3">نوع الشكل:</label>
+<select class="w-full px-4 py-3 text-base font-medium border-4 border-primary rounded-xl focus:ring-4 focus:ring-primary/50 dark:bg-gray-700 dark:text-white" id="reflectionShapeType">
+<option value="triangle">مثلث</option>
+<option value="rectangle">مستطيل</option>
+<option value="circle">دائرة</option>
+<option value="line">مستقيم</option>
+</select>
+</div>
+<button class="w-full modern-btn text-white px-6 py-4 rounded-xl font-bold text-lg" onclick="reflectShape()">انعكس الشكل</button>
+<div class="bg-orange-50 dark:bg-orange-900/30 p-4 rounded-xl" id="reflectionInfo">
+<h4 class="font-bold text-orange-800 dark:text-orange-200 mb-2">معلومات الانعكاس:</h4>
+<p class="text-orange-700 dark:text-orange-300 text-sm">اختر شكلاً واضغط على "انعكس الشكل" لرؤية النتيجة</p>
+</div>
+</div>
+<div>
+<svg class="w-full border-4 border-gray-200 dark:border-gray-600 rounded-2xl bg-gray-50 dark:bg-gray-900" height="300" id="reflectionCanvas" viewbox="0 0 350 300" width="350">
+<!-- Grid -->
+<defs>
+<pattern height="25" id="reflectionGrid" patternunits="userSpaceOnUse" width="25">
+<path d="M 25 0 L 0 0 0 25" fill="none" stroke="#e5e7eb" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#reflectionGrid)" height="100%" width="100%"></rect>
+<!-- Symmetry axis -->
+<line class="symmetry-line" x1="175" x2="175" y1="0" y2="300"></line>
+<text class="fill-red-600 text-sm font-bold" x="180" y="20">محور التناظر</text>
+<!-- Original and reflected shapes will be drawn here -->
+<g id="originalShape"></g>
+<g id="reflectedShape"></g>
+</svg>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Properties Section -->
+<section class="section hidden" id="properties">
+<div class="glass-effect rounded-3xl p-8 mb-8">
+<h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-8 text-center">⚡ خواص التناظر المحوري</h2>
+<div class="grid lg:grid-cols-2 gap-8 mb-8">
+<div class="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/30 dark:to-orange-800/30 rounded-2xl p-8 border-l-8 border-orange-500">
+<h3 class="text-2xl font-semibold text-orange-800 dark:text-orange-200 mb-6 flex items-center">
+<span class="text-3xl ml-3">📏</span> خواص الأطوال والمسافات
+                        </h3>
+<div class="space-y-4">
+<div class="bg-orange-200 dark:bg-orange-800/50 p-4 rounded-xl">
+<h4 class="font-bold text-orange-800 dark:text-orange-200 text-lg mb-2">حفظ الأطوال</h4>
+<p class="text-orange-700 dark:text-orange-300">طول أي قطعة يساوي طول نظيرتها</p>
+<p class="text-orange-600 dark:text-orange-400 text-sm mt-2">AB = A'B'</p>
+</div>
+<div class="bg-orange-200 dark:bg-orange-800/50 p-4 rounded-xl">
+<h4 class="font-bold text-orange-800 dark:text-orange-200 text-lg mb-2">حفظ المسافات</h4>
+<p class="text-orange-700 dark:text-orange-300">المسافة بين أي نقطتين تساوي المسافة بين نظيرتيهما</p>
+</div>
+<div class="bg-orange-200 dark:bg-orange-800/50 p-4 rounded-xl">
+<h4 class="font-bold text-orange-800 dark:text-orange-200 text-lg mb-2">حفظ نصف القطر</h4>
+<p class="text-orange-700 dark:text-orange-300">نصف قطر الدائرة يبقى ثابتاً عند التناظر</p>
+</div>
+</div>
+</div>
+<div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 rounded-2xl p-8 border-l-8 border-purple-500">
+<h3 class="text-2xl font-semibold text-purple-800 dark:text-purple-200 mb-6 flex items-center">
+<span class="text-3xl ml-3">📐</span> خواص الزوايا والشكل
+                        </h3>
+<div class="space-y-4">
+<div class="bg-purple-200 dark:bg-purple-800/50 p-4 rounded-xl">
+<h4 class="font-bold text-purple-800 dark:text-purple-200 text-lg mb-2">حفظ الزوايا</h4>
+<p class="text-purple-700 dark:text-purple-300">قياس أي زاوية يساوي قياس نظيرتها</p>
+<p class="text-purple-600 dark:text-purple-400 text-sm mt-2">∠ABC = ∠A'B'C'</p>
+</div>
+<div class="bg-purple-200 dark:bg-purple-800/50 p-4 rounded-xl">
+<h4 class="font-bold text-purple-800 dark:text-purple-200 text-lg mb-2">حفظ الشكل</h4>
+<p class="text-purple-700 dark:text-purple-300">الشكل ونظيره لهما نفس الشكل والحجم</p>
+</div>
+<div class="bg-purple-200 dark:bg-purple-800/50 p-4 rounded-xl">
+<h4 class="font-bold text-purple-800 dark:text-purple-200 text-lg mb-2">حفظ المساحة</h4>
+<p class="text-purple-700 dark:text-purple-300">مساحة الشكل تساوي مساحة نظيره</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Property Demonstrations -->
+<div class="grid md:grid-cols-2 gap-8">
+<!-- Distance Property Demo -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-6 border-4 border-rose-400">
+<h3 class="text-xl font-bold text-rose-800 dark:text-rose-200 mb-4 text-center">تجربة: حفظ الأطوال</h3>
+<svg class="mx-auto" height="200" viewbox="0 0 300 200" width="300">
+<!-- Grid -->
+<defs>
+<pattern height="20" id="propertyGrid1" patternunits="userSpaceOnUse" width="20">
+<path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e5e7eb" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#propertyGrid1)" height="100%" width="100%"></rect>
+<!-- Symmetry axis -->
+<line class="symmetry-line" x1="150" x2="150" y1="0" y2="200"></line>
+<!-- Original triangle -->
+<polygon fill="#E11D48" opacity="0.3" points="60,60 100,60 80,120" stroke="#E11D48" stroke-width="2"></polygon>
+<text class="fill-rose-700 text-sm font-bold" x="70" y="50">ABC</text>
+<!-- Reflected triangle -->
+<polygon fill="#F59E0B" opacity="0.3" points="200,60 240,60 220,120" stroke="#F59E0B" stroke-width="2"></polygon>
+<text class="fill-orange-700 text-sm font-bold" x="210" y="50">A'B'C'</text>
+<!-- Length indicators -->
+<text class="fill-rose-700 text-xs font-bold" x="70" y="140">|AB| = 40</text>
+<text class="fill-orange-700 text-xs font-bold" x="200" y="140">|A'B'| = 40</text>
+</svg>
+</div>
+<!-- Angle Property Demo -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-6 border-4 border-purple-400">
+<h3 class="text-xl font-bold text-purple-800 dark:text-purple-200 mb-4 text-center">تجربة: حفظ الزوايا</h3>
+<svg class="mx-auto" height="200" viewbox="0 0 300 200" width="300">
+<!-- Grid -->
+<rect fill="url(#propertyGrid1)" height="100%" width="100%"></rect>
+<!-- Symmetry axis -->
+<line class="symmetry-line" x1="150" x2="150" y1="0" y2="200"></line>
+<!-- Original angle -->
+<line stroke="#8B5CF6" stroke-width="3" x1="50" x2="100" y1="100" y2="100"></line>
+<line stroke="#8B5CF6" stroke-width="3" x1="50" x2="80" y1="100" y2="60"></line>
+<path d="M 70 100 A 20 20 0 0 0 65 85" fill="none" stroke="#DC2626" stroke-width="2"></path>
+<text class="fill-red-600 text-sm font-bold" x="75" y="85">60°</text>
+<!-- Reflected angle -->
+<line stroke="#F59E0B" stroke-width="3" x1="200" x2="250" y1="100" y2="100"></line>
+<line stroke="#F59E0B" stroke-width="3" x1="250" x2="220" y1="100" y2="60"></line>
+<path d="M 230 100 A 20 20 0 0 1 235 85" fill="none" stroke="#DC2626" stroke-width="2"></path>
+<text class="fill-red-600 text-sm font-bold" x="225" y="85">60°</text>
+</svg>
+</div>
+</div>
+</div>
+</section>
+<!-- Exercises Section -->
+<section class="section hidden" id="exercises">
+<div class="glass-effect rounded-3xl p-8 mb-8">
+<h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-8 text-center">🎮 تمارين تفاعلية</h2>
+<!-- Exercise 1: Find the Reflection -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-8 mb-8 border-4 border-rose-400">
+<h3 class="text-2xl font-bold text-rose-800 dark:text-rose-200 mb-6">تمرين 1: أوجد النظير</h3>
+<div class="grid lg:grid-cols-2 gap-8">
+<div>
+<p class="text-gray-700 dark:text-gray-300 mb-4">انقر في المنطقة الصحيحة لنظير النقطة A</p>
+<svg class="border-4 border-gray-200 dark:border-gray-600 rounded-2xl bg-gray-50 dark:bg-gray-900" height="250" id="exercise1" viewbox="0 0 350 250" width="350">
+<!-- Grid -->
+<defs>
+<pattern height="25" id="ex1Grid" patternunits="userSpaceOnUse" width="25">
+<path d="M 25 0 L 0 0 0 25" fill="none" stroke="#e5e7eb" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#ex1Grid)" height="100%" width="100%"></rect>
+<!-- Symmetry axis -->
+<line class="symmetry-line" x1="175" x2="175" y1="0" y2="250"></line>
+<!-- Point A -->
+<circle cx="100" cy="100" fill="#E11D48" r="6"></circle>
+<text class="fill-rose-700 text-sm font-bold" x="85" y="90">A</text>
+<!-- Success zone (invisible) -->
+<circle class="success-zone" cx="250" cy="100" id="successZone" opacity="0" r="25"></circle>
+<!-- Clickable area -->
+<rect fill="transparent" height="250" id="clickableArea" width="175" x="175" y="0"></rect>
+</svg>
+</div>
+<div class="flex items-center">
+<div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl w-full" id="exercise1Result">
+<h4 class="text-xl font-bold text-gray-800 dark:text-white mb-4">النتيجة</h4>
+<p class="text-gray-600 dark:text-gray-400">انقر في المنطقة الصحيحة في الرسم</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Exercise 2: Symmetry Axes Count -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-8 mb-8 border-4 border-orange-400">
+<h3 class="text-2xl font-bold text-orange-800 dark:text-orange-200 mb-6">تمرين 2: عدد محاور التناظر</h3>
+<div class="grid lg:grid-cols-2 gap-8">
+<div>
+<p class="text-gray-700 dark:text-gray-300 mb-4">كم عدد محاور التناظر لهذا الشكل؟</p>
+<svg class="border-4 border-gray-200 dark:border-gray-600 rounded-2xl bg-gray-50 dark:bg-gray-900" height="200" id="exercise2Shape" viewbox="0 0 350 200" width="350">
+<!-- Regular hexagon -->
+<polygon fill="#F59E0B" opacity="0.3" points="175,50 225,75 225,125 175,150 125,125 125,75" stroke="#F59E0B" stroke-width="3"></polygon>
+</svg>
+</div>
+<div class="space-y-4">
+<h4 class="text-xl font-bold text-gray-800 dark:text-white">اختر الإجابة الصحيحة:</h4>
+<div class="space-y-2">
+<button class="w-full p-3 text-right bg-gray-100 dark:bg-gray-700 hover:bg-orange-100 dark:hover:bg-orange-800 rounded-xl transition-all duration-300 border-2 border-transparent hover:border-orange-400" onclick="checkAnswer(2, 4)">4 محاور</button>
+<button class="w-full p-3 text-right bg-gray-100 dark:bg-gray-700 hover:bg-orange-100 dark:hover:bg-orange-800 rounded-xl transition-all duration-300 border-2 border-transparent hover:border-orange-400" onclick="checkAnswer(2, 6)">6 محاور</button>
+<button class="w-full p-3 text-right bg-gray-100 dark:bg-gray-700 hover:bg-orange-100 dark:hover:bg-orange-800 rounded-xl transition-all duration-300 border-2 border-transparent hover:border-orange-400" onclick="checkAnswer(2, 8)">8 محاور</button>
+</div>
+<div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-xl" id="exercise2Result">
+<p class="text-gray-600 dark:text-gray-400">اختر إجابة لترى النتيجة</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Exercise 3: Complete the Symmetric Shape -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-8 mb-8 border-4 border-purple-400">
+<h3 class="text-2xl font-bold text-purple-800 dark:text-purple-200 mb-6">تمرين 3: أكمل الشكل المتناظر</h3>
+<div class="grid lg:grid-cols-2 gap-8">
+<div>
+<p class="text-gray-700 dark:text-gray-300 mb-4">أكمل الجزء المفقود من الشكل ليصبح متناظراً</p>
+<svg class="border-4 border-gray-200 dark:border-gray-600 rounded-2xl bg-gray-50 dark:bg-gray-900" height="300" id="exercise3" viewbox="0 0 350 300" width="350">
+<!-- Grid -->
+<defs>
+<pattern height="25" id="ex3Grid" patternunits="userSpaceOnUse" width="25">
+<path d="M 25 0 L 0 0 0 25" fill="none" stroke="#e5e7eb" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#ex3Grid)" height="100%" width="100%"></rect>
+<!-- Symmetry axis -->
+<line class="symmetry-line" x1="175" x2="175" y1="0" y2="300"></line>
+<!-- Half of a butterfly wing -->
+<path d="M 175 150 Q 125 100 100 125 Q 115 140 125 155 Q 140 170 175 150" fill="#8B5CF6" opacity="0.7" stroke="#8B5CF6" stroke-width="2"></path>
+<path d="M 175 150 Q 150 180 130 200 Q 145 210 160 195 Q 170 180 175 150" fill="#8B5CF6" opacity="0.7" stroke="#8B5CF6" stroke-width="2"></path>
+</svg>
+</div>
+<div class="flex items-center">
+<div class="space-y-4 w-full">
+<button class="w-full modern-btn text-white px-6 py-4 rounded-xl font-bold text-lg" onclick="completeShape()">أكمل الشكل</button>
+<div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl" id="exercise3Result">
+<p class="text-gray-600 dark:text-gray-400">اضغط على "أكمل الشكل" لرؤية النتيجة</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Exercise 4: Animated Shape Completion -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-8 border-4 border-yellow-400">
+<h3 class="text-2xl font-bold text-yellow-800 dark:text-yellow-200 mb-6">تمرين 4: إكمال الشكل بالأنيميشن</h3>
+<div class="grid lg:grid-cols-2 gap-8">
+<div>
+<p class="text-gray-700 dark:text-gray-300 mb-4">شاهد كيف يتم إكمال الشكل خطوة بخطوة</p>
+<svg class="border-4 border-gray-200 dark:border-gray-600 rounded-2xl bg-gray-50 dark:bg-gray-900" height="300" id="animatedExercise" viewbox="0 0 350 300" width="350">
+<!-- Grid -->
+<defs>
+<pattern height="25" id="animGrid" patternunits="userSpaceOnUse" width="25">
+<path d="M 25 0 L 0 0 0 25" fill="none" stroke="#e5e7eb" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#animGrid)" height="100%" width="100%"></rect>
+<!-- Symmetry axis -->
+<line class="symmetry-line" x1="175" x2="175" y1="0" y2="300"></line>
+<!-- Original half house -->
+<g id="originalHalf">
+<polygon fill="#E11D48" opacity="0.7" points="175,80 120,130 175,130" stroke="#E11D48" stroke-width="2"></polygon>
+<rect fill="#F59E0B" height="60" opacity="0.7" stroke="#F59E0B" stroke-width="2" width="45" x="130" y="130"></rect>
+<rect fill="#8B5CF6" height="25" opacity="0.7" stroke="#8B5CF6" stroke-width="2" width="15" x="140" y="150"></rect>
+</g>
+<!-- Animated reflection points (initially hidden) -->
+<g id="reflectionPoints" style="display: none;">
+<circle class="animate-point" cx="175" cy="80" fill="#DC2626" r="4"></circle>
+<circle class="animate-point" cx="230" cy="130" fill="#DC2626" r="4"></circle>
+<circle class="animate-point" cx="230" cy="130" fill="#DC2626" r="4"></circle>
+<circle class="animate-point" cx="195" cy="150" fill="#DC2626" r="4"></circle>
+<circle class="animate-point" cx="210" cy="150" fill="#DC2626" r="4"></circle>
+<circle class="animate-point" cx="195" cy="175" fill="#DC2626" r="4"></circle>
+<circle class="animate-point" cx="210" cy="175" fill="#DC2626" r="4"></circle>
+<circle class="animate-point" cx="175" cy="190" fill="#DC2626" r="4"></circle>
+<circle class="animate-point" cx="220" cy="190" fill="#DC2626" r="4"></circle>
+</g>
+<!-- Animated lines (initially hidden) -->
+<g id="animatedLines" style="display: none;">
+<polygon class="animate-line" fill="#E11D48" opacity="0.7" points="175,80 230,130 175,130" stroke="#E11D48" stroke-width="2"></polygon>
+<rect class="animate-line" fill="#F59E0B" height="60" opacity="0.7" stroke="#F59E0B" stroke-width="2" width="45" x="175" y="130"></rect>
+<rect class="animate-line" fill="#8B5CF6" height="25" opacity="0.7" stroke="#8B5CF6" stroke-width="2" width="15" x="195" y="150"></rect>
+</g>
+</svg>
+</div>
+<div class="flex items-center">
+<div class="space-y-4 w-full">
+<button class="w-full modern-btn text-white px-6 py-4 rounded-xl font-bold text-lg" id="animateBtn" onclick="startAnimation()">ابدأ الأنيميشن</button>
+<div class="bg-yellow-50 dark:bg-yellow-900/30 p-6 rounded-xl">
+<h5 class="font-bold text-yellow-800 dark:text-yellow-200 mb-2">خطوات الإكمال:</h5>
+<ol class="text-yellow-700 dark:text-yellow-300 text-sm space-y-1">
+<li>1. تحديد النقاط الأساسية</li>
+<li>2. إيجاد النقاط النظيرة</li>
+<li>3. ربط النقاط لتكوين الشكل</li>
+<li>4. إكمال التفاصيل</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="gradient-bg text-white text-center p-8 mt-12">
+<p class="text-xl font-bold">استكشف عالم التناظر والهندسة بطريقة تفاعلية</p>
+<p class="mt-2 opacity-80">برنامج تعليمي شامل للرياضيات</p>
+</footer>
+
+<pre id="result"></pre><button onclick="run()">تشغيل الدرس</button>
+<script>
+async function run() {
+    const res = await fetch("/.netlify/functions/symmetry");
+    const text = await res.text();
+    document.getElementById("result").textContent = text;
+}
+</script>
+</body>
+</html>

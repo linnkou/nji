@@ -1,0 +1,645 @@
+﻿<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>تنظيم المعطيات</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Noto Sans Arabic', sans-serif;
+        }
+        
+        .slide-enter {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        
+        .slide-active {
+            opacity: 1;
+            transform: translateX(0);
+            transition: all 0.3s ease;
+        }
+        
+        .table-hover:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .dark .table-hover:hover {
+            background-color: #374151;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
+<!-- Header -->
+<header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center py-4">
+<h1 class="text-2xl font-bold text-emerald-600 dark:text-emerald-400">📊 تنظيم المعطيات</h1>
+<div class="flex space-x-reverse space-x-4">
+<button class="bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-4 py-2 rounded-lg text-sm font-medium" id="progressBtn">
+                        التقدم: <span id="progressText">0/7</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<!-- Navigation -->
+<nav class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white sticky top-0 z-40">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex space-x-reverse space-x-1 overflow-x-auto py-3">
+<button class="nav-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm font-medium hover:bg-white hover:bg-opacity-20 transition-all" data-section="intro">المقدمة</button>
+<button class="nav-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm font-medium hover:bg-white hover:bg-opacity-20 transition-all" data-section="pie-chart">المخطط الدائري</button>
+<button class="nav-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm font-medium hover:bg-white hover:bg-opacity-20 transition-all" data-section="bar-chart">مخطط الأعمدة</button>
+<button class="nav-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm font-medium hover:bg-white hover:bg-opacity-20 transition-all" data-section="tables">قراءة الجداول</button>
+<button class="nav-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm font-medium hover:bg-white hover:bg-opacity-20 transition-all" data-section="fill-tables">ملء الجداول</button>
+<button class="nav-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm font-medium hover:bg-white hover:bg-opacity-20 transition-all" data-section="practice">التمارين</button>
+<button class="nav-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm font-medium hover:bg-white hover:bg-opacity-20 transition-all" data-section="create">إنشاء مخطط</button>
+</div>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- Introduction Section -->
+<section class="section" id="intro">
+<div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8">
+<h2 class="text-3xl font-bold mb-6 text-center">مرحباً بك في عالم تنظيم المعطيات! 📈</h2>
+<div class="grid md:grid-cols-2 gap-8">
+<div>
+<h3 class="text-xl font-semibold mb-4 text-emerald-600 dark:text-emerald-400">ماذا ستتعلم؟</h3>
+<ul class="space-y-3">
+<li class="flex items-center">
+<span class="w-2 h-2 bg-emerald-600 rounded-full mr-3"></span>
+                                قراءة وفهم المخططات الدائرية
+                            </li>
+<li class="flex items-center">
+<span class="w-2 h-2 bg-teal-600 rounded-full mr-3"></span>
+                                تحليل مخططات الأعمدة
+                            </li>
+<li class="flex items-center">
+<span class="w-2 h-2 bg-cyan-600 rounded-full mr-3"></span>
+                                قراءة واستخراج المعلومات من الجداول
+                            </li>
+<li class="flex items-center">
+<span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+                                ملء الجداول وتنظيم البيانات
+                            </li>
+<li class="flex items-center">
+<span class="w-2 h-2 bg-purple-600 rounded-full mr-3"></span>
+                                إنشاء مخططات بسيطة
+                            </li>
+</ul>
+</div>
+<div class="text-center">
+<div class="bg-gradient-to-br from-emerald-600 to-teal-600 text-white p-6 rounded-xl">
+<h4 class="text-lg font-semibold mb-3">🎯 هدفنا</h4>
+<p class="text-sm leading-relaxed">تعلم كيفية تنظيم وقراءة وتفسير البيانات المعروضة في أشكال مختلفة وتحويل المعلومات إلى معرفة مفيدة</p>
+</div>
+</div>
+</div>
+<div class="text-center mt-8">
+<button class="bg-emerald-600 text-white px-8 py-3 rounded-lg hover:bg-emerald-700 transition-all font-medium" onclick="nextSection('pie-chart')">ابدأ التعلم 🚀</button>
+</div>
+</div>
+</section>
+<!-- Pie Chart Section -->
+<section class="section hidden" id="pie-chart">
+<div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8">
+<h2 class="text-2xl font-bold mb-6">📊 المخطط الدائري (Pie Chart)</h2>
+<div class="grid lg:grid-cols-2 gap-8">
+<div>
+<h3 class="text-lg font-semibold mb-4 text-emerald-600 dark:text-emerald-400">ما هو المخطط الدائري؟</h3>
+<p class="text-gray-600 dark:text-gray-300 mb-4">
+                            المخطط الدائري هو رسم بياني دائري يُقسم إلى قطاعات، حيث يمثل كل قطاع نسبة معينة من الكل.
+                        </p>
+<h4 class="font-semibold mb-3">خصائص المخطط الدائري:</h4>
+<ul class="space-y-2">
+<li class="flex items-start">
+<span class="w-2 h-2 bg-emerald-500 rounded-full mt-2 mr-3"></span>
+                                مجموع النسب = 100%
+                            </li>
+<li class="flex items-start">
+<span class="w-2 h-2 bg-teal-500 rounded-full mt-2 mr-3"></span>
+                                كل قطاع يمثل جزءاً من الكل
+                            </li>
+<li class="flex items-start">
+<span class="w-2 h-2 bg-cyan-500 rounded-full mt-2 mr-3"></span>
+                                يُستخدم لمقارنة الأجزاء بالكل
+                            </li>
+</ul>
+</div>
+<div>
+<div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+<h4 class="font-semibold mb-4 text-center">مثال: توزيع الطلاب حسب المواد المفضلة</h4>
+<canvas height="300" id="examplePieChart" width="300"></canvas>
+</div>
+</div>
+</div>
+<!-- Interactive Exercise -->
+<div class="mt-8 bg-emerald-50 dark:bg-emerald-900 dark:bg-opacity-30 p-6 rounded-lg">
+<h4 class="font-semibold mb-4">🤔 تمرين تفاعلي</h4>
+<p class="mb-4">انظر إلى المخطط أعلاه وأجب على الأسئلة:</p>
+<div class="space-y-4">
+<div>
+<p class="mb-2">1. ما هي المادة الأكثر تفضيلاً؟</p>
+<div class="space-y-2">
+<label class="flex items-center">
+<input class="mr-2" name="q1" type="radio" value="math"/>
+<span>الرياضيات</span>
+</label>
+<label class="flex items-center">
+<input class="mr-2" name="q1" type="radio" value="science"/>
+<span>العلوم</span>
+</label>
+<label class="flex items-center">
+<input class="mr-2" name="q1" type="radio" value="arabic"/>
+<span>اللغة العربية</span>
+</label>
+</div>
+</div>
+<button class="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700 transition-all" onclick="checkPieAnswer()">تحقق من الإجابة</button>
+<div class="hidden mt-3" id="pieResult"></div>
+</div>
+</div>
+<div class="text-center mt-8">
+<button class="bg-emerald-600 text-white px-8 py-3 rounded-lg hover:bg-emerald-700 transition-all font-medium" onclick="nextSection('bar-chart')">التالي: مخططات الأعمدة ←</button>
+</div>
+</div>
+</section>
+<!-- Bar Chart Section -->
+<section class="section hidden" id="bar-chart">
+<div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8">
+<h2 class="text-2xl font-bold mb-6">📊 مخطط الأعمدة (Bar Chart)</h2>
+<div class="grid lg:grid-cols-2 gap-8">
+<div>
+<h3 class="text-lg font-semibold mb-4 text-teal-600 dark:text-teal-400">ما هو مخطط الأعمدة؟</h3>
+<p class="text-gray-600 dark:text-gray-300 mb-4">
+                            مخطط الأعمدة يستخدم أعمدة بأطوال مختلفة لتمثيل البيانات والمقارنة بين القيم المختلفة.
+                        </p>
+<h4 class="font-semibold mb-3">كيفية قراءة المخطط:</h4>
+<ul class="space-y-2">
+<li class="flex items-start">
+<span class="w-2 h-2 bg-emerald-500 rounded-full mt-2 mr-3"></span>
+                                المحور الأفقي (X): يمثل الفئات
+                            </li>
+<li class="flex items-start">
+<span class="w-2 h-2 bg-teal-500 rounded-full mt-2 mr-3"></span>
+                                المحور العمودي (Y): يمثل القيم
+                            </li>
+<li class="flex items-start">
+<span class="w-2 h-2 bg-cyan-500 rounded-full mt-2 mr-3"></span>
+                                ارتفاع العمود = القيمة
+                            </li>
+</ul>
+</div>
+<div>
+<div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+<h4 class="font-semibold mb-4 text-center">مثال: عدد الكتب المقروءة شهرياً</h4>
+<canvas height="300" id="exampleBarChart" width="400"></canvas>
+</div>
+</div>
+</div>
+<!-- Interactive Exercise -->
+<div class="mt-8 bg-teal-50 dark:bg-teal-900 dark:bg-opacity-30 p-6 rounded-lg">
+<h4 class="font-semibold mb-4">🧮 تمرين استخراج البيانات</h4>
+<p class="mb-4">استخدم المخطط أعلاه للإجابة:</p>
+<div class="grid md:grid-cols-2 gap-6">
+<div>
+<p class="mb-2">كم كتاباً قُرئ في شهر مارس؟</p>
+<input class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-base" id="marchBooks" placeholder="أدخل العدد" type="number"/>
+</div>
+<div>
+<p class="mb-2">ما هو الشهر الذي قُرئت فيه أكثر الكتب؟</p>
+<select class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-base" id="bestMonth">
+<option value="">اختر الشهر</option>
+<option value="jan">يناير</option>
+<option value="feb">فبراير</option>
+<option value="mar">مارس</option>
+<option value="apr">أبريل</option>
+</select>
+</div>
+</div>
+<button class="mt-4 bg-teal-600 text-white px-6 py-2 rounded-lg hover:bg-teal-700 transition-all" onclick="checkBarAnswer()">تحقق من الإجابات</button>
+<div class="hidden mt-3" id="barResult"></div>
+</div>
+<div class="text-center mt-8">
+<button class="bg-teal-600 text-white px-8 py-3 rounded-lg hover:bg-teal-700 transition-all font-medium" onclick="nextSection('tables')">التالي: قراءة الجداول ←</button>
+</div>
+</div>
+</section>
+<!-- Tables Section -->
+<section class="section hidden" id="tables">
+<div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8">
+<h2 class="text-2xl font-bold mb-6">📋 قراءة الجداول</h2>
+<div class="mb-8">
+<h3 class="text-lg font-semibold mb-4 text-cyan-600 dark:text-cyan-400">مكونات الجدول</h3>
+<div class="grid md:grid-cols-3 gap-6">
+<div class="bg-emerald-50 dark:bg-emerald-900 dark:bg-opacity-30 p-4 rounded-lg">
+<h4 class="font-semibold mb-2">العنوان</h4>
+<p class="text-sm">يوضح موضوع الجدول</p>
+</div>
+<div class="bg-teal-50 dark:bg-teal-900 dark:bg-opacity-30 p-4 rounded-lg">
+<h4 class="font-semibold mb-2">الأعمدة</h4>
+<p class="text-sm">تمثل الفئات المختلفة</p>
+</div>
+<div class="bg-cyan-50 dark:bg-cyan-900 dark:bg-opacity-30 p-4 rounded-lg">
+<h4 class="font-semibold mb-2">الصفوف</h4>
+<p class="text-sm">تحتوي على البيانات</p>
+</div>
+</div>
+</div>
+<div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg mb-8">
+<h4 class="font-semibold mb-4 text-center">مثال: نتائج امتحان العلوم</h4>
+<div class="overflow-x-auto">
+<table class="w-full border-collapse border border-gray-300 dark:border-gray-600">
+<thead>
+<tr class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
+<th class="border border-gray-300 dark:border-gray-600 p-3 text-center">الفصل</th>
+<th class="border border-gray-300 dark:border-gray-600 p-3 text-center">ممتاز</th>
+<th class="border border-gray-300 dark:border-gray-600 p-3 text-center">جيد جداً</th>
+<th class="border border-gray-300 dark:border-gray-600 p-3 text-center">جيد</th>
+<th class="border border-gray-300 dark:border-gray-600 p-3 text-center">مقبول</th>
+<th class="border border-gray-300 dark:border-gray-600 p-3 text-center">المجموع</th>
+</tr>
+</thead>
+<tbody>
+<tr class="table-hover">
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center font-semibold">أ</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">12</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">8</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">5</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">3</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center font-bold">28</td>
+</tr>
+<tr class="table-hover">
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center font-semibold">ب</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">15</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">7</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">4</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">2</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center font-bold">28</td>
+</tr>
+<tr class="table-hover">
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center font-semibold">ج</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">9</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">11</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">6</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">4</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center font-bold">30</td>
+</tr>
+<tr class="bg-gray-100 dark:bg-gray-600 font-bold">
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">المجموع</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">36</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">26</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">15</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">9</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">86</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Table Exercise -->
+<div class="bg-cyan-50 dark:bg-cyan-900 dark:bg-opacity-30 p-6 rounded-lg">
+<h4 class="font-semibold mb-4">📝 تمرين استخراج المعلومات</h4>
+<div class="grid md:grid-cols-2 gap-6">
+<div>
+<p class="mb-2">كم طالباً حصل على درجة "ممتاز" في الفصل ب؟</p>
+<input class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-base" id="excellentB" placeholder="أدخل العدد" type="number"/>
+</div>
+<div>
+<p class="mb-2">ما هو العدد الإجمالي للطلاب الحاصلين على "جيد جداً"؟</p>
+<input class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-base" id="totalVeryGood" placeholder="أدخل العدد" type="number"/>
+</div>
+<div>
+<p class="mb-2">أي فصل لديه أكبر عدد من الطلاب؟</p>
+<select class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-base" id="largestClass">
+<option value="">اختر الفصل</option>
+<option value="a">الفصل أ</option>
+<option value="b">الفصل ب</option>
+<option value="c">الفصل ج</option>
+</select>
+</div>
+<div>
+<p class="mb-2">كم هو الفرق بين عدد الطلاب الممتازين والمقبولين؟</p>
+<input class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-base" id="difference" placeholder="أدخل الفرق" type="number"/>
+</div>
+</div>
+<button class="mt-4 bg-cyan-600 text-white px-6 py-2 rounded-lg hover:bg-cyan-700 transition-all" onclick="checkTableAnswer()">تحقق من الإجابات</button>
+<div class="hidden mt-3" id="tableResult"></div>
+</div>
+<div class="text-center mt-8">
+<button class="bg-cyan-600 text-white px-8 py-3 rounded-lg hover:bg-cyan-700 transition-all font-medium" onclick="nextSection('fill-tables')">التالي: ملء الجداول ←</button>
+</div>
+</div>
+</section>
+<!-- Fill Tables Section -->
+<section class="section hidden" id="fill-tables">
+<div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8">
+<h2 class="text-2xl font-bold mb-6">✏️ ملء الجداول</h2>
+<div class="mb-8">
+<h3 class="text-lg font-semibold mb-4 text-blue-600 dark:text-blue-400">كيفية ملء الجداول</h3>
+<div class="grid md:grid-cols-3 gap-6">
+<div class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-30 p-4 rounded-lg">
+<h4 class="font-semibold mb-2">١. قراءة البيانات</h4>
+<p class="text-sm">اقرأ البيانات المُعطاة بعناية</p>
+</div>
+<div class="bg-indigo-50 dark:bg-indigo-900 dark:bg-opacity-30 p-4 rounded-lg">
+<h4 class="font-semibold mb-2">٢. تحديد المكان</h4>
+<p class="text-sm">حدد الخانة المناسبة في الجدول</p>
+</div>
+<div class="bg-purple-50 dark:bg-purple-900 dark:bg-opacity-30 p-4 rounded-lg">
+<h4 class="font-semibold mb-2">٣. إدخال القيمة</h4>
+<p class="text-sm">أدخل القيمة في المكان الصحيح</p>
+</div>
+</div>
+</div>
+<!-- Exercise 1: Complete the table -->
+<div class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-30 p-6 rounded-lg mb-8">
+<h4 class="font-semibold mb-4">📊 التمرين الأول: أكمل الجدول</h4>
+<p class="mb-4 text-gray-600 dark:text-gray-300">
+                        الجدول التالي يوضح عدد الطلاب في كل فصل حسب المواد. أكمل الخانات الفارغة:
+                    </p>
+<div class="overflow-x-auto mb-4">
+<table class="w-full border-collapse border border-gray-300 dark:border-gray-600">
+<thead>
+<tr class="bg-blue-600 text-white">
+<th class="border border-gray-300 dark:border-gray-600 p-3 text-center">الفصل</th>
+<th class="border border-gray-300 dark:border-gray-600 p-3 text-center">الرياضيات</th>
+<th class="border border-gray-300 dark:border-gray-600 p-3 text-center">العلوم</th>
+<th class="border border-gray-300 dark:border-gray-600 p-3 text-center">اللغة العربية</th>
+<th class="border border-gray-300 dark:border-gray-600 p-3 text-center">المجموع</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center font-semibold">أ</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">25</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">23</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">22</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">
+<input class="w-16 p-1 border rounded text-center text-base" id="totalA" placeholder="؟" type="number"/>
+</td>
+</tr>
+<tr>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center font-semibold">ب</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">
+<input class="w-16 p-1 border rounded text-center text-base" id="mathB" placeholder="؟" type="number"/>
+</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">24</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">26</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">72</td>
+</tr>
+<tr>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center font-semibold">ج</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">28</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">
+<input class="w-16 p-1 border rounded text-center text-base" id="scienceC" placeholder="؟" type="number"/>
+</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">25</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">78</td>
+</tr>
+</tbody>
+</table>
+</div>
+<button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all" onclick="checkFillTable1()">تحقق من الإجابات</button>
+<div class="hidden mt-3" id="fillTable1Result"></div>
+</div>
+<!-- Exercise 2: Create table from data -->
+<div class="bg-indigo-50 dark:bg-indigo-900 dark:bg-opacity-30 p-6 rounded-lg">
+<h4 class="font-semibold mb-4">📋 التمرين الثاني: إنشاء جدول من البيانات</h4>
+<p class="mb-4 text-gray-600 dark:text-gray-300">
+<strong>البيانات:</strong> في المدرسة، يفضل 45 طالباً كرة القدم، و30 طالباً كرة السلة، و25 طالباً السباحة، و20 طالباً التنس. أنشئ جدول لتنظيم هذه البيانات:
+                    </p>
+<div class="overflow-x-auto mb-4">
+<table class="w-full border-collapse border border-gray-300 dark:border-gray-600">
+<thead>
+<tr class="bg-indigo-600 text-white">
+<th class="border border-gray-300 dark:border-gray-600 p-3 text-center">الرياضة</th>
+<th class="border border-gray-300 dark:border-gray-600 p-3 text-center">عدد الطلاب</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">كرة القدم</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">
+<input class="w-16 p-1 border rounded text-center text-base" id="football" placeholder="؟" type="number"/>
+</td>
+</tr>
+<tr>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">كرة السلة</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">
+<input class="w-16 p-1 border rounded text-center text-base" id="basketball" placeholder="؟" type="number"/>
+</td>
+</tr>
+<tr>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">السباحة</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">
+<input class="w-16 p-1 border rounded text-center text-base" id="swimming" placeholder="؟" type="number"/>
+</td>
+</tr>
+<tr>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">التنس</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">
+<input class="w-16 p-1 border rounded text-center text-base" id="tennis" placeholder="؟" type="number"/>
+</td>
+</tr>
+<tr class="bg-gray-100 dark:bg-gray-600 font-bold">
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">المجموع</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">
+<input class="w-16 p-1 border rounded text-center text-base" id="totalSports" placeholder="؟" type="number"/>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<button class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-all" onclick="checkFillTable2()">تحقق من الإجابات</button>
+<div class="hidden mt-3" id="fillTable2Result"></div>
+</div>
+<div class="text-center mt-8">
+<button class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-all font-medium" onclick="nextSection('practice')">التالي: التمارين الشاملة ←</button>
+</div>
+</div>
+</section>
+<!-- Practice Section -->
+<section class="section hidden" id="practice">
+<div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8">
+<h2 class="text-2xl font-bold mb-6">🏆 التمارين الشاملة</h2>
+<div class="space-y-8">
+<!-- Practice Exercise 1 -->
+<div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900 dark:to-pink-900 dark:bg-opacity-30 p-6 rounded-lg">
+<h3 class="text-lg font-semibold mb-4">التمرين الأول: مخطط دائري</h3>
+<div class="grid lg:grid-cols-2 gap-6">
+<div>
+<canvas height="300" id="practiceChart1" width="300"></canvas>
+</div>
+<div class="space-y-4">
+<p class="font-medium">أجب على الأسئلة التالية بناءً على المخطط:</p>
+<div>
+<p class="mb-2">1. ما نسبة الطلاب الذين يفضلون كرة القدم؟</p>
+<input class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-base" id="practice1Q1" placeholder="النسبة %" type="number"/>
+</div>
+<div>
+<p class="mb-2">2. أي رياضة هي الأقل تفضيلاً؟</p>
+<select class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-base" id="practice1Q2">
+<option value="">اختر الرياضة</option>
+<option value="football">كرة القدم</option>
+<option value="basketball">كرة السلة</option>
+<option value="tennis">التنس</option>
+<option value="swimming">السباحة</option>
+</select>
+</div>
+</div>
+</div>
+<button class="mt-4 bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-all" onclick="checkPractice1()">تحقق من الإجابات</button>
+<div class="hidden mt-3" id="practice1Result"></div>
+</div>
+<!-- Practice Exercise 2 -->
+<div class="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900 dark:to-red-900 dark:bg-opacity-30 p-6 rounded-lg">
+<h3 class="text-lg font-semibold mb-4">التمرين الثاني: جدول مبيعات</h3>
+<div class="overflow-x-auto mb-4">
+<table class="w-full border-collapse border border-gray-300 dark:border-gray-600">
+<thead>
+<tr class="bg-orange-600 text-white">
+<th class="border border-gray-300 dark:border-gray-600 p-3">المنتج</th>
+<th class="border border-gray-300 dark:border-gray-600 p-3">الربع الأول</th>
+<th class="border border-gray-300 dark:border-gray-600 p-3">الربع الثاني</th>
+<th class="border border-gray-300 dark:border-gray-600 p-3">الربع الثالث</th>
+<th class="border border-gray-300 dark:border-gray-600 p-3">الربع الرابع</th>
+</tr>
+</thead>
+<tbody>
+<tr class="table-hover">
+<td class="border border-gray-300 dark:border-gray-600 p-3 font-semibold">الهواتف</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">120</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">150</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">180</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">200</td>
+</tr>
+<tr class="table-hover">
+<td class="border border-gray-300 dark:border-gray-600 p-3 font-semibold">الحاسوب</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">80</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">95</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">110</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">130</td>
+</tr>
+<tr class="table-hover">
+<td class="border border-gray-300 dark:border-gray-600 p-3 font-semibold">الأجهزة اللوحية</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">60</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">70</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">85</td>
+<td class="border border-gray-300 dark:border-gray-600 p-3 text-center">90</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="grid md:grid-cols-2 gap-4">
+<div>
+<p class="mb-2">ما هو إجمالي مبيعات الهواتف في السنة؟</p>
+<input class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-base" id="practice2Q1" placeholder="أدخل المجموع" type="number"/>
+</div>
+<div>
+<p class="mb-2">في أي ربع كانت مبيعات الحاسوب أعلى؟</p>
+<select class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-base" id="practice2Q2">
+<option value="">اختر الربع</option>
+<option value="q1">الربع الأول</option>
+<option value="q2">الربع الثاني</option>
+<option value="q3">الربع الثالث</option>
+<option value="q4">الربع الرابع</option>
+</select>
+</div>
+</div>
+<button class="mt-4 bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 transition-all" onclick="checkPractice2()">تحقق من الإجابات</button>
+<div class="hidden mt-3" id="practice2Result"></div>
+</div>
+</div>
+<div class="text-center mt-8">
+<button class="bg-purple-600 text-white px-8 py-3 rounded-lg hover:bg-purple-700 transition-all font-medium" onclick="nextSection('create')">التالي: إنشاء مخطط ←</button>
+</div>
+</div>
+</section>
+<!-- Create Chart Section -->
+<section class="section hidden" id="create">
+<div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8">
+<h2 class="text-2xl font-bold mb-6">🎨 إنشاء مخطط خاص بك</h2>
+<div class="grid lg:grid-cols-2 gap-8">
+<div>
+<h3 class="text-lg font-semibold mb-4 text-pink-600 dark:text-pink-400">أدخل البيانات</h3>
+<div class="space-y-4">
+<div>
+<label class="block mb-2 font-medium">عنوان المخطط:</label>
+<input class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-base" id="chartTitle" placeholder="مثال: المواد المفضلة" type="text"/>
+</div>
+<div>
+<label class="block mb-2 font-medium">نوع المخطط:</label>
+<select class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-base" id="chartType">
+<option value="pie">مخطط دائري</option>
+<option value="bar">مخطط أعمدة</option>
+</select>
+</div>
+<div id="dataInputs">
+<label class="block mb-2 font-medium">البيانات:</label>
+<div class="space-y-2" id="dataFields">
+<div class="flex gap-2">
+<input class="flex-1 p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-base" data-type="label" placeholder="التسمية" type="text"/>
+<input class="flex-1 p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-base" data-type="value" placeholder="القيمة" type="number"/>
+</div>
+<div class="flex gap-2">
+<input class="flex-1 p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-base" data-type="label" placeholder="التسمية" type="text"/>
+<input class="flex-1 p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-base" data-type="value" placeholder="القيمة" type="number"/>
+</div>
+<div class="flex gap-2">
+<input class="flex-1 p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-base" data-type="label" placeholder="التسمية" type="text"/>
+<input class="flex-1 p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-base" data-type="value" placeholder="القيمة" type="number"/>
+</div>
+</div>
+<button class="mt-2 text-pink-600 hover:text-pink-700 text-sm" onclick="addDataField()">+ إضافة صف جديد</button>
+</div>
+<button class="w-full bg-pink-600 text-white p-3 rounded-lg hover:bg-pink-700 transition-all font-medium" onclick="createCustomChart()">إنشاء المخطط</button>
+<button class="w-full bg-gray-500 text-white p-3 rounded-lg hover:bg-gray-600 transition-all font-medium mt-2" id="clearBtn" onclick="clearChart()" style="display: none;">مسح وإنشاء مخطط جديد</button>
+</div>
+</div>
+<div>
+<h3 class="text-lg font-semibold mb-4 text-pink-600 dark:text-pink-400">المخطط الخاص بك</h3>
+<div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg min-h-[400px] flex items-center justify-center">
+<div id="customChartContainer">
+<div class="text-center text-gray-500 dark:text-gray-400" id="emptyState">
+<p class="text-lg mb-2">📊</p>
+<p>أدخل البيانات وانقر "إنشاء المخطط" لعرض النتيجة</p>
+</div>
+<canvas id="customChart" style="display: none;"></canvas>
+</div>
+</div>
+<div class="mt-4 text-center">
+<button class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-all" id="downloadBtn" onclick="downloadChart()" style="display: none;">📥 تحميل المخطط</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Success Modal -->
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="successModal">
+<div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-2xl max-w-md w-full mx-4">
+<div class="text-center">
+<div class="text-6xl mb-4">🎉</div>
+<h3 class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-4">مبروك!</h3>
+<p class="text-gray-600 dark:text-gray-300 mb-6">لقد أكملت جميع الدروس بنجاح!</p>
+<button class="bg-emerald-600 text-white px-8 py-3 rounded-lg hover:bg-emerald-700 transition-all" onclick="closeSuccessModal()">ممتاز!</button>
+</div>
+</div>
+</div>
+
+<pre id="result"></pre><button onclick="run()">تشغيل الدرس</button>
+<script>
+async function run() {
+    const res = await fetch("/.netlify/functions/data-organization");
+    const text = await res.text();
+    document.getElementById("result").textContent = text;
+}
+</script>
+</body>
+</html>

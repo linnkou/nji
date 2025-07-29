@@ -1,0 +1,639 @@
+﻿<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>النسبة المئوية - الرابع المتناسب</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&amp;family=Cairo:wght@300;400;600;700;900&amp;display=swap" rel="stylesheet"/>
+
+<style>
+        .calculation {
+            direction: ltr;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+        }
+        .arrow {
+            font-size: 2rem;
+            color: #5D5CDE;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .highlight {
+            background: linear-gradient(135deg, #FFD54F 0%, #FFC107 100%);
+            padding: 12px 20px;
+            border-radius: 15px;
+            border: 3px solid #FF8F00;
+            box-shadow: 0 6px 12px rgba(255, 143, 0, 0.3);
+            font-weight: bold;
+            color: #E65100;
+        }
+        .card-3d {
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
+            box-shadow: 
+                12px 12px 24px rgba(0, 0, 0, 0.1),
+                -12px -12px 24px rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+        .dark .card-3d {
+            background: linear-gradient(145deg, #2d3748, #1a202c);
+            box-shadow: 
+                12px 12px 24px rgba(0, 0, 0, 0.3),
+                -12px -12px 24px rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        .card-3d:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                16px 16px 32px rgba(0, 0, 0, 0.15),
+                -16px -16px 32px rgba(255, 255, 255, 0.95);
+        }
+        .dark .card-3d:hover {
+            box-shadow: 
+                16px 16px 32px rgba(0, 0, 0, 0.4),
+                -16px -16px 32px rgba(255, 255, 255, 0.08);
+        }
+        .button-3d {
+            box-shadow: 
+                6px 6px 12px rgba(0, 0, 0, 0.2),
+                -3px -3px 6px rgba(255, 255, 255, 0.2);
+            transition: all 0.2s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        .button-3d:active {
+            transform: translateY(3px);
+            box-shadow: 
+                3px 3px 6px rgba(0, 0, 0, 0.2),
+                -1px -1px 3px rgba(255, 255, 255, 0.2);
+        }
+        .proportion-container {
+            direction: ltr;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+        }
+        .title-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .selected-btn {
+            ring: 4px;
+            ring-color: rgba(255, 255, 255, 0.6);
+            transform: scale(1.05);
+        }
+        .gradient-orange {
+            background: linear-gradient(135deg, #FF9A56 0%, #FF6B35 100%);
+        }
+        .gradient-pink {
+            background: linear-gradient(135deg, #FF8A80 0%, #F8BBD9 100%);
+        }
+        .gradient-teal {
+            background: linear-gradient(135deg, #4DB6AC 0%, #26A69A 100%);
+        }
+        .gradient-purple {
+            background: linear-gradient(135deg, #BA68C8 0%, #9C27B0 100%);
+        }
+        .gradient-blue {
+            background: linear-gradient(135deg, #64B5F6 0%, #2196F3 100%);
+        }
+        .gradient-green {
+            background: linear-gradient(135deg, #81C784 0%, #4CAF50 100%);
+        }
+        .gradient-red {
+            background: linear-gradient(135deg, #E57373 0%, #F44336 100%);
+        }
+        .gradient-indigo {
+            background: linear-gradient(135deg, #9575CD 0%, #673AB7 100%);
+        }
+        .gradient-cyan {
+            background: linear-gradient(135deg, #4DD0E1 0%, #00BCD4 100%);
+        }
+        .gradient-amber {
+            background: linear-gradient(135deg, #FFB74D 0%, #FF9800 100%);
+        }
+        .colorful-bg-1 {
+            background: linear-gradient(135deg, #FFE0B2 0%, #FFCC80 100%);
+        }
+        .colorful-bg-2 {
+            background: linear-gradient(135deg, #F8BBD9 0%, #F48FB1 100%);
+        }
+        .colorful-bg-3 {
+            background: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%);
+        }
+        .colorful-bg-4 {
+            background: linear-gradient(135deg, #E1BEE7 0%, #CE93D8 100%);
+        }
+        .colorful-bg-5 {
+            background: linear-gradient(135deg, #BBDEFB 0%, #90CAF9 100%);
+        }
+        .colorful-bg-6 {
+            background: linear-gradient(135deg, #FFF9C4 0%, #FFF176 100%);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pink-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 font-arabic min-h-screen">
+<!-- Dark mode detection -->
+
+<div class="container mx-auto px-3 py-6 max-w-6xl">
+<!-- Header -->
+<div class="text-center mb-8">
+<h1 class="text-4xl md:text-6xl font-bold font-amiri title-gradient mb-4">
+                النسبة المئوية
+            </h1>
+<p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 font-medium">
+                تعلم حساب النسب المئوية بطريقة الرابع المتناسب
+            </p>
+</div>
+<!-- Main Method Selection -->
+<div class="card-3d p-4 md:p-8 mb-6 colorful-bg-1">
+<h2 class="text-xl md:text-2xl font-bold text-center mb-4 md:mb-6 text-orange-800">اختر نوع المسألة:</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
+<button class="main-method-btn button-3d gradient-blue text-white p-4 md:p-6 rounded-2xl transition-all duration-300 transform hover:scale-105" onclick="selectMainMethod('percentage')">
+<h3 class="text-lg md:text-xl font-bold mb-2 md:mb-3">حساب قيمة النسبة</h3>
+<p class="text-sm opacity-90">حساب قيمة نسبة معينة من عدد</p>
+</button>
+<button class="main-method-btn button-3d gradient-red text-white p-4 md:p-6 rounded-2xl transition-all duration-300 transform hover:scale-105" onclick="selectMainMethod('discount')">
+<h3 class="text-lg md:text-xl font-bold mb-2 md:mb-3">حساب التخفيض</h3>
+<p class="text-sm opacity-90">حساب السعر بعد التخفيض</p>
+</button>
+<button class="main-method-btn button-3d gradient-green text-white p-4 md:p-6 rounded-2xl transition-all duration-300 transform hover:scale-105" onclick="selectMainMethod('increase')">
+<h3 class="text-lg md:text-xl font-bold mb-2 md:mb-3">حساب الزيادة</h3>
+<p class="text-sm opacity-90">حساب القيمة بعد الزيادة</p>
+</button>
+</div>
+</div>
+<!-- Sub Method Selection -->
+<div class="hidden card-3d p-4 md:p-6 mb-6 colorful-bg-2" id="subMethodSelection">
+<h3 class="text-lg md:text-xl font-bold text-center mb-3 md:mb-4 text-pink-800">اختر نوع الحساب:</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+<button class="sub-method-btn button-3d gradient-purple text-white p-3 md:p-4 rounded-xl transition-all duration-300 text-sm md:text-base" onclick="selectSubMethod('calculate')">
+<span id="calculateBtnText">حساب القيمة عند إعطاء النسبة</span>
+</button>
+<button class="sub-method-btn button-3d gradient-indigo text-white p-3 md:p-4 rounded-xl transition-all duration-300 text-sm md:text-base" onclick="selectSubMethod('find')">
+<span id="findBtnText">حساب النسبة عند إعطاء القيمة</span>
+</button>
+</div>
+</div>
+<!-- Method Content Areas -->
+<!-- Percentage Calculate -->
+<div class="method-content hidden card-3d p-4 md:p-8 mb-6 colorful-bg-3" id="percentageCalculate">
+<h2 class="text-2xl md:text-3xl font-bold text-center mb-4 md:mb-6 text-green-800">
+                حساب قيمة النسبة المعطاة
+            </h2>
+<div class="bg-gradient-to-r from-blue-200 to-blue-300 dark:from-blue-900 dark:to-blue-800 p-4 md:p-6 rounded-2xl mb-4 md:mb-6 card-3d">
+<h3 class="text-lg md:text-xl font-bold text-blue-800 dark:text-blue-300 mb-2 md:mb-3">مثال توضيحي:</h3>
+<p class="text-base md:text-lg text-blue-700 dark:text-blue-300">ما قيمة 25% من 200 دينار جزائري؟</p>
+</div>
+<div class="bg-gradient-to-br from-yellow-100 to-yellow-200 dark:from-gray-700 dark:to-gray-800 p-4 md:p-6 rounded-2xl mb-4 md:mb-6 card-3d">
+<h4 class="text-lg md:text-xl font-bold mb-4 md:mb-6 text-center text-yellow-800">تمثيل الرابع المتناسب:</h4>
+<div class="proportion-container space-y-4 md:space-y-6">
+<div class="flex items-center justify-center space-x-4 md:space-x-8 text-lg md:text-2xl">
+<div class="text-center">
+<div class="highlight text-base md:text-xl">200</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">العدد الأصلي</div>
+</div>
+<div class="arrow">→</div>
+<div class="text-center">
+<div class="highlight text-base md:text-xl">100%</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">النسبة الكاملة</div>
+</div>
+</div>
+<div class="flex items-center justify-center space-x-4 md:space-x-8 text-lg md:text-2xl">
+<div class="text-center">
+<div class="highlight text-base md:text-xl text-red-600">؟</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">المجهول</div>
+</div>
+<div class="arrow">→</div>
+<div class="text-center">
+<div class="highlight text-base md:text-xl">25%</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">النسبة المطلوبة</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-gradient-to-br from-green-200 to-green-300 dark:from-green-900 dark:to-green-800 p-4 md:p-6 rounded-2xl mb-4 md:mb-6 card-3d">
+<h4 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-center text-green-800 dark:text-green-300">الحساب:</h4>
+<div class="calculation text-base md:text-xl space-y-2 md:space-y-3 text-center">
+<div>? = (200 × 25) ÷ 100</div>
+<div>? = 5000 ÷ 100</div>
+<div>? = 50</div>
+</div>
+<div class="text-center mt-3 md:mt-4">
+<p class="text-green-800 dark:text-green-300 font-bold text-base md:text-lg">الإجابة: 50 دينار جزائري</p>
+</div>
+</div>
+<div class="border-4 border-dashed border-blue-400 dark:border-blue-600 p-4 md:p-6 rounded-2xl card-3d bg-white dark:bg-gray-800">
+<h4 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-center text-blue-600">جرب بنفسك:</h4>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-4 md:mb-6">
+<div>
+<label class="block text-sm md:text-lg font-medium mb-1 md:mb-2 text-gray-700 dark:text-gray-300">العدد الأصلي:</label>
+<input class="w-full p-2 md:p-3 border-2 rounded-xl text-base md:text-lg border-blue-300 focus:border-blue-500" id="originalNumber1" placeholder="مثال: 200" type="number"/>
+</div>
+<div>
+<label class="block text-sm md:text-lg font-medium mb-1 md:mb-2 text-gray-700 dark:text-gray-300">النسبة المطلوبة (%):</label>
+<input class="w-full p-2 md:p-3 border-2 rounded-xl text-base md:text-lg border-blue-300 focus:border-blue-500" id="percentage1" placeholder="مثال: 25" type="number"/>
+</div>
+<div class="flex items-end">
+<button class="w-full button-3d gradient-cyan text-white py-2 md:py-3 px-4 md:px-6 rounded-xl text-base md:text-lg font-bold" onclick="calculatePercentageValue()">
+                            احسب
+                        </button>
+</div>
+</div>
+<div class="hidden mt-4 md:mt-6 p-4 md:p-6 bg-gradient-to-r from-green-200 to-green-300 dark:from-green-900 dark:to-green-800 rounded-2xl card-3d" id="result1">
+<div class="calculation text-base md:text-xl text-center space-y-1 md:space-y-2" id="calculation1"></div>
+<div class="text-lg md:text-2xl font-bold text-green-600 mt-3 md:mt-4 text-center" id="answer1"></div>
+</div>
+</div>
+</div>
+<!-- Percentage Find -->
+<div class="method-content hidden card-3d p-4 md:p-8 mb-6 colorful-bg-4" id="percentageFind">
+<h2 class="text-2xl md:text-3xl font-bold text-center mb-4 md:mb-6 text-purple-800">
+                إيجاد النسبة المئوية عند إعطاء القيمة
+            </h2>
+<div class="bg-gradient-to-r from-purple-200 to-purple-300 dark:from-purple-900 dark:to-purple-800 p-4 md:p-6 rounded-2xl mb-4 md:mb-6 card-3d">
+<h3 class="text-lg md:text-xl font-bold text-purple-800 dark:text-purple-300 mb-2 md:mb-3">مثال توضيحي:</h3>
+<p class="text-base md:text-lg text-purple-700 dark:text-purple-300">حصل طالب على 85 درجة من 100. ما نسبته المئوية؟</p>
+</div>
+<div class="bg-gradient-to-br from-yellow-100 to-yellow-200 dark:from-gray-700 dark:to-gray-800 p-4 md:p-6 rounded-2xl mb-4 md:mb-6 card-3d">
+<h4 class="text-lg md:text-xl font-bold mb-4 md:mb-6 text-center text-yellow-800">تمثيل المسألة:</h4>
+<div class="proportion-container space-y-4 md:space-y-6">
+<div class="flex items-center justify-center space-x-4 md:space-x-8 text-lg md:text-2xl">
+<div class="text-center">
+<div class="highlight text-base md:text-xl">100</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">المجموع الكلي</div>
+</div>
+<div class="arrow">→</div>
+<div class="text-center">
+<div class="highlight text-base md:text-xl">100%</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">النسبة الكاملة</div>
+</div>
+</div>
+<div class="flex items-center justify-center space-x-4 md:space-x-8 text-lg md:text-2xl">
+<div class="text-center">
+<div class="highlight text-base md:text-xl">85</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">الدرجات المحصلة</div>
+</div>
+<div class="arrow">→</div>
+<div class="text-center">
+<div class="highlight text-base md:text-xl text-purple-600">؟%</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">النسبة المجهولة</div>
+</div>
+</div>
+</div>
+<div class="calculation mt-4 md:mt-6 text-base md:text-xl space-y-2 md:space-y-3 text-center">
+<div>? = (85 × 100) ÷ 100</div>
+<div>? = 8500 ÷ 100</div>
+<div>? = 85%</div>
+</div>
+</div>
+<div class="border-4 border-dashed border-purple-400 dark:border-purple-600 p-4 md:p-6 rounded-2xl card-3d bg-white dark:bg-gray-800">
+<h4 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-center text-purple-600">احسب النسبة المئوية:</h4>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-4 md:mb-6">
+<div>
+<label class="block text-sm md:text-lg font-medium mb-1 md:mb-2 text-gray-700 dark:text-gray-300">الجزء:</label>
+<input class="w-full p-2 md:p-3 border-2 rounded-xl text-base md:text-lg border-purple-300 focus:border-purple-500" id="part" placeholder="مثال: 85" type="number"/>
+</div>
+<div>
+<label class="block text-sm md:text-lg font-medium mb-1 md:mb-2 text-gray-700 dark:text-gray-300">الكل:</label>
+<input class="w-full p-2 md:p-3 border-2 rounded-xl text-base md:text-lg border-purple-300 focus:border-purple-500" id="total" placeholder="مثال: 100" type="number"/>
+</div>
+<div class="flex items-end">
+<button class="w-full button-3d gradient-orange text-white py-2 md:py-3 px-4 md:px-6 rounded-xl text-base md:text-lg font-bold" onclick="findPercentage()">
+                            احسب النسبة
+                        </button>
+</div>
+</div>
+<div class="hidden mt-4 md:mt-6 p-4 md:p-6 bg-gradient-to-r from-purple-200 to-purple-300 dark:from-purple-900 dark:to-purple-800 rounded-2xl card-3d" id="result2">
+<div class="calculation text-base md:text-xl space-y-2 md:space-y-3 text-center" id="calculation2"></div>
+<div class="text-lg md:text-2xl font-bold text-purple-600 mt-3 md:mt-4 text-center" id="answer2"></div>
+</div>
+</div>
+</div>
+<!-- Discount Calculate -->
+<div class="method-content hidden card-3d p-4 md:p-8 mb-6 colorful-bg-5" id="discountCalculate">
+<h2 class="text-2xl md:text-3xl font-bold text-center mb-4 md:mb-6 text-red-800">
+                حساب السعر بعد التخفيض
+            </h2>
+<div class="bg-gradient-to-r from-red-200 to-red-300 dark:from-red-900 dark:to-red-800 p-4 md:p-6 rounded-2xl mb-4 md:mb-6 card-3d">
+<h3 class="text-lg md:text-xl font-bold text-red-800 dark:text-red-300 mb-2 md:mb-3">مثال توضيحي:</h3>
+<p class="text-base md:text-lg text-red-700 dark:text-red-300">سعر جهاز 800 دينار جزائري، عليه تخفيض 20%. ما السعر بعد التخفيض؟</p>
+</div>
+<div class="bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 p-4 md:p-6 rounded-2xl mb-4 md:mb-6 card-3d">
+<h4 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-center text-gray-800">الخطوة الأولى - حساب قيمة التخفيض:</h4>
+<div class="proportion-container space-y-4 md:space-y-6">
+<div class="flex items-center justify-center space-x-4 md:space-x-8 text-lg md:text-2xl">
+<div class="text-center">
+<div class="highlight text-base md:text-xl">800</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">السعر الأصلي</div>
+</div>
+<div class="arrow">→</div>
+<div class="text-center">
+<div class="highlight text-base md:text-xl">100%</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">النسبة الكاملة</div>
+</div>
+</div>
+<div class="flex items-center justify-center space-x-4 md:space-x-8 text-lg md:text-2xl">
+<div class="text-center">
+<div class="highlight text-base md:text-xl text-red-600">؟</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">قيمة التخفيض</div>
+</div>
+<div class="arrow">→</div>
+<div class="text-center">
+<div class="highlight text-base md:text-xl">20%</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">نسبة التخفيض</div>
+</div>
+</div>
+</div>
+<div class="calculation mt-4 md:mt-6 text-base md:text-xl space-y-2 md:space-y-3 text-center">
+<div>? = (800 × 20) ÷ 100</div>
+<div>? = 16000 ÷ 100</div>
+<div>? = 160</div>
+</div>
+<div class="text-center mt-3">
+<p class="text-red-600 font-bold text-base md:text-lg">قيمة التخفيض = 160 دينار جزائري</p>
+</div>
+</div>
+<div class="bg-gradient-to-br from-green-200 to-green-300 dark:from-green-900 dark:to-green-800 p-4 md:p-6 rounded-2xl mb-4 md:mb-6 card-3d">
+<h4 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-center text-green-800 dark:text-green-300">الخطوة الثانية - السعر النهائي:</h4>
+<div class="text-center space-y-2 md:space-y-3">
+<p class="text-green-800 dark:text-green-300 font-medium text-base md:text-lg">السعر بعد التخفيض = السعر الأصلي - قيمة التخفيض</p>
+<div class="calculation text-base md:text-xl">
+<div>= 800 - 160</div>
+<div>= 640</div>
+</div>
+<p class="text-green-600 font-bold text-base md:text-lg">السعر بعد التخفيض = 640 دينار جزائري</p>
+</div>
+</div>
+<div class="border-4 border-dashed border-red-400 dark:border-red-600 p-4 md:p-6 rounded-2xl card-3d bg-white dark:bg-gray-800">
+<h4 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-center text-red-600">جرب بنفسك:</h4>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-4 md:mb-6">
+<div>
+<label class="block text-sm md:text-lg font-medium mb-1 md:mb-2 text-gray-700 dark:text-gray-300">السعر الأصلي:</label>
+<input class="w-full p-2 md:p-3 border-2 rounded-xl text-base md:text-lg border-red-300 focus:border-red-500" id="originalPrice" placeholder="مثال: 800" type="number"/>
+</div>
+<div>
+<label class="block text-sm md:text-lg font-medium mb-1 md:mb-2 text-gray-700 dark:text-gray-300">نسبة التخفيض (%):</label>
+<input class="w-full p-2 md:p-3 border-2 rounded-xl text-base md:text-lg border-red-300 focus:border-red-500" id="discountPercentage" placeholder="مثال: 20" type="number"/>
+</div>
+<div class="flex items-end">
+<button class="w-full button-3d gradient-pink text-white py-2 md:py-3 px-4 md:px-6 rounded-xl text-base md:text-lg font-bold" onclick="calculateDiscount()">
+                            احسب
+                        </button>
+</div>
+</div>
+<div class="hidden mt-4 md:mt-6 p-4 md:p-6 bg-gradient-to-r from-green-200 to-green-300 dark:from-green-900 dark:to-green-800 rounded-2xl card-3d" id="result3">
+<div class="text-base md:text-xl space-y-2 md:space-y-3 text-center" id="calculation3"></div>
+<div class="text-lg md:text-2xl font-bold text-green-600 mt-3 md:mt-4 text-center" id="answer3"></div>
+</div>
+</div>
+</div>
+<!-- Discount Find -->
+<div class="method-content hidden card-3d p-4 md:p-8 mb-6 colorful-bg-6" id="discountFind">
+<h2 class="text-2xl md:text-3xl font-bold text-center mb-4 md:mb-6 text-red-800">
+                إيجاد نسبة التخفيض
+            </h2>
+<div class="bg-gradient-to-r from-red-200 to-red-300 dark:from-red-900 dark:to-red-800 p-4 md:p-6 rounded-2xl mb-4 md:mb-6 card-3d">
+<h3 class="text-lg md:text-xl font-bold text-red-800 dark:text-red-300 mb-2 md:mb-3">مثال توضيحي:</h3>
+<p class="text-base md:text-lg text-red-700 dark:text-red-300">سعر جهاز كان 1000 دينار جزائري، وأصبح 750 دينار جزائري. ما نسبة التخفيض؟</p>
+</div>
+<div class="bg-gradient-to-br from-yellow-100 to-yellow-200 dark:from-gray-700 dark:to-gray-800 p-4 md:p-6 rounded-2xl mb-4 md:mb-6 card-3d">
+<h4 class="text-lg md:text-xl font-bold mb-4 md:mb-6 text-center text-yellow-800">تمثيل المسألة:</h4>
+<div class="proportion-container space-y-4 md:space-y-6">
+<div class="flex items-center justify-center space-x-4 md:space-x-8 text-lg md:text-2xl">
+<div class="text-center">
+<div class="highlight text-base md:text-xl">1000</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">السعر الأصلي</div>
+</div>
+<div class="arrow">→</div>
+<div class="text-center">
+<div class="highlight text-base md:text-xl">100%</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">النسبة الكاملة</div>
+</div>
+</div>
+<div class="flex items-center justify-center space-x-4 md:space-x-8 text-lg md:text-2xl">
+<div class="text-center">
+<div class="highlight text-base md:text-xl">750</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">السعر بعد التخفيض</div>
+</div>
+<div class="arrow">→</div>
+<div class="text-center">
+<div class="highlight text-base md:text-xl text-purple-600">؟%</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">النسبة المتبقية</div>
+</div>
+</div>
+</div>
+<div class="calculation mt-4 md:mt-6 text-base md:text-xl space-y-2 md:space-y-3 text-center">
+<div>النسبة المتبقية = (750 × 100) ÷ 1000 = 75%</div>
+<div>نسبة التخفيض = 100% - 75% = 25%</div>
+</div>
+</div>
+<div class="border-4 border-dashed border-red-400 dark:border-red-600 p-4 md:p-6 rounded-2xl card-3d bg-white dark:bg-gray-800">
+<h4 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-center text-red-600">احسب نسبة التخفيض:</h4>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-4 md:mb-6">
+<div>
+<label class="block text-sm md:text-lg font-medium mb-1 md:mb-2 text-gray-700 dark:text-gray-300">السعر الأصلي:</label>
+<input class="w-full p-2 md:p-3 border-2 rounded-xl text-base md:text-lg border-red-300 focus:border-red-500" id="originalPriceFind" placeholder="مثال: 1000" type="number"/>
+</div>
+<div>
+<label class="block text-sm md:text-lg font-medium mb-1 md:mb-2 text-gray-700 dark:text-gray-300">السعر بعد التخفيض:</label>
+<input class="w-full p-2 md:p-3 border-2 rounded-xl text-base md:text-lg border-red-300 focus:border-red-500" id="finalPriceFind" placeholder="مثال: 750" type="number"/>
+</div>
+<div class="flex items-end">
+<button class="w-full button-3d gradient-amber text-white py-2 md:py-3 px-4 md:px-6 rounded-xl text-base md:text-lg font-bold" onclick="findDiscountPercentage()">
+                            احسب النسبة
+                        </button>
+</div>
+</div>
+<div class="hidden mt-4 md:mt-6 p-4 md:p-6 bg-gradient-to-r from-red-200 to-red-300 dark:from-red-900 dark:to-red-800 rounded-2xl card-3d" id="result4">
+<div class="calculation text-base md:text-xl space-y-2 md:space-y-3 text-center" id="calculation4"></div>
+<div class="text-lg md:text-2xl font-bold text-red-600 mt-3 md:mt-4 text-center" id="answer4"></div>
+</div>
+</div>
+</div>
+<!-- Increase Calculate -->
+<div class="method-content hidden card-3d p-4 md:p-8 mb-6 colorful-bg-3" id="increaseCalculate">
+<h2 class="text-2xl md:text-3xl font-bold text-center mb-4 md:mb-6 text-green-800">
+                حساب القيمة بعد الزيادة
+            </h2>
+<div class="bg-gradient-to-r from-green-200 to-green-300 dark:from-green-900 dark:to-green-800 p-4 md:p-6 rounded-2xl mb-4 md:mb-6 card-3d">
+<h3 class="text-lg md:text-xl font-bold text-green-800 dark:text-green-300 mb-2 md:mb-3">مثال توضيحي:</h3>
+<p class="text-base md:text-lg text-green-700 dark:text-green-300">راتب موظف 5000 دينار جزائري، حصل على زيادة 15%. ما الراتب الجديد؟</p>
+</div>
+<div class="bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 p-4 md:p-6 rounded-2xl mb-4 md:mb-6 card-3d">
+<h4 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-center text-gray-800">الخطوة الأولى - حساب قيمة الزيادة:</h4>
+<div class="proportion-container space-y-4 md:space-y-6">
+<div class="flex items-center justify-center space-x-4 md:space-x-8 text-lg md:text-2xl">
+<div class="text-center">
+<div class="highlight text-base md:text-xl">5000</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">الراتب الأصلي</div>
+</div>
+<div class="arrow">→</div>
+<div class="text-center">
+<div class="highlight text-base md:text-xl">100%</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">النسبة الكاملة</div>
+</div>
+</div>
+<div class="flex items-center justify-center space-x-4 md:space-x-8 text-lg md:text-2xl">
+<div class="text-center">
+<div class="highlight text-base md:text-xl text-green-600">؟</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">قيمة الزيادة</div>
+</div>
+<div class="arrow">→</div>
+<div class="text-center">
+<div class="highlight text-base md:text-xl">15%</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">نسبة الزيادة</div>
+</div>
+</div>
+</div>
+<div class="calculation mt-4 md:mt-6 text-base md:text-xl space-y-2 md:space-y-3 text-center">
+<div>? = (5000 × 15) ÷ 100</div>
+<div>? = 75000 ÷ 100</div>
+<div>? = 750</div>
+</div>
+<div class="text-center mt-3">
+<p class="text-green-600 font-bold text-base md:text-lg">قيمة الزيادة = 750 دينار جزائري</p>
+</div>
+</div>
+<div class="bg-gradient-to-br from-blue-200 to-blue-300 dark:from-blue-900 dark:to-blue-800 p-4 md:p-6 rounded-2xl mb-4 md:mb-6 card-3d">
+<h4 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-center text-blue-800 dark:text-blue-300">الخطوة الثانية - الراتب الجديد:</h4>
+<div class="text-center space-y-2 md:space-y-3">
+<p class="text-blue-800 dark:text-blue-300 font-medium text-base md:text-lg">الراتب الجديد = الراتب الأصلي + قيمة الزيادة</p>
+<div class="calculation text-base md:text-xl">
+<div>= 5000 + 750</div>
+<div>= 5750</div>
+</div>
+<p class="text-blue-600 font-bold text-base md:text-lg">الراتب الجديد = 5750 دينار جزائري</p>
+</div>
+</div>
+<div class="border-4 border-dashed border-green-400 dark:border-green-600 p-4 md:p-6 rounded-2xl card-3d bg-white dark:bg-gray-800">
+<h4 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-center text-green-600">جرب بنفسك:</h4>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-4 md:mb-6">
+<div>
+<label class="block text-sm md:text-lg font-medium mb-1 md:mb-2 text-gray-700 dark:text-gray-300">القيمة الأصلية:</label>
+<input class="w-full p-2 md:p-3 border-2 rounded-xl text-base md:text-lg border-green-300 focus:border-green-500" id="originalValue" placeholder="مثال: 5000" type="number"/>
+</div>
+<div>
+<label class="block text-sm md:text-lg font-medium mb-1 md:mb-2 text-gray-700 dark:text-gray-300">نسبة الزيادة (%):</label>
+<input class="w-full p-2 md:p-3 border-2 rounded-xl text-base md:text-lg border-green-300 focus:border-green-500" id="increasePercentage" placeholder="مثال: 15" type="number"/>
+</div>
+<div class="flex items-end">
+<button class="w-full button-3d gradient-teal text-white py-2 md:py-3 px-4 md:px-6 rounded-xl text-base md:text-lg font-bold" onclick="calculateIncrease()">
+                            احسب
+                        </button>
+</div>
+</div>
+<div class="hidden mt-4 md:mt-6 p-4 md:p-6 bg-gradient-to-r from-blue-200 to-blue-300 dark:from-blue-900 dark:to-blue-800 rounded-2xl card-3d" id="result5">
+<div class="text-base md:text-xl space-y-2 md:space-y-3 text-center" id="calculation5"></div>
+<div class="text-lg md:text-2xl font-bold text-blue-600 mt-3 md:mt-4 text-center" id="answer5"></div>
+</div>
+</div>
+</div>
+<!-- Increase Find -->
+<div class="method-content hidden card-3d p-4 md:p-8 mb-6 colorful-bg-1" id="increaseFind">
+<h2 class="text-2xl md:text-3xl font-bold text-center mb-4 md:mb-6 text-green-800">
+                إيجاد نسبة الزيادة
+            </h2>
+<div class="bg-gradient-to-r from-green-200 to-green-300 dark:from-green-900 dark:to-green-800 p-4 md:p-6 rounded-2xl mb-4 md:mb-6 card-3d">
+<h3 class="text-lg md:text-xl font-bold text-green-800 dark:text-green-300 mb-2 md:mb-3">مثال توضيحي:</h3>
+<p class="text-base md:text-lg text-green-700 dark:text-green-300">راتب موظف كان 4000 دينار جزائري، وأصبح 4600 دينار جزائري. ما نسبة الزيادة؟</p>
+</div>
+<div class="bg-gradient-to-br from-yellow-100 to-yellow-200 dark:from-gray-700 dark:to-gray-800 p-4 md:p-6 rounded-2xl mb-4 md:mb-6 card-3d">
+<h4 class="text-lg md:text-xl font-bold mb-4 md:mb-6 text-center text-yellow-800">تمثيل المسألة:</h4>
+<div class="proportion-container space-y-4 md:space-y-6">
+<div class="flex items-center justify-center space-x-4 md:space-x-8 text-lg md:text-2xl">
+<div class="text-center">
+<div class="highlight text-base md:text-xl">4000</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">الراتب الأصلي</div>
+</div>
+<div class="arrow">→</div>
+<div class="text-center">
+<div class="highlight text-base md:text-xl">100%</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">النسبة الكاملة</div>
+</div>
+</div>
+<div class="flex items-center justify-center space-x-4 md:space-x-8 text-lg md:text-2xl">
+<div class="text-center">
+<div class="highlight text-base md:text-xl">4600</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">الراتب بعد الزيادة</div>
+</div>
+<div class="arrow">→</div>
+<div class="text-center">
+<div class="highlight text-base md:text-xl text-purple-600">؟%</div>
+<div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 md:mt-2">النسبة الجديدة</div>
+</div>
+</div>
+</div>
+<div class="calculation mt-4 md:mt-6 text-base md:text-xl space-y-2 md:space-y-3 text-center">
+<div>النسبة الجديدة = (4600 × 100) ÷ 4000 = 115%</div>
+<div>نسبة الزيادة = 115% - 100% = 15%</div>
+</div>
+</div>
+<div class="border-4 border-dashed border-green-400 dark:border-green-600 p-4 md:p-6 rounded-2xl card-3d bg-white dark:bg-gray-800">
+<h4 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-center text-green-600">احسب نسبة الزيادة:</h4>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-4 md:mb-6">
+<div>
+<label class="block text-sm md:text-lg font-medium mb-1 md:mb-2 text-gray-700 dark:text-gray-300">القيمة الأصلية:</label>
+<input class="w-full p-2 md:p-3 border-2 rounded-xl text-base md:text-lg border-green-300 focus:border-green-500" id="originalValueFind" placeholder="مثال: 4000" type="number"/>
+</div>
+<div>
+<label class="block text-sm md:text-lg font-medium mb-1 md:mb-2 text-gray-700 dark:text-gray-300">القيمة بعد الزيادة:</label>
+<input class="w-full p-2 md:p-3 border-2 rounded-xl text-base md:text-lg border-green-300 focus:border-green-500" id="finalValueFind" placeholder="مثال: 4600" type="number"/>
+</div>
+<div class="flex items-end">
+<button class="w-full button-3d gradient-indigo text-white py-2 md:py-3 px-4 md:px-6 rounded-xl text-base md:text-lg font-bold" onclick="findIncreasePercentage()">
+                            احسب النسبة
+                        </button>
+</div>
+</div>
+<div class="hidden mt-4 md:mt-6 p-4 md:p-6 bg-gradient-to-r from-green-200 to-green-300 dark:from-green-900 dark:to-green-800 rounded-2xl card-3d" id="result6">
+<div class="calculation text-base md:text-xl space-y-2 md:space-y-3 text-center" id="calculation6"></div>
+<div class="text-lg md:text-2xl font-bold text-green-600 mt-3 md:mt-4 text-center" id="answer6"></div>
+</div>
+</div>
+</div>
+<!-- Practice Problems -->
+<div class="card-3d p-4 md:p-8 colorful-bg-2">
+<h2 class="text-2xl md:text-3xl font-bold text-center mb-6 md:mb-8 text-pink-800">تمارين للممارسة</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
+<div class="space-y-4 md:space-y-6">
+<h3 class="text-lg md:text-2xl font-bold text-blue-600 text-center">تمارين حساب القيمة:</h3>
+<div class="bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 p-4 md:p-6 rounded-2xl card-3d">
+<p class="text-sm md:text-lg mb-2 md:mb-3">• ما قيمة 30% من 150 دينار جزائري؟</p>
+<p class="text-sm md:text-lg mb-2 md:mb-3">• احسب 12% من 2500 دينار جزائري</p>
+<p class="text-sm md:text-lg">• ما مقدار 8% من 750 كيلوغرام؟</p>
+</div>
+</div>
+<div class="space-y-4 md:space-y-6">
+<h3 class="text-lg md:text-2xl font-bold text-red-600 text-center">تمارين التخفيض:</h3>
+<div class="bg-gradient-to-br from-red-100 to-red-200 dark:from-red-900 dark:to-red-800 p-4 md:p-6 rounded-2xl card-3d">
+<p class="text-sm md:text-lg mb-2 md:mb-3">• سعر قميص 120 دينار جزائري، عليه تخفيض 25%</p>
+<p class="text-sm md:text-lg mb-2 md:mb-3">• حاسوب ثمنه 50000 دينار، تخفيض 15%</p>
+<p class="text-sm md:text-lg">• كتاب 800 دينار، تخفيض 10%</p>
+</div>
+</div>
+<div class="space-y-4 md:space-y-6">
+<h3 class="text-lg md:text-2xl font-bold text-green-600 text-center">تمارين الزيادة:</h3>
+<div class="bg-gradient-to-br from-green-100 to-green-200 dark:from-green-900 dark:to-green-800 p-4 md:p-6 rounded-2xl card-3d">
+<p class="text-sm md:text-lg mb-2 md:mb-3">• راتب 4000 دينار جزائري، زيادة 18%</p>
+<p class="text-sm md:text-lg mb-2 md:mb-3">• أجر 15000 دينار، زيادة 12%</p>
+<p class="text-sm md:text-lg">• ثمن منتج 300 دينار، زيادة 5%</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<pre id="result"></pre><button onclick="run()">تشغيل الدرس</button>
+<script>
+async function run() {
+    const res = await fetch("/.netlify/functions/percentages");
+    const text = await res.text();
+    document.getElementById("result").textContent = text;
+}
+</script>
+</body>
+</html>

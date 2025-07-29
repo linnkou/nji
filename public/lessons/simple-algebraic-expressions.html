@@ -1,0 +1,601 @@
+﻿<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>التعابير الحرفية - المحيط والمساحة</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --primary-color: #5D5CDE;
+            --secondary-color: #8B5CF6;
+            --accent-color: #10B981;
+            --warning-color: #F59E0B;
+            --danger-color: #EF4444;
+            --success-color: #22C55E;
+            --info-color: #3B82F6;
+        }
+        
+        body {
+            font-family: 'Amiri', serif;
+            font-size: 16px;
+        }
+        
+        .latin-text {
+            font-family: 'Inter', sans-serif;
+            direction: ltr;
+        }
+        
+        .shape-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 3px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .shape-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+            border-color: var(--primary-color);
+        }
+        
+        .dark .shape-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-color: #475569;
+        }
+        
+        .shape-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            border-radius: 20px 20px 0 0;
+        }
+        
+        .formula-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 3px solid var(--info-color);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px 0;
+            text-align: center;
+        }
+        
+        .dark .formula-box {
+            background: linear-gradient(135deg, #0c4a6e 0%, #075985 100%);
+            border-color: #0ea5e9;
+        }
+        
+        .formula-text {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--info-color);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .dark .formula-text {
+            color: #38bdf8;
+        }
+        
+        .shape-visual {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .rectangle {
+            width: 160px;
+            height: 100px;
+            border: 4px solid var(--primary-color);
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(93, 92, 222, 0.1), rgba(93, 92, 222, 0.2));
+            position: relative;
+        }
+        
+        .square {
+            width: 120px;
+            height: 120px;
+            border: 4px solid var(--accent-color);
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.2));
+            position: relative;
+        }
+        
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 80px solid transparent;
+            border-right: 80px solid transparent;
+            border-bottom: 140px solid rgba(245, 158, 11, 0.3);
+            border-radius: 8px;
+            position: relative;
+        }
+        
+        .triangle::before {
+            content: '';
+            position: absolute;
+            top: 136px;
+            left: -76px;
+            width: 0;
+            height: 0;
+            border-left: 76px solid transparent;
+            border-right: 76px solid transparent;
+            border-bottom: 4px solid var(--warning-color);
+        }
+        
+        .circle {
+            width: 140px;
+            height: 140px;
+            border: 4px solid var(--secondary-color);
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.2));
+            position: relative;
+        }
+        
+        .diamond {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.2));
+            border: 4px solid var(--danger-color);
+            transform: rotate(45deg);
+            border-radius: 8px;
+            position: relative;
+        }
+        
+        .dimension-label {
+            position: absolute;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .input-section {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 3px solid var(--warning-color);
+            border-radius: 20px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+        
+        .dark .input-section {
+            background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
+            border-color: #d97706;
+        }
+        
+        .calculator-input {
+            width: 100px;
+            height: 50px;
+            border: 3px solid #d1d5db;
+            background: white;
+            outline: none;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .calculator-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(93, 92, 222, 0.2);
+            transform: scale(1.05);
+        }
+        
+        .dark .calculator-input {
+            background: #475569;
+            border-color: #6b7280;
+            color: white;
+        }
+        
+        .result-box {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 3px solid var(--success-color);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px 0;
+            text-align: center;
+        }
+        
+        .dark .result-box {
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+            border-color: #059669;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(93, 92, 222, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(93, 92, 222, 0.5);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
+        }
+        
+        .tab-button {
+            background: #f1f5f9;
+            border: 2px solid #e2e8f0;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #64748b;
+        }
+        
+        .tab-button.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(93, 92, 222, 0.3);
+        }
+        
+        .dark .tab-button {
+            background: #334155;
+            border-color: #475569;
+            color: #94a3b8;
+        }
+        
+        .exercise-card {
+            background: linear-gradient(135deg, #fef7ff 0%, #fae8ff 100%);
+            border: 3px solid var(--secondary-color);
+            border-radius: 20px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+        
+        .dark .exercise-card {
+            background: linear-gradient(135deg, #581c87 0%, #7c3aed 100%);
+        }
+        
+        .step-indicator {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .highlight-term {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            padding: 4px 8px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            display: inline-block;
+            margin: 2px;
+        }
+        
+        @media (max-width: 768px) {
+            .shape-visual {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .rectangle {
+                width: 120px;
+                height: 80px;
+            }
+            
+            .square {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .circle {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .diamond {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .calculator-input {
+                width: 80px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+            
+            .formula-text {
+                font-size: 1.4rem;
+            }
+            
+            .shape-card {
+                padding: 16px;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .container {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+            
+            .input-section, .exercise-card {
+                margin-left: -12px;
+                margin-right: -12px;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-slate-900 dark:to-purple-900 text-gray-900 dark:text-gray-100 min-h-screen">
+<div class="container mx-auto px-4 py-6 max-w-7xl">
+<!-- العنوان الرئيسي -->
+<div class="text-center mb-8">
+<div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl mb-6 shadow-xl">
+<svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<h1 class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-blue-500 to-green-500 bg-clip-text text-transparent mb-4 leading-tight">
+                انتاج عبارة حرفية بسيطة
+            </h1>
+<p class="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                تعلم كتابة التعابير الحرفية للمحيط والمساحة وتطبيق القواعد الرياضية - السنة الأولى متوسط
+            </p>
+</div>
+<!-- أزرار التبويب -->
+<div class="flex flex-wrap justify-center gap-4 mb-8">
+<button class="tab-button active" id="theoryTab" onclick="showTab('theory')">
+<svg class="w-5 h-5 inline-block ml-2" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+                الدروس النظرية
+            </button>
+<button class="tab-button" id="calculatorTab" onclick="showTab('calculator')">
+<svg class="w-5 h-5 inline-block ml-2" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+                الحاسبة التفاعلية
+            </button>
+<button class="tab-button" id="exercisesTab" onclick="showTab('exercises')">
+<svg class="w-5 h-5 inline-block ml-2" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+                التمارين التطبيقية
+            </button>
+</div>
+<!-- قسم الدروس النظرية -->
+<div class="tab-content" id="theorySection">
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- المستطيل -->
+<div class="shape-card">
+<h3 class="text-2xl font-bold text-center mb-4 text-purple-600 dark:text-purple-400">المستطيل</h3>
+<div class="shape-visual">
+<div class="rectangle">
+<div class="dimension-label" style="top: -30px; left: 50%; transform: translateX(-50%);">a</div>
+<div class="dimension-label" style="right: -35px; top: 50%; transform: translateY(-50%);">b</div>
+</div>
+</div>
+<div class="formula-box">
+<div class="text-lg font-bold mb-2">المحيط:</div>
+<div class="formula-text latin-text">P = 2(a + b)</div>
+</div>
+<div class="formula-box">
+<div class="text-lg font-bold mb-2">المساحة:</div>
+<div class="formula-text latin-text">S = a × b</div>
+</div>
+<div class="text-center mt-4">
+<p class="text-gray-600 dark:text-gray-400">حيث: a = الطول، b = العرض</p>
+</div>
+</div>
+<!-- المربع -->
+<div class="shape-card">
+<h3 class="text-2xl font-bold text-center mb-4 text-green-600 dark:text-green-400">المربع</h3>
+<div class="shape-visual">
+<div class="square">
+<div class="dimension-label" style="top: -30px; left: 50%; transform: translateX(-50%);">a</div>
+<div class="dimension-label" style="right: -25px; top: 50%; transform: translateY(-50%);">a</div>
+</div>
+</div>
+<div class="formula-box">
+<div class="text-lg font-bold mb-2">المحيط:</div>
+<div class="formula-text latin-text">P = 4a</div>
+</div>
+<div class="formula-box">
+<div class="text-lg font-bold mb-2">المساحة:</div>
+<div class="formula-text latin-text">S = a²</div>
+</div>
+<div class="text-center mt-4">
+<p class="text-gray-600 dark:text-gray-400">حيث: a = طول الضلع</p>
+</div>
+</div>
+<!-- المثلث -->
+<div class="shape-card">
+<h3 class="text-2xl font-bold text-center mb-4 text-yellow-600 dark:text-yellow-400">المثلث</h3>
+<div class="shape-visual">
+<div class="triangle">
+<div class="dimension-label" style="top: 150px; left: 50%; transform: translateX(-50%);">a</div>
+<div class="dimension-label" style="top: 80px; left: -40px;">h</div>
+</div>
+</div>
+<div class="formula-box">
+<div class="text-lg font-bold mb-2">المحيط:</div>
+<div class="formula-text latin-text">P = a + b + c</div>
+</div>
+<div class="formula-box">
+<div class="text-lg font-bold mb-2">المساحة:</div>
+<div class="formula-text latin-text">S = (a × h) ÷ 2</div>
+</div>
+<div class="text-center mt-4">
+<p class="text-gray-600 dark:text-gray-400">حيث: a = القاعدة، h = الارتفاع</p>
+</div>
+</div>
+<!-- الدائرة -->
+<div class="shape-card">
+<h3 class="text-2xl font-bold text-center mb-4 text-purple-600 dark:text-purple-400">الدائرة</h3>
+<div class="shape-visual">
+<div class="circle">
+<div class="dimension-label" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">r</div>
+</div>
+</div>
+<div class="formula-box">
+<div class="text-lg font-bold mb-2">المحيط:</div>
+<div class="formula-text latin-text">P = 2πr</div>
+</div>
+<div class="formula-box">
+<div class="text-lg font-bold mb-2">المساحة:</div>
+<div class="formula-text latin-text">S = πr²</div>
+</div>
+<div class="text-center mt-4">
+<p class="text-gray-600 dark:text-gray-400">حيث: r = نصف القطر، π ≈ 3.14</p>
+</div>
+</div>
+<!-- المعين -->
+<div class="shape-card">
+<h3 class="text-2xl font-bold text-center mb-4 text-red-600 dark:text-red-400">المعين</h3>
+<div class="shape-visual">
+<div class="diamond">
+<div class="dimension-label" style="top: -30px; left: 50%; transform: translateX(-50%) rotate(-45deg);">a</div>
+</div>
+</div>
+<div class="formula-box">
+<div class="text-lg font-bold mb-2">المحيط:</div>
+<div class="formula-text latin-text">P = 4a</div>
+</div>
+<div class="formula-box">
+<div class="text-lg font-bold mb-2">المساحة:</div>
+<div class="formula-text latin-text">S = (d₁ × d₂) ÷ 2</div>
+</div>
+<div class="text-center mt-4">
+<p class="text-gray-600 dark:text-gray-400">حيث: a = الضلع، d₁، d₂ = القطران</p>
+</div>
+</div>
+<!-- شرح التعابير الحرفية -->
+<div class="shape-card">
+<h3 class="text-2xl font-bold text-center mb-4 text-blue-600 dark:text-blue-400">ما هي التعابير الحرفية؟</h3>
+<div class="space-y-4">
+<div class="text-lg">
+<span class="step-indicator">1</span>
+<strong>التعبير الحرفي:</strong> تعبير رياضي يحتوي على أحرف وأرقام
+                        </div>
+<div class="text-lg">
+<span class="step-indicator">2</span>
+<strong>المتغيرات:</strong> الأحرف مثل a، b، x، y تمثل قيماً غير معروفة
+                        </div>
+<div class="text-lg">
+<span class="step-indicator">3</span>
+<strong>القواعد:</strong>
+<div class="mt-2">
+<span class="highlight-term">a × b = ab</span>
+<span class="highlight-term">a + a = 2a</span>
+<span class="highlight-term">a × a = a²</span>
+</div>
+</div>
+<div class="text-lg">
+<span class="step-indicator">4</span>
+<strong>التبسيط:</strong> 3a + 2a = 5a
+                        </div>
+</div>
+</div>
+</div>
+</div>
+<!-- قسم الحاسبة التفاعلية -->
+<div class="tab-content hidden" id="calculatorSection">
+<div class="max-w-4xl mx-auto">
+<h2 class="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                    الحاسبة التفاعلية للتعابير الحرفية
+                </h2>
+<!-- اختيار الشكل -->
+<div class="input-section">
+<h3 class="text-2xl font-bold mb-6 text-center">اختر الشكل الهندسي:</h3>
+<div class="flex flex-wrap justify-center gap-4 mb-6">
+<button class="btn-secondary shape-selector active" data-shape="rectangle">المستطيل</button>
+<button class="btn-secondary shape-selector" data-shape="square">المربع</button>
+<button class="btn-secondary shape-selector" data-shape="triangle">المثلث</button>
+<button class="btn-secondary shape-selector" data-shape="circle">الدائرة</button>
+<button class="btn-secondary shape-selector" data-shape="diamond">المعين</button>
+</div>
+</div>
+<!-- إدخال القيم -->
+<div class="input-section" id="inputArea">
+<!-- سيتم ملؤها ديناميكياً -->
+</div>
+<!-- النتائج -->
+<div class="result-box hidden" id="resultsArea">
+<!-- ستظهر النتائج هنا -->
+</div>
+</div>
+</div>
+<!-- قسم التمارين التطبيقية -->
+<div class="tab-content hidden" id="exercisesSection">
+<div class="max-w-4xl mx-auto">
+<h2 class="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                    التمارين التطبيقية
+                </h2>
+<div class="space-y-6" id="exercisesList">
+<!-- التمارين ستُضاف هنا -->
+</div>
+<div class="text-center mt-8">
+<button class="btn-primary" id="newExerciseBtn">
+<svg class="w-6 h-6 inline-block ml-2" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+                        تمرين جديد
+                    </button>
+</div>
+</div>
+</div>
+</div>
+
+<pre id="result"></pre><button onclick="run()">تشغيل الدرس</button>
+<script>
+async function run() {
+    const res = await fetch("/.netlify/functions/simple-algebraic-expressions");
+    const text = await res.text();
+    document.getElementById("result").textContent = text;
+}
+</script>
+</body>
+</html>

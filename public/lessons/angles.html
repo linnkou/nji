@@ -1,0 +1,522 @@
+﻿<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>برنامج الزوايا - السنة الأولى متوسط</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+
+<style>
+        body {
+            font-family: 'Noto Sans Arabic', sans-serif;
+        }
+        .shape-animation {
+            transition: all 0.3s ease;
+        }
+        .shape-animation:hover {
+            transform: scale(1.05);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #0F766E 0%, #0D9488 50%, #14B8A6 100%);
+        }
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(13, 148, 136, 0.2);
+        }
+        .dark .glass-effect {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(20, 184, 166, 0.3);
+        }
+        .formula-box {
+            border: 2px dashed #0D9488;
+            background: linear-gradient(45deg, rgba(13, 148, 136, 0.05) 25%, transparent 25%), 
+                        linear-gradient(-45deg, rgba(13, 148, 136, 0.05) 25%, transparent 25%), 
+                        linear-gradient(45deg, transparent 75%, rgba(13, 148, 136, 0.05) 75%), 
+                        linear-gradient(-45deg, transparent 75%, rgba(13, 148, 136, 0.05) 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+        .dark .formula-box {
+            border-color: #14B8A6;
+            background: linear-gradient(45deg, rgba(20, 184, 166, 0.1) 25%, transparent 25%), 
+                        linear-gradient(-45deg, rgba(20, 184, 166, 0.1) 25%, transparent 25%), 
+                        linear-gradient(45deg, transparent 75%, rgba(20, 184, 166, 0.1) 75%), 
+                        linear-gradient(-45deg, transparent 75%, rgba(20, 184, 166, 0.1) 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+        .pattern-bg {
+            background-image: 
+                radial-gradient(circle at 1px 1px, rgba(13, 148, 136, 0.1) 1px, transparent 0);
+            background-size: 30px 30px;
+        }
+        .section-border {
+            border: 3px solid;
+            border-image: linear-gradient(45deg, #0D9488, #059669, #DC2626, #7C3AED) 1;
+        }
+        .angle-arc {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 pattern-bg transition-colors duration-300">
+<!-- Header -->
+<header class="gradient-bg text-white p-8 text-center relative overflow-hidden">
+<div class="absolute inset-0 opacity-20">
+<svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="40" id="grid" patternunits="userSpaceOnUse" width="40">
+<path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#grid)" height="100%" width="100%"></rect>
+</svg>
+</div>
+<h1 class="text-4xl md:text-5xl font-bold mb-3 relative z-10">📐 الزوايا</h1>
+<p class="text-xl opacity-90 relative z-10">برنامج تعليمي تفاعلي للسنة الأولى متوسط</p>
+<div class="mt-4 flex justify-center space-x-reverse space-x-8 relative z-10">
+<div class="text-center">
+<div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-2">
+<span class="text-2xl">📏</span>
+</div>
+<p class="text-sm">قياس</p>
+</div>
+<div class="text-center">
+<div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-2">
+<span class="text-2xl">🔢</span>
+</div>
+<p class="text-sm">تصنيف</p>
+</div>
+<div class="text-center">
+<div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-2">
+<span class="text-2xl">⚖️</span>
+</div>
+<p class="text-sm">مقارنة</p>
+</div>
+</div>
+</header>
+<!-- Navigation -->
+<nav class="bg-white dark:bg-gray-800 shadow-2xl sticky top-0 z-50 border-b-4 border-primary">
+<div class="max-w-6xl mx-auto px-4">
+<div class="flex justify-center overflow-x-auto">
+<div class="flex space-x-reverse space-x-2 py-4">
+<button class="nav-btn px-6 py-3 rounded-xl text-base font-bold whitespace-nowrap border-2 border-transparent hover:border-primary transition-all duration-300" onclick="showSection('intro')">المفهوم</button>
+<button class="nav-btn px-6 py-3 rounded-xl text-base font-bold whitespace-nowrap border-2 border-transparent hover:border-primary transition-all duration-300" onclick="showSection('measurement')">القياس</button>
+<button class="nav-btn px-6 py-3 rounded-xl text-base font-bold whitespace-nowrap border-2 border-transparent hover:border-primary transition-all duration-300" onclick="showSection('drawing')">الرسم</button>
+<button class="nav-btn px-6 py-3 rounded-xl text-base font-bold whitespace-nowrap border-2 border-transparent hover:border-primary transition-all duration-300" onclick="showSection('classification')">التصنيف</button>
+<button class="nav-btn px-6 py-3 rounded-xl text-base font-bold whitespace-nowrap border-2 border-transparent hover:border-primary transition-all duration-300" onclick="showSection('comparison')">المقارنة</button>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-6xl mx-auto px-4 py-8">
+<!-- Introduction Section -->
+<section class="section" id="intro">
+<div class="glass-effect rounded-3xl p-8 mb-8 section-border">
+<h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-8 text-center">🎯 مفهوم الزاوية</h2>
+<div class="grid md:grid-cols-2 gap-8 mb-8">
+<div class="bg-gradient-to-br from-teal-50 to-teal-100 dark:from-teal-900/30 dark:to-teal-800/30 rounded-2xl p-8 border-l-8 border-teal-500">
+<h3 class="text-2xl font-semibold text-teal-800 dark:text-teal-200 mb-4 flex items-center">
+<span class="text-3xl ml-3">📐</span> تعريف الزاوية
+                        </h3>
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed text-lg mb-4">
+                            الزاوية هي المنطقة المحصورة بين نصفي مستقيم لهما نقطة بداية مشتركة تسمى رأس الزاوية.
+                        </p>
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl">
+<svg class="mx-auto" height="150" viewbox="0 0 200 150" width="200">
+<defs>
+<marker id="arrow" markerheight="7" markerwidth="10" orient="auto" refx="9" refy="3.5">
+<polygon fill="#0D9488" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+</defs>
+<line marker-end="url(#arrow)" stroke="#0D9488" stroke-width="3" x1="100" x2="170" y1="100" y2="100"></line>
+<line marker-end="url(#arrow)" stroke="#0D9488" stroke-width="3" x1="100" x2="140" y1="100" y2="40"></line>
+<path d="M 120 100 A 20 20 0 0 0 115 85" fill="none" stroke="#DC2626" stroke-width="2"></path>
+<circle cx="100" cy="100" fill="#0D9488" r="3"></circle>
+<text class="fill-teal-800 dark:fill-teal-200 text-sm font-bold" x="105" y="110">O (الرأس)</text>
+<text class="fill-teal-800 dark:fill-teal-200 text-sm font-bold" x="175" y="105">A</text>
+<text class="fill-teal-800 dark:fill-teal-200 text-sm font-bold" x="145" y="35">B</text>
+<text class="fill-red-600 dark:fill-red-400 text-sm font-bold" x="125" y="85">الزاوية</text>
+</svg>
+</div>
+</div>
+<div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 rounded-2xl p-8 border-l-8 border-green-500">
+<h3 class="text-2xl font-semibold text-green-800 dark:text-green-200 mb-4 flex items-center">
+<span class="text-3xl ml-3">🔤</span> ترميز الزاوية
+                        </h3>
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed text-lg mb-4">
+                            يمكن ترميز الزاوية بعدة طرق:
+                        </p>
+<div class="space-y-4">
+<div class="bg-green-200 dark:bg-green-800/50 p-4 rounded-xl">
+<p class="font-bold text-green-800 dark:text-green-200 text-2xl">∠AOB</p>
+<p class="text-sm text-green-700 dark:text-green-300">باستخدام ثلاث نقاط (الرأس في الوسط)</p>
+</div>
+<div class="bg-green-200 dark:bg-green-800/50 p-4 rounded-xl">
+<p class="font-bold text-green-800 dark:text-green-200 text-2xl">∠O</p>
+<p class="text-sm text-green-700 dark:text-green-300">باستخدام رأس الزاوية فقط</p>
+</div>
+<div class="bg-green-200 dark:bg-green-800/50 p-4 rounded-xl">
+<p class="font-bold text-green-800 dark:text-green-200 text-2xl">∠α أو ∠β</p>
+<p class="text-sm text-green-700 dark:text-green-300">باستخدام حرف يوناني</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Angle Components -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-8 border-4 border-dashed border-gray-300 dark:border-gray-600">
+<h3 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6 text-center flex items-center justify-center">
+<span class="text-3xl ml-3">🔍</span> مكونات الزاوية
+                    </h3>
+<div class="grid md:grid-cols-3 gap-6">
+<div class="text-center p-6 bg-teal-50 dark:bg-teal-900/30 rounded-xl">
+<div class="w-16 h-16 bg-teal-500 rounded-full flex items-center justify-center mx-auto mb-4">
+<span class="text-white text-2xl font-bold">•</span>
+</div>
+<h4 class="text-lg font-bold text-teal-800 dark:text-teal-200 mb-2">الرأس</h4>
+<p class="text-teal-700 dark:text-teal-300">نقطة التقاء نصفي المستقيم</p>
+</div>
+<div class="text-center p-6 bg-green-50 dark:bg-green-900/30 rounded-xl">
+<div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+<span class="text-white text-2xl font-bold">→</span>
+</div>
+<h4 class="text-lg font-bold text-green-800 dark:text-green-200 mb-2">نصف المستقيم الأول</h4>
+<p class="text-green-700 dark:text-green-300">الضلع الأول للزاوية</p>
+</div>
+<div class="text-center p-6 bg-purple-50 dark:bg-purple-900/30 rounded-xl">
+<div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+<span class="text-white text-2xl font-bold">→</span>
+</div>
+<h4 class="text-lg font-bold text-purple-800 dark:text-purple-200 mb-2">نصف المستقيم الثاني</h4>
+<p class="text-purple-700 dark:text-purple-300">الضلع الثاني للزاوية</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Measurement Section -->
+<section class="section hidden" id="measurement">
+<div class="glass-effect rounded-3xl p-8 mb-8 section-border">
+<h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-8 text-center flex items-center justify-center">
+<span class="text-4xl ml-4">📏</span> قياس الزوايا
+                </h2>
+<div class="grid lg:grid-cols-2 gap-8">
+<!-- Protractor -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-8 border-4 border-primary">
+<h3 class="text-xl font-bold text-center mb-6 text-gray-800 dark:text-white">المنقلة (أداة قياس الزوايا)</h3>
+<div class="flex justify-center mb-6">
+<svg class="border-4 border-gray-200 dark:border-gray-600 rounded-2xl bg-gray-50 dark:bg-gray-900" height="220" id="protractorSvg" viewbox="0 0 320 220" width="320">
+<!-- Protractor outer semicircle -->
+<path d="M 40 170 A 120 120 0 0 1 280 170" fill="none" stroke="#666" stroke-width="2"></path>
+<!-- Protractor inner semicircle -->
+<path d="M 60 170 A 100 100 0 0 1 260 170" fill="none" stroke="#888" stroke-width="1"></path>
+<!-- Outer degree markings (0-180) -->
+<g id="outerDegreeMarks"></g>
+<!-- Inner degree markings (180-0) -->
+<g id="innerDegreeMarks"></g>
+<!-- Base line -->
+<line stroke="#666" stroke-width="2" x1="40" x2="280" y1="170" y2="170"></line>
+<!-- Angle lines -->
+<line id="baseLine" stroke="#0D9488" stroke-width="3" x1="160" x2="280" y1="170" y2="170"></line>
+<line id="angleLine" stroke="#DC2626" stroke-width="3" x1="160" x2="220" y1="170" y2="110"></line>
+<!-- Angle arc -->
+<path d="" fill="none" id="angleArc" stroke="#DC2626" stroke-width="3"></path>
+<!-- Center point -->
+<circle cx="160" cy="170" fill="#0D9488" r="4"></circle>
+<!-- Angle measurement -->
+<text class="fill-red-600 dark:fill-red-400 text-lg font-bold" id="angleDisplay" x="210" y="140">45°</text>
+<!-- Angle notation -->
+<text class="fill-gray-700 dark:fill-gray-300 text-lg font-bold" x="165" y="190">∠AOB</text>
+</svg>
+</div>
+<div>
+<label class="block text-lg font-bold text-gray-700 dark:text-gray-300 mb-3">قياس الزاوية (بالدرجات)</label>
+<input class="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer mb-4" id="angleSlider" max="180" min="0" type="range" value="45"/>
+<div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+<span>0°</span>
+<span>90°</span>
+<span>180°</span>
+</div>
+</div>
+</div>
+<!-- Degree Information -->
+<div class="space-y-6">
+<div class="bg-gradient-to-br from-teal-50 to-teal-100 dark:from-teal-900/30 dark:to-teal-800/30 rounded-2xl p-8 border-4 border-teal-400">
+<h3 class="text-2xl font-bold text-teal-800 dark:text-teal-200 mb-6 flex items-center">
+<span class="text-3xl ml-3">🎯</span> وحدة القياس: الدرجة
+                            </h3>
+<div class="space-y-4">
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl border-3 border-teal-300 shadow-lg">
+<p class="text-lg font-medium mb-2">الدرجة (°) هي وحدة قياس الزوايا</p>
+<p class="text-lg font-medium mb-2">الدورة الكاملة = 360°</p>
+<p class="text-lg font-medium">نصف الدورة = 180°</p>
+</div>
+</div>
+</div>
+<div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 rounded-2xl p-8 border-4 border-green-400">
+<h3 class="text-2xl font-bold text-green-800 dark:text-green-200 mb-6 flex items-center">
+<span class="text-3xl ml-3">📐</span> كيفية قياس الزاوية
+                            </h3>
+<div class="space-y-4">
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl border-3 border-green-300 shadow-lg">
+<ol class="list-decimal list-inside space-y-2 text-lg">
+<li>ضع مركز المنقلة على رأس الزاوية</li>
+<li>اجعل الخط الأساسي يتطابق مع أحد ضلعي الزاوية</li>
+<li>اقرأ القيمة عند الضلع الآخر</li>
+<li>استخدم التدريج الخارجي أو الداخلي حسب الحاجة</li>
+</ol>
+</div>
+</div>
+</div>
+<!-- Current Angle Info -->
+<div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 rounded-2xl p-8 border-4 border-purple-400">
+<h3 class="text-2xl font-bold text-purple-800 dark:text-purple-200 mb-4 text-center">قياس الزاوية الحالية</h3>
+<div class="text-center">
+<div class="text-4xl font-bold text-purple-600 dark:text-purple-400" id="currentAngle">45°</div>
+<div class="text-lg text-purple-700 dark:text-purple-300 mt-2" id="angleType">زاوية حادة</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Drawing Section -->
+<section class="section hidden" id="drawing">
+<div class="glass-effect rounded-3xl p-8 mb-8 section-border">
+<h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-8 text-center flex items-center justify-center">
+<span class="text-4xl ml-4">✏️</span> رسم الزوايا
+                </h2>
+<div class="grid lg:grid-cols-2 gap-8">
+<!-- Drawing Area -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-8 border-4 border-secondary">
+<h3 class="text-xl font-bold text-center mb-6 text-gray-800 dark:text-white">منطقة الرسم</h3>
+<div class="flex justify-center mb-6">
+<svg class="border-4 border-gray-200 dark:border-gray-600 rounded-2xl bg-gray-50 dark:bg-gray-900" height="240" id="drawingSvg" viewbox="0 0 320 240" width="320">
+<!-- Grid -->
+<defs>
+<pattern height="20" id="smallGrid" patternunits="userSpaceOnUse" width="20">
+<path d="M 20 0 L 0 0 0 20" fill="none" stroke="#ddd" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#smallGrid)" height="100%" width="100%"></rect>
+<!-- Drawn angle -->
+<line id="drawnBaseLine" stroke="#059669" stroke-width="4" x1="160" x2="280" y1="180" y2="180"></line>
+<line id="drawnAngleLine" stroke="#059669" stroke-width="4" x1="160" x2="220" y1="180" y2="120"></line>
+<path d="" fill="none" id="drawnAngleArc" stroke="#DC2626" stroke-width="3"></path>
+<circle cx="160" cy="180" fill="#059669" r="4"></circle>
+<text class="fill-red-600 dark:fill-red-400 text-lg font-bold" id="drawnAngleDisplay" x="210" y="160">60°</text>
+<!-- Labels -->
+<text class="fill-gray-700 dark:fill-gray-300 text-sm font-bold" x="285" y="185">A</text>
+<text class="fill-gray-700 dark:fill-gray-300 text-sm font-bold" x="225" y="115">B</text>
+<text class="fill-gray-700 dark:fill-gray-300 text-sm font-bold" x="165" y="195">O</text>
+<text class="fill-gray-700 dark:fill-gray-300 text-lg font-bold" x="165" y="210">∠AOB</text>
+</svg>
+</div>
+<div>
+<label class="block text-lg font-bold text-gray-700 dark:text-gray-300 mb-3">اختر قياس الزاوية المطلوب رسمها</label>
+<input class="w-full px-6 py-4 text-base font-medium border-4 border-secondary rounded-xl focus:ring-4 focus:ring-secondary/50 dark:bg-gray-700 dark:text-white transition-all duration-300 mb-4" id="drawAngleInput" max="180" min="0" type="number" value="60"/>
+<button class="w-full bg-secondary text-white px-6 py-4 rounded-xl font-bold text-lg hover:bg-green-700 transition-all duration-300" onclick="drawAngle()">ارسم الزاوية</button>
+</div>
+</div>
+<!-- Drawing Steps -->
+<div class="space-y-6">
+<div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 rounded-2xl p-8 border-4 border-green-400">
+<h3 class="text-2xl font-bold text-green-800 dark:text-green-200 mb-6 flex items-center">
+<span class="text-3xl ml-3">📝</span> خطوات رسم الزاوية
+                            </h3>
+<div class="space-y-4">
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl border-3 border-green-300 shadow-lg">
+<ol class="list-decimal list-inside space-y-3 text-lg">
+<li>ارسم نقطة تمثل رأس الزاوية (O)</li>
+<li>ارسم نصف مستقيم أفقياً من الرأس (OA)</li>
+<li>ضع المنقلة بحيث يكون مركزها على الرأس</li>
+<li>حدد القياس المطلوب على المنقلة</li>
+<li>ارسم نصف المستقيم الثاني من الرأس إلى النقطة المحددة (OB)</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/30 dark:to-yellow-800/30 rounded-2xl p-8 border-4 border-yellow-400">
+<h3 class="text-2xl font-bold text-yellow-800 dark:text-yellow-200 mb-6 flex items-center">
+<span class="text-3xl ml-3">💡</span> نصائح مهمة
+                            </h3>
+<div class="space-y-4">
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl border-3 border-yellow-300 shadow-lg">
+<ul class="list-disc list-inside space-y-2 text-lg">
+<li>تأكد من دقة وضع المنقلة</li>
+<li>ابدأ القراءة من الصفر</li>
+<li>استخدم قلم رصاص للرسم</li>
+<li>اجعل الخطوط واضحة ومستقيمة</li>
+<li>استخدم المسطرة لضمان استقامة الخطوط</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Classification Section -->
+<section class="section hidden" id="classification">
+<div class="glass-effect rounded-3xl p-8 mb-8 section-border">
+<h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-8 text-center flex items-center justify-center">
+<span class="text-4xl ml-4">🔍</span> تصنيف الزوايا
+                </h2>
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<!-- Acute Angle -->
+<div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 rounded-2xl p-6 border-4 border-green-400 text-center">
+<h3 class="text-xl font-bold text-green-800 dark:text-green-200 mb-4">الزاوية الحادة</h3>
+<svg class="mx-auto mb-4" height="120" viewbox="0 0 120 120" width="120">
+<line stroke="#059669" stroke-width="3" x1="60" x2="100" y1="90" y2="90"></line>
+<line stroke="#059669" stroke-width="3" x1="60" x2="85" y1="90" y2="60"></line>
+<path d="M 75 90 A 15 15 0 0 0 70 80" fill="none" stroke="#DC2626" stroke-width="2"></path>
+<circle cx="60" cy="90" fill="#059669" r="2"></circle>
+<text class="fill-green-600 text-sm font-bold" x="80" y="75">30°</text>
+</svg>
+<p class="text-green-700 dark:text-green-300 font-medium">أقل من 90°</p>
+</div>
+<!-- Right Angle -->
+<div class="bg-gradient-to-br from-teal-50 to-teal-100 dark:from-teal-900/30 dark:to-teal-800/30 rounded-2xl p-6 border-4 border-teal-400 text-center">
+<h3 class="text-xl font-bold text-teal-800 dark:text-teal-200 mb-4">الزاوية القائمة</h3>
+<svg class="mx-auto mb-4" height="120" viewbox="0 0 120 120" width="120">
+<line stroke="#0D9488" stroke-width="3" x1="60" x2="100" y1="90" y2="90"></line>
+<line stroke="#0D9488" stroke-width="3" x1="60" x2="60" y1="90" y2="50"></line>
+<rect fill="none" height="15" stroke="#DC2626" stroke-width="2" width="15" x="60" y="75"></rect>
+<circle cx="60" cy="90" fill="#0D9488" r="2"></circle>
+<text class="fill-teal-600 text-sm font-bold" x="75" y="70">90°</text>
+</svg>
+<p class="text-teal-700 dark:text-teal-300 font-medium">تساوي 90°</p>
+</div>
+<!-- Obtuse Angle -->
+<div class="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/30 dark:to-orange-800/30 rounded-2xl p-6 border-4 border-orange-400 text-center">
+<h3 class="text-xl font-bold text-orange-800 dark:text-orange-200 mb-4">الزاوية المنفرجة</h3>
+<svg class="mx-auto mb-4" height="120" viewbox="0 0 120 120" width="120">
+<line stroke="#EA580C" stroke-width="3" x1="60" x2="100" y1="90" y2="90"></line>
+<line stroke="#EA580C" stroke-width="3" x1="60" x2="30" y1="90" y2="60"></line>
+<path d="M 80 90 A 20 20 0 0 0 50 75" fill="none" stroke="#DC2626" stroke-width="2"></path>
+<circle cx="60" cy="90" fill="#EA580C" r="2"></circle>
+<text class="fill-orange-600 text-sm font-bold" x="50" y="70">120°</text>
+</svg>
+<p class="text-orange-700 dark:text-orange-300 font-medium">أكبر من 90° وأقل من 180°</p>
+</div>
+<!-- Straight Angle -->
+<div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 rounded-2xl p-6 border-4 border-purple-400 text-center">
+<h3 class="text-xl font-bold text-purple-800 dark:text-purple-200 mb-4">الزاوية المستقيمة</h3>
+<svg class="mx-auto mb-4" height="120" viewbox="0 0 120 120" width="120">
+<line stroke="#7C3AED" stroke-width="3" x1="20" x2="100" y1="70" y2="70"></line>
+<path d="M 40 70 A 20 20 0 0 0 80 70" fill="none" stroke="#DC2626" stroke-width="2"></path>
+<circle cx="60" cy="70" fill="#7C3AED" r="2"></circle>
+<text class="fill-purple-600 text-sm font-bold" x="55" y="55">180°</text>
+</svg>
+<p class="text-purple-700 dark:text-purple-300 font-medium">تساوي 180°</p>
+</div>
+</div>
+<!-- Interactive Classification -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-8 border-4 border-dashed border-gray-300 dark:border-gray-600">
+<h3 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6 text-center">🎮 اختبر معرفتك</h3>
+<div class="grid lg:grid-cols-2 gap-8">
+<div class="text-center">
+<svg class="mx-auto mb-4 border-2 border-gray-300 rounded-lg" height="150" id="testAngleSvg" viewbox="0 0 200 150" width="200">
+<line stroke="#0D9488" stroke-width="3" x1="100" x2="170" y1="100" y2="100"></line>
+<line id="testAngleLine" stroke="#0D9488" stroke-width="3" x1="100" x2="140" y1="100" y2="60"></line>
+<path d="" fill="none" id="testAngleArc" stroke="#DC2626" stroke-width="3"></path>
+<circle cx="100" cy="100" fill="#0D9488" r="3"></circle>
+<text class="fill-red-600 text-lg font-bold" id="testAngleValue" x="135" y="85">45°</text>
+<text class="fill-gray-700 dark:fill-gray-300 text-sm font-bold" x="175" y="105">A</text>
+<text class="fill-gray-700 dark:fill-gray-300 text-sm font-bold" x="145" y="55">B</text>
+<text class="fill-gray-700 dark:fill-gray-300 text-sm font-bold" x="105" y="115">O</text>
+</svg>
+<input class="w-full mb-4" id="testAngleSlider" max="180" min="1" type="range" value="45"/>
+</div>
+<div class="text-center">
+<div class="text-2xl font-bold text-gray-800 dark:text-white mb-4">نوع الزاوية:</div>
+<div class="text-3xl font-bold p-6 rounded-xl" id="angleClassification">زاوية حادة</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Comparison Section -->
+<section class="section hidden" id="comparison">
+<div class="glass-effect rounded-3xl p-8 mb-8 section-border">
+<h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-8 text-center flex items-center justify-center">
+<span class="text-4xl ml-4">⚖️</span> مقارنة الزوايا
+                </h2>
+<div class="grid md:grid-cols-2 gap-8">
+<!-- First Angle -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-8 border-4 border-teal-400">
+<h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">الزاوية الأولى</h3>
+<div class="text-center mb-6">
+<svg class="mx-auto border-2 border-gray-300 rounded-lg" height="150" viewbox="0 0 200 150" width="200">
+<line stroke="#0D9488" stroke-width="3" x1="100" x2="170" y1="120" y2="120"></line>
+<line id="angle1Line" stroke="#0D9488" stroke-width="3" x1="100" x2="140" y1="120" y2="80"></line>
+<path d="" fill="none" id="angle1Arc" stroke="#DC2626" stroke-width="3"></path>
+<circle cx="100" cy="120" fill="#0D9488" r="3"></circle>
+<text class="fill-red-600 text-lg font-bold" id="angle1Value" x="135" y="105">60°</text>
+<text class="fill-gray-700 dark:fill-gray-300 text-sm font-bold" x="175" y="125">A</text>
+<text class="fill-gray-700 dark:fill-gray-300 text-sm font-bold" x="145" y="75">B</text>
+<text class="fill-gray-700 dark:fill-gray-300 text-sm font-bold" x="105" y="135">O</text>
+</svg>
+</div>
+<div>
+<label class="block text-lg font-bold text-gray-700 dark:text-gray-300 mb-3">قياس الزاوية الأولى</label>
+<input class="w-full px-6 py-4 text-base font-medium border-4 border-teal-400 rounded-xl focus:ring-4 focus:ring-teal-400/50 dark:bg-gray-700 dark:text-white transition-all duration-300" id="angle1Input" max="180" min="1" type="number" value="60"/>
+</div>
+<div class="mt-4 p-4 bg-teal-50 dark:bg-teal-900/30 rounded-xl">
+<p class="text-lg font-bold text-teal-800 dark:text-teal-200" id="angle1Type">زاوية حادة</p>
+</div>
+</div>
+<!-- Second Angle -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl p-8 border-4 border-green-400">
+<h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">الزاوية الثانية</h3>
+<div class="text-center mb-6">
+<svg class="mx-auto border-2 border-gray-300 rounded-lg" height="150" viewbox="0 0 200 150" width="200">
+<line stroke="#059669" stroke-width="3" x1="100" x2="170" y1="120" y2="120"></line>
+<line id="angle2Line" stroke="#059669" stroke-width="3" x1="100" x2="120" y1="120" y2="70"></line>
+<path d="" fill="none" id="angle2Arc" stroke="#DC2626" stroke-width="3"></path>
+<circle cx="100" cy="120" fill="#059669" r="3"></circle>
+<text class="fill-red-600 text-lg font-bold" id="angle2Value" x="120" y="95">90°</text>
+<text class="fill-gray-700 dark:fill-gray-300 text-sm font-bold" x="175" y="125">A</text>
+<text class="fill-gray-700 dark:fill-gray-300 text-sm font-bold" x="125" y="65">B</text>
+<text class="fill-gray-700 dark:fill-gray-300 text-sm font-bold" x="105" y="135">O</text>
+</svg>
+</div>
+<div>
+<label class="block text-lg font-bold text-gray-700 dark:text-gray-300 mb-3">قياس الزاوية الثانية</label>
+<input class="w-full px-6 py-4 text-base font-medium border-4 border-green-400 rounded-xl focus:ring-4 focus:ring-green-400/50 dark:bg-gray-700 dark:text-white transition-all duration-300" id="angle2Input" max="180" min="1" type="number" value="90"/>
+</div>
+<div class="mt-4 p-4 bg-green-50 dark:bg-green-900/30 rounded-xl">
+<p class="text-lg font-bold text-green-800 dark:text-green-200" id="angle2Type">زاوية قائمة</p>
+</div>
+</div>
+</div>
+<!-- Comparison Result -->
+<div class="mt-8 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 rounded-2xl p-8 border-4 border-purple-400">
+<h3 class="text-2xl font-bold text-center text-gray-800 dark:text-white mb-6 flex items-center justify-center">
+<span class="text-3xl ml-3">🏆</span> نتيجة المقارنة
+                    </h3>
+<div class="text-center text-xl font-bold text-gray-700 dark:text-gray-300" id="comparisonResult">
+                        الزاوية الثانية أكبر من الزاوية الأولى
+                    </div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-gradient-to-r from-gray-800 to-gray-900 dark:from-gray-900 dark:to-black text-white text-center p-8 mt-12 border-t-4 border-primary">
+<p class="text-xl font-bold">تعلم الزوايا بطريقة تفاعلية وممتعة</p>
+</footer>
+
+<pre id="result"></pre><button onclick="run()">تشغيل الدرس</button>
+<script>
+async function run() {
+    const res = await fetch("/.netlify/functions/angles");
+    const text = await res.text();
+    document.getElementById("result").textContent = text;
+}
+</script>
+</body>
+</html>

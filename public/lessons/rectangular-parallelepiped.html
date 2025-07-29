@@ -1,0 +1,603 @@
+﻿<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>متوازي المستطيلات - تطبيق تعليمي تفاعلي</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+
+<style>
+        * {
+            font-family: 'Tajawal', Arial, sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #45B7D1 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.15);
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        #threejs-container {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(255, 107, 107, 0.2);
+            border: 3px solid #FFE0E0;
+            cursor: grab;
+        }
+        #threejs-container:active {
+            cursor: grabbing;
+        }
+        .feature-item {
+            transition: all 0.3s ease;
+            border-radius: 15px;
+            padding: 1rem;
+            border: 2px solid transparent;
+        }
+        .feature-item:hover {
+            background: linear-gradient(45deg, rgba(255, 107, 107, 0.1), rgba(78, 205, 196, 0.1));
+            transform: scale(1.02);
+            border: 2px solid #FF6B6B;
+        }
+        .dark .feature-item:hover {
+            background: linear-gradient(45deg, rgba(255, 107, 107, 0.2), rgba(78, 205, 196, 0.2));
+        }
+        .emoji-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .colorful-bg-1 {
+            background: linear-gradient(45deg, #FF6B6B, #FFE66D);
+        }
+        .colorful-bg-2 {
+            background: linear-gradient(45deg, #4ECDC4, #44A08D);
+        }
+        .colorful-bg-3 {
+            background: linear-gradient(45deg, #45B7D1, #96C93D);
+        }
+        .colorful-bg-4 {
+            background: linear-gradient(45deg, #9B59B6, #E74C3C);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .mobile-optimized {
+            padding: 1rem;
+        }
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .control-btn:hover {
+            transform: scale(1.1);
+        }
+        .control-instructions {
+            background: linear-gradient(45deg, rgba(255, 107, 107, 0.1), rgba(78, 205, 196, 0.1));
+            border: 2px dashed #FF6B6B;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .mobile-optimized {
+                padding: 0.75rem;
+            }
+            .tab-btn {
+                font-size: 0.875rem;
+                padding: 0.5rem 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pink-50 via-blue-50 to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 min-h-screen transition-colors duration-300">
+<!-- Header -->
+<header class="gradient-bg text-white p-4 md:p-6 shadow-xl">
+<div class="max-w-6xl mx-auto text-center">
+<h1 class="text-2xl md:text-4xl font-bold mb-2 floating">
+<span class="emoji-title">
+                    📦 متوازي المستطيلات 📐
+                </span>
+</h1>
+<p class="text-sm md:text-lg opacity-90">تعلم بطريقة ممتعة وتفاعلية! 🌟</p>
+</div>
+</header>
+<div class="max-w-6xl mx-auto mobile-optimized space-y-6 md:space-y-8">
+<!-- Navigation Tabs -->
+<div class="flex flex-wrap justify-center gap-1 md:gap-2 bg-white/80 dark:bg-gray-800/80 p-2 rounded-2xl shadow-lg backdrop-blur-sm">
+<button class="tab-btn px-3 py-2 rounded-xl font-medium transition-all duration-300 text-sm md:text-base" id="tab-definition" onclick="showTab('definition')">
+                🏠 التعريف
+            </button>
+<button class="tab-btn px-3 py-2 rounded-xl font-medium transition-all duration-300 text-sm md:text-base" id="tab-design" onclick="showTab('design')">
+                ✂️ التصميم
+            </button>
+<button class="tab-btn px-3 py-2 rounded-xl font-medium transition-all duration-300 text-sm md:text-base" id="tab-3d" onclick="showTab('3d')">
+                🎮 ثلاثي الأبعاد
+            </button>
+<button class="tab-btn px-3 py-2 rounded-xl font-medium transition-all duration-300 text-sm md:text-base" id="tab-calculator" onclick="showTab('calculator')">
+                🧮 الحاسبة
+            </button>
+</div>
+<!-- Definition Tab -->
+<div class="tab-content" id="definition-tab">
+<div class="grid gap-4 md:gap-6">
+<div class="bg-white/90 dark:bg-gray-800/90 rounded-2xl p-4 md:p-6 shadow-xl card-hover backdrop-blur-sm">
+<h2 class="text-xl md:text-2xl font-bold mb-4 colorful-bg-1 text-white p-3 rounded-xl text-center">
+<span class="emoji-title">
+                            🎯 ما هو متوازي المستطيلات؟ 
+                        </span>
+</h2>
+<div class="text-center mb-6">
+<div class="text-4xl md:text-6xl mb-4">📦</div>
+<p class="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                            متوازي المستطيلات هو صندوق له <span class="font-bold text-primary">6 أوجه مستطيلة</span>
+<br/>كل وجهين متقابلين متطابقان ومتوازيان تماماً! 🎪
+                        </p>
+</div>
+</div>
+<div class="grid md:grid-cols-3 gap-4">
+<div class="bg-white/90 dark:bg-gray-800/90 rounded-2xl p-4 md:p-6 shadow-xl card-hover">
+<div class="text-center">
+<div class="colorful-bg-2 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+<span class="text-2xl">🏠</span>
+</div>
+<h3 class="text-lg md:text-xl font-bold text-gray-800 dark:text-white mb-3">الأوجه</h3>
+<div class="space-y-2">
+<div class="bg-gradient-to-r from-pink-100 to-pink-200 dark:from-pink-900/20 dark:to-pink-800/20 p-3 rounded-xl">
+<span class="font-bold text-pink-700 dark:text-pink-300 text-lg">6 أوجه</span>
+<p class="text-sm text-pink-600 dark:text-pink-400">كل وجه مستطيل</p>
+</div>
+<div class="text-xs text-gray-600 dark:text-gray-400">
+                                    أمام 👀 خلف 🔙 يمين ➡️ يسار ⬅️ أعلى ⬆️ أسفل ⬇️
+                                </div>
+</div>
+</div>
+</div>
+<div class="bg-white/90 dark:bg-gray-800/90 rounded-2xl p-4 md:p-6 shadow-xl card-hover">
+<div class="text-center">
+<div class="colorful-bg-3 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+<span class="text-2xl">📏</span>
+</div>
+<h3 class="text-lg md:text-xl font-bold text-gray-800 dark:text-white mb-3">الأحرف</h3>
+<div class="space-y-2">
+<div class="bg-gradient-to-r from-blue-100 to-blue-200 dark:from-blue-900/20 dark:to-blue-800/20 p-3 rounded-xl">
+<span class="font-bold text-blue-700 dark:text-blue-300 text-lg">12 حرف</span>
+<p class="text-sm text-blue-600 dark:text-blue-400">خطوط الاتصال</p>
+</div>
+<div class="text-xs text-gray-600 dark:text-gray-400">
+                                    4 أحرف طولية | 4 أحرف عرضية | 4 أحرف ارتفاع
+                                </div>
+</div>
+</div>
+</div>
+<div class="bg-white/90 dark:bg-gray-800/90 rounded-2xl p-4 md:p-6 shadow-xl card-hover">
+<div class="text-center">
+<div class="colorful-bg-4 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+<span class="text-2xl">⭐</span>
+</div>
+<h3 class="text-lg md:text-xl font-bold text-gray-800 dark:text-white mb-3">الرؤوس</h3>
+<div class="space-y-2">
+<div class="bg-gradient-to-r from-purple-100 to-purple-200 dark:from-purple-900/20 dark:to-purple-800/20 p-3 rounded-xl">
+<span class="font-bold text-purple-700 dark:text-purple-300 text-lg">8 رؤوس</span>
+<p class="text-sm text-purple-600 dark:text-purple-400">نقاط الزوايا</p>
+</div>
+<div class="text-xs text-gray-600 dark:text-gray-400">
+                                    🔸 4 رؤوس علوية | 4 رؤوس سفلية 🔸
+                                </div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white/90 dark:bg-gray-800/90 rounded-2xl p-4 md:p-6 shadow-xl card-hover">
+<h3 class="text-xl md:text-2xl font-bold text-center mb-6 colorful-bg-2 text-white p-3 rounded-xl">
+                        🎨 الأبعاد الثلاثة الساحرة
+                    </h3>
+<div class="grid md:grid-cols-3 gap-4">
+<div class="text-center p-4 bg-gradient-to-br from-red-100 to-pink-100 dark:from-red-900/20 dark:to-pink-900/20 rounded-xl">
+<div class="text-3xl mb-2">📏</div>
+<h4 class="font-bold text-red-700 dark:text-red-300 text-lg">الطول</h4>
+<p class="text-sm text-red-600 dark:text-red-400">المسافة الأفقية الطويلة</p>
+<div class="text-2xl mt-2">↔️</div>
+</div>
+<div class="text-center p-4 bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl">
+<div class="text-3xl mb-2">📐</div>
+<h4 class="font-bold text-green-700 dark:text-green-300 text-lg">العرض</h4>
+<p class="text-sm text-green-600 dark:text-green-400">المسافة الأفقية القصيرة</p>
+<div class="text-2xl mt-2">↕️</div>
+</div>
+<div class="text-center p-4 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl">
+<div class="text-3xl mb-2">📊</div>
+<h4 class="font-bold text-blue-700 dark:text-blue-300 text-lg">الارتفاع</h4>
+<p class="text-sm text-blue-600 dark:text-blue-400">المسافة العمودية</p>
+<div class="text-2xl mt-2">⬆️</div>
+</div>
+</div>
+<div class="mt-6 p-4 bg-gradient-to-r from-yellow-100 via-orange-100 to-red-100 dark:from-yellow-900/20 dark:via-orange-900/20 dark:to-red-900/20 rounded-2xl border-3 border-yellow-300">
+<h4 class="font-bold text-center text-gray-800 dark:text-white mb-3 text-lg">🧮 سر حساب الحجم</h4>
+<div class="text-center bg-white dark:bg-gray-800 p-4 rounded-xl border-2 border-dashed border-yellow-400">
+<p class="text-lg md:text-xl font-bold text-gray-800 dark:text-white mb-2">
+                                الحجم = الطول × العرض × الارتفاع
+                            </p>
+<p class="text-xl font-mono font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg">
+                                V = L × l × h
+                            </p>
+<p class="text-sm text-gray-600 dark:text-gray-400 mt-2">🎪 اضرب الأبعاد الثلاثة معاً لتحصل على الحجم!</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Design Tab -->
+<div class="tab-content hidden" id="design-tab">
+<div class="grid lg:grid-cols-2 gap-4 md:gap-6">
+<div class="bg-white/90 dark:bg-gray-800/90 rounded-2xl p-4 md:p-6 shadow-xl card-hover">
+<h2 class="text-xl md:text-2xl font-bold mb-6 colorful-bg-3 text-white p-3 rounded-xl text-center">
+<span class="emoji-title">✂️ ورشة التصميم والصناعة</span>
+</h2>
+<div class="space-y-4 md:space-y-6">
+<div class="p-4 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl border-2 border-blue-200">
+<h3 class="font-bold text-blue-800 dark:text-blue-200 mb-3 text-lg">🎯 خطوات التصميم السحرية:</h3>
+<div class="space-y-3">
+<div class="flex items-center bg-white dark:bg-gray-700 p-3 rounded-lg">
+<span class="w-8 h-8 bg-gradient-to-r from-pink-400 to-red-400 text-white rounded-full flex items-center justify-center text-sm font-bold ml-3">1</span>
+<span class="text-blue-700 dark:text-blue-300">📏 حدد الأبعاد المطلوبة</span>
+</div>
+<div class="flex items-center bg-white dark:bg-gray-700 p-3 rounded-lg">
+<span class="w-8 h-8 bg-gradient-to-r from-green-400 to-emerald-400 text-white rounded-full flex items-center justify-center text-sm font-bold ml-3">2</span>
+<span class="text-blue-700 dark:text-blue-300">🎨 ارسم المخطط المسطح</span>
+</div>
+<div class="flex items-center bg-white dark:bg-gray-700 p-3 rounded-lg">
+<span class="w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-400 text-white rounded-full flex items-center justify-center text-sm font-bold ml-3">3</span>
+<span class="text-blue-700 dark:text-blue-300">🕸️ أنشئ الشبكة</span>
+</div>
+<div class="flex items-center bg-white dark:bg-gray-700 p-3 rounded-lg">
+<span class="w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-400 text-white rounded-full flex items-center justify-center text-sm font-bold ml-3">4</span>
+<span class="text-blue-700 dark:text-blue-300">🔧 اقص واطو وأجمع</span>
+</div>
+</div>
+</div>
+<div class="p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl border-2 border-green-200">
+<h3 class="font-bold text-green-800 dark:text-green-200 mb-3 text-lg">🛠️ صندوق العدة:</h3>
+<div class="grid grid-cols-2 gap-2">
+<div class="flex items-center bg-white dark:bg-gray-700 p-2 rounded-lg">
+<span class="text-2xl ml-2">📄</span>
+<span class="text-green-700 dark:text-green-300 text-sm">ورق مقوى</span>
+</div>
+<div class="flex items-center bg-white dark:bg-gray-700 p-2 rounded-lg">
+<span class="text-2xl ml-2">✂️</span>
+<span class="text-green-700 dark:text-green-300 text-sm">مقص</span>
+</div>
+<div class="flex items-center bg-white dark:bg-gray-700 p-2 rounded-lg">
+<span class="text-2xl ml-2">📏</span>
+<span class="text-green-700 dark:text-green-300 text-sm">مسطرة</span>
+</div>
+<div class="flex items-center bg-white dark:bg-gray-700 p-2 rounded-lg">
+<span class="text-2xl ml-2">🧲</span>
+<span class="text-green-700 dark:text-green-300 text-sm">غراء</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white/90 dark:bg-gray-800/90 rounded-2xl p-4 md:p-6 shadow-xl card-hover">
+<h3 class="text-xl md:text-2xl font-bold mb-6 colorful-bg-4 text-white p-3 rounded-xl text-center">
+                        🎪 مولد الشبكة السحري
+                    </h3>
+<div class="space-y-4 mb-6">
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                📏 طول الصندوق (سم)
+                            </label>
+<input class="w-full px-4 py-3 text-base border-2 border-primary/30 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white transition-all duration-300" id="net-length" max="20" min="1" type="number" value="8"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                📐 عرض الصندوق (سم)
+                            </label>
+<input class="w-full px-4 py-3 text-base border-2 border-secondary/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-secondary dark:bg-gray-700 dark:text-white transition-all duration-300" id="net-width" max="20" min="1" type="number" value="6"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                📊 ارتفاع الصندوق (سم)
+                            </label>
+<input class="w-full px-4 py-3 text-base border-2 border-accent/30 rounded-xl focus:ring-2 focus:ring-accent focus:border-accent dark:bg-gray-700 dark:text-white transition-all duration-300" id="net-height" max="20" min="1" type="number" value="4"/>
+</div>
+<button class="w-full bg-gradient-to-r from-primary to-secondary hover:from-primaryHover hover:to-teal-400 text-white px-4 py-3 rounded-xl transition-all duration-300 text-base font-bold shadow-lg" onclick="generateNet()">
+                            ✨ أنشئ الشبكة السحرية
+                        </button>
+</div>
+<div class="border-3 border-dashed border-primary/30 rounded-2xl p-4 min-h-64 flex items-center justify-center bg-gradient-to-br from-pink-50 to-blue-50 dark:from-gray-700 dark:to-gray-600" id="net-display">
+<p class="text-gray-500 dark:text-gray-400 text-center">
+                            🎨 اضغط الزر لعرض المخطط الساحر!
+                        </p>
+</div>
+<div class="mt-4 text-center">
+<button class="bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 px-4 py-2 rounded-xl text-base cursor-not-allowed" disabled="" id="download-btn" onclick="downloadNet()">
+                            📥 تحميل الشبكة
+                        </button>
+</div>
+</div>
+</div>
+<div class="mt-6 bg-gradient-to-r from-yellow-100 via-orange-100 to-red-100 dark:from-yellow-900/20 dark:via-orange-900/20 dark:to-red-900/20 border-3 border-yellow-300 rounded-2xl p-4 md:p-6">
+<h3 class="text-lg md:text-xl font-bold text-yellow-800 dark:text-yellow-200 mb-4 text-center">
+                    💡 نصائح الخبراء للصناعة
+                </h3>
+<div class="grid md:grid-cols-2 gap-4 text-yellow-700 dark:text-yellow-300">
+<div class="bg-white/70 dark:bg-gray-800/70 p-4 rounded-xl">
+<h4 class="font-semibold mb-2 text-orange-600">🎯 قبل البدء:</h4>
+<ul class="space-y-1 text-sm">
+<li>✅ تأكد من دقة القياسات</li>
+<li>🌈 ارسم خطوط الطي بلون مختلف</li>
+<li>📐 اترك مساحة إضافية للألسنة</li>
+</ul>
+</div>
+<div class="bg-white/70 dark:bg-gray-800/70 p-4 rounded-xl">
+<h4 class="font-semibold mb-2 text-orange-600">🔧 أثناء التجميع:</h4>
+<ul class="space-y-1 text-sm">
+<li>🎨 اطو الخطوط بعناية فائقة</li>
+<li>💧 استخدم الغراء بكمية مناسبة</li>
+<li>🎪 اتبع ترتيب التجميع</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- 3D Visualization Tab -->
+<div class="tab-content hidden" id="3d-tab">
+<div class="bg-white/90 dark:bg-gray-800/90 rounded-2xl p-4 md:p-6 shadow-xl card-hover mb-6">
+<h2 class="text-xl md:text-2xl font-bold mb-4 colorful-bg-1 text-white p-3 rounded-xl text-center">
+<span class="emoji-title">🎮 العالم ثلاثي الأبعاد التفاعلي</span>
+</h2>
+<!-- 3D Container with better sizing -->
+<div class="relative">
+<div class="w-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-gray-700 dark:to-gray-600 mx-auto" id="threejs-container" style="height: 500px; max-height: 70vh;">
+</div>
+<!-- Interactive instructions overlay -->
+<div class="control-instructions">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+<div class="text-center">
+<div class="text-2xl mb-2">🖱️</div>
+<strong>الماوس:</strong><br/>
+                                اسحب للدوران<br/>
+                                العجلة للتكبير
+                            </div>
+<div class="text-center">
+<div class="text-2xl mb-2">👆</div>
+<strong>اللمس:</strong><br/>
+                                المس واسحب للدوران<br/>
+                                اقرص للتكبير
+                            </div>
+<div class="text-center">
+<div class="text-2xl mb-2">⌨️</div>
+<strong>الأزرار:</strong><br/>
+                                استخدم أزرار التحكم<br/>
+                                أسفل الشاشة
+                            </div>
+</div>
+</div>
+</div>
+</div>
+<div class="grid lg:grid-cols-2 gap-4 md:gap-6">
+<!-- Control Panel -->
+<div class="bg-white/90 dark:bg-gray-800/90 rounded-2xl p-4 md:p-6 shadow-xl card-hover">
+<h3 class="text-lg md:text-xl font-bold mb-4 colorful-bg-2 text-white p-3 rounded-xl text-center">
+                        🎛️ لوحة التحكم في الأبعاد
+                    </h3>
+<div class="space-y-4">
+<div class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 p-3 rounded-xl">
+<label class="block text-sm font-medium text-red-700 dark:text-red-300 mb-2">📏 الطول</label>
+<input class="w-full accent-red-500" id="length-slider" max="10" min="1" type="range" value="4"/>
+<div class="text-center mt-1">
+<span class="text-sm font-bold text-red-600 dark:text-red-400 bg-white dark:bg-gray-700 px-2 py-1 rounded-lg" id="length-value">4</span>
+</div>
+</div>
+<div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-3 rounded-xl">
+<label class="block text-sm font-medium text-green-700 dark:text-green-300 mb-2">📐 العرض</label>
+<input class="w-full accent-green-500" id="width-slider" max="10" min="1" type="range" value="3"/>
+<div class="text-center mt-1">
+<span class="text-sm font-bold text-green-600 dark:text-green-400 bg-white dark:bg-gray-700 px-2 py-1 rounded-lg" id="width-value">3</span>
+</div>
+</div>
+<div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-3 rounded-xl">
+<label class="block text-sm font-medium text-blue-700 dark:text-blue-300 mb-2">📊 الارتفاع</label>
+<input class="w-full accent-blue-500" id="height-slider" max="10" min="1" type="range" value="2"/>
+<div class="text-center mt-1">
+<span class="text-sm font-bold text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-700 px-2 py-1 rounded-lg" id="height-value">2</span>
+</div>
+</div>
+<!-- Physical Control Buttons -->
+<div class="mt-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-4 rounded-xl">
+<h4 class="text-center font-bold text-gray-700 dark:text-gray-300 mb-3">🕹️ تحكم في الرؤية</h4>
+<div class="grid grid-cols-5 gap-2 place-items-center">
+<div></div>
+<button class="control-btn bg-green-500 hover:bg-green-600 text-white" onclick="rotateShape('up')">⬆️</button>
+<div></div>
+<button class="control-btn bg-orange-500 hover:bg-orange-600 text-white" onclick="zoomCamera('in')">🔍</button>
+<div></div>
+<button class="control-btn bg-blue-500 hover:bg-blue-600 text-white" onclick="rotateShape('left')">⬅️</button>
+<button class="control-btn bg-purple-500 hover:bg-purple-600 text-white" onclick="resetCamera()">🎯</button>
+<button class="control-btn bg-blue-500 hover:bg-blue-600 text-white" onclick="rotateShape('right')">➡️</button>
+<button class="control-btn bg-orange-500 hover:bg-orange-600 text-white" onclick="zoomCamera('out')">🔍</button>
+<button class="control-btn bg-gray-500 hover:bg-gray-600 text-white" onclick="resetDimensions()">🔄</button>
+<div></div>
+<button class="control-btn bg-green-500 hover:bg-green-600 text-white" onclick="rotateShape('down')">⬇️</button>
+<div></div>
+<div></div>
+<div></div>
+</div>
+<div class="text-xs text-center text-gray-600 dark:text-gray-400 mt-3">
+                                ⬆️⬇️⬅️➡️ دوران | 🔍 تكبير/تصغير | 🎯 إعادة تعيين الكاميرا | 🔄 إعادة تعيين الأبعاد
+                            </div>
+</div>
+</div>
+</div>
+<!-- Information Panel -->
+<div class="bg-white/90 dark:bg-gray-800/90 rounded-2xl p-4 md:p-6 shadow-xl card-hover">
+<h3 class="text-lg md:text-xl font-bold mb-4 colorful-bg-3 text-white p-3 rounded-xl text-center">
+                        📊 معلومات المجسم الحية
+                    </h3>
+<div class="space-y-4">
+<div class="bg-gradient-to-r from-primary/10 to-primary/5 p-4 rounded-xl border-2 border-primary/20">
+<div class="flex justify-between items-center">
+<span class="text-gray-600 dark:text-gray-400 flex items-center">
+<span class="text-2xl ml-2">🧊</span>
+                                    الحجم:
+                                </span>
+<span class="font-bold text-primary text-xl" id="current-volume">24</span>
+</div>
+<div class="text-xs text-gray-500 dark:text-gray-400 mt-1">وحدة مكعبة</div>
+</div>
+<div class="bg-gradient-to-r from-success/10 to-success/5 p-4 rounded-xl border-2 border-success/20">
+<div class="flex justify-between items-center">
+<span class="text-gray-600 dark:text-gray-400 flex items-center">
+<span class="text-2xl ml-2">📐</span>
+                                    مساحة السطح:
+                                </span>
+<span class="font-bold text-success text-xl" id="current-surface">52</span>
+</div>
+<div class="text-xs text-gray-500 dark:text-gray-400 mt-1">وحدة مربعة</div>
+</div>
+<div class="bg-gradient-to-r from-blue-100 to-blue-50 dark:from-blue-900/20 dark:to-blue-800/10 p-4 rounded-xl border-2 border-blue-200">
+<h4 class="font-bold text-blue-600 mb-2">🎨 ألوان الأوجه:</h4>
+<div class="grid grid-cols-2 gap-2 text-xs">
+<div class="flex items-center"><div class="w-4 h-4 bg-red-400 rounded ml-2"></div>أمام/خلف</div>
+<div class="flex items-center"><div class="w-4 h-4 bg-green-400 rounded ml-2"></div>يمين/يسار</div>
+<div class="flex items-center"><div class="w-4 h-4 bg-blue-400 rounded ml-2"></div>أعلى</div>
+<div class="flex items-center"><div class="w-4 h-4 bg-yellow-400 rounded ml-2"></div>أسفل</div>
+</div>
+</div>
+<div class="bg-gradient-to-r from-purple-100 to-purple-50 dark:from-purple-900/20 dark:to-purple-800/10 p-4 rounded-xl border-2 border-purple-200">
+<h4 class="font-bold text-purple-600 mb-2">📏 الأبعاد الحالية:</h4>
+<div class="space-y-1 text-sm">
+<div class="flex justify-between">
+<span>📏 الطول:</span>
+<span class="font-bold" id="display-length">4</span>
+</div>
+<div class="flex justify-between">
+<span>📐 العرض:</span>
+<span class="font-bold" id="display-width">3</span>
+</div>
+<div class="flex justify-between">
+<span>📊 الارتفاع:</span>
+<span class="font-bold" id="display-height">2</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Calculator Tab -->
+<div class="tab-content hidden" id="calculator-tab">
+<div class="grid md:grid-cols-2 gap-4 md:gap-6">
+<div class="bg-white/90 dark:bg-gray-800/90 rounded-2xl p-4 md:p-6 shadow-xl card-hover">
+<h2 class="text-xl md:text-2xl font-bold mb-6 colorful-bg-4 text-white p-3 rounded-xl text-center">
+<span class="emoji-title">🧮 الحاسبة السحرية</span>
+</h2>
+<!-- Unit Selector -->
+<div class="mb-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-4 rounded-xl">
+<label class="block text-sm font-medium text-purple-700 dark:text-purple-300 mb-2">📏 اختر الوحدة:</label>
+<select class="w-full px-4 py-3 text-base border-2 border-purple-200 dark:border-purple-700 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-purple-400 dark:bg-gray-700 dark:text-white transition-all duration-300" id="unit-selector" onchange="updateUnitLabels()">
+<option value="سم">سنتيمتر (سم)</option>
+<option value="م">متر (م)</option>
+<option value="مم">مليمتر (مم)</option>
+<option value="بوصة">بوصة (inch)</option>
+</select>
+</div>
+<form class="space-y-6">
+<div class="bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 p-4 rounded-xl">
+<label class="block text-sm font-medium text-red-700 dark:text-red-300 mb-2">📏 الطول (<span id="length-unit">سم</span>)</label>
+<input class="w-full px-4 py-3 text-base border-2 border-red-200 dark:border-red-700 rounded-xl focus:ring-2 focus:ring-red-400 focus:border-red-400 dark:bg-gray-700 dark:text-white transition-all duration-300" id="calc-length" placeholder="أدخل الطول" type="number"/>
+</div>
+<div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-4 rounded-xl">
+<label class="block text-sm font-medium text-green-700 dark:text-green-300 mb-2">📐 العرض (<span id="width-unit">سم</span>)</label>
+<input class="w-full px-4 py-3 text-base border-2 border-green-200 dark:border-green-700 rounded-xl focus:ring-2 focus:ring-green-400 focus:border-green-400 dark:bg-gray-700 dark:text-white transition-all duration-300" id="calc-width" placeholder="أدخل العرض" type="number"/>
+</div>
+<div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 rounded-xl">
+<label class="block text-sm font-medium text-blue-700 dark:text-blue-300 mb-2">📊 الارتفاع (<span id="height-unit">سم</span>)</label>
+<input class="w-full px-4 py-3 text-base border-2 border-blue-200 dark:border-blue-700 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-blue-400 dark:bg-gray-700 dark:text-white transition-all duration-300" id="calc-height" placeholder="أدخل الارتفاع" type="number"/>
+</div>
+<button class="w-full bg-gradient-to-r from-primary to-secondary hover:from-primaryHover hover:to-teal-400 text-white px-6 py-4 rounded-xl font-bold transition-all duration-300 text-base shadow-lg pulse-animation" onclick="calculateVolume()" type="button">
+                            ✨ احسب النتائج السحرية
+                        </button>
+</form>
+</div>
+<div class="bg-white/90 dark:bg-gray-800/90 rounded-2xl p-4 md:p-6 shadow-xl card-hover">
+<h3 class="text-xl md:text-2xl font-bold mb-6 colorful-bg-1 text-white p-3 rounded-xl text-center">
+                        🎯 النتائج المذهلة
+                    </h3>
+<div class="space-y-4 text-center" id="calculation-results">
+<div class="text-gray-500 dark:text-gray-400 text-lg p-8 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 rounded-xl">
+<div class="text-4xl mb-4">🎪</div>
+                            أدخل الأبعاد لترى السحر يحدث!
+                        </div>
+</div>
+<!-- Calculation Steps -->
+<div class="mt-6 hidden" id="calculation-steps">
+<h4 class="font-bold text-gray-800 dark:text-white mb-3 text-center colorful-bg-2 text-white p-2 rounded-xl">
+                            🧙‍♂️ خطوات الحساب
+                        </h4>
+<div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border-2 border-blue-200" id="steps-content">
+</div>
+</div>
+<div class="mt-8 p-4 bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 dark:from-blue-900/20 dark:via-purple-900/20 dark:to-pink-900/20 rounded-xl border-2 border-blue-200">
+<h4 class="font-bold text-blue-800 dark:text-blue-200 mb-3 text-center">🧙‍♂️ الصيغ السحرية:</h4>
+<div class="space-y-3 text-sm">
+<div class="bg-white dark:bg-gray-800 p-3 rounded-xl border-l-4 border-primary shadow-sm">
+<div class="font-bold text-primary">🧊 الحجم:</div>
+<div class="text-gray-600 dark:text-gray-300">الطول × العرض × الارتفاع</div>
+<div class="text-sm text-blue-600 font-mono">V = L × l × h</div>
+</div>
+<div class="bg-white dark:bg-gray-800 p-3 rounded-xl border-l-4 border-success shadow-sm">
+<div class="font-bold text-success">📐 مساحة السطح:</div>
+<div class="text-gray-600 dark:text-gray-300">2(طول×عرض + طول×ارتفاع + عرض×ارتفاع)</div>
+<div class="text-sm text-blue-600 font-mono">S = 2(L×l + L×h + l×h)</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<pre id="result"></pre><button onclick="run()">تشغيل الدرس</button>
+<script>
+async function run() {
+    const res = await fetch("/.netlify/functions/rectangular-parallelepiped");
+    const text = await res.text();
+    document.getElementById("result").textContent = text;
+}
+</script>
+</body>
+</html>

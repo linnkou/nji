@@ -1,0 +1,632 @@
+﻿<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>مقارنة وترتيب الأعداد العشرية</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap');
+        
+        body {
+            font-family: 'Almarai', Arial, sans-serif;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .glass-card {
+            background: rgba(31, 41, 55, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #1e40af, #059669, #dc2626, #d97706);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 4s ease-in-out infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        .number-display {
+            direction: ltr;
+            text-align: center;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .digit {
+            display: inline-block;
+            width: 35px;
+            height: 45px;
+            margin: 2px;
+            border-radius: 8px;
+            line-height: 45px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 20px;
+            transition: all 0.8s ease;
+            border: 2px solid transparent;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+        
+        .dark .digit {
+            background: #475569;
+            color: #f1f5f9;
+        }
+        
+        .decimal-point {
+            color: #dc2626;
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+        
+        .digit-highlight {
+            background: #fef08a !important;
+            border: 2px solid #eab308 !important;
+            color: #a16207 !important;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.5);
+            animation: pulse 1s ease-in-out infinite;
+        }
+        
+        .digit-greater {
+            background: #dcfce7 !important;
+            border: 2px solid #16a34a !important;
+            color: #15803d !important;
+        }
+        
+        .digit-lesser {
+            background: #fecaca !important;
+            border: 2px solid #dc2626 !important;
+            color: #dc2626 !important;
+        }
+        
+        .digit-equal {
+            background: #e0e7ff !important;
+            border: 2px solid #6366f1 !important;
+            color: #4338ca !important;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .comparison-arrow {
+            font-size: 3rem;
+            color: #059669;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .step-indicator {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        
+        .method-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .method-card.active {
+            border-color: #3b82f6;
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+        }
+        
+        .dark .method-card {
+            border-color: #4b5563;
+            background: #374151;
+        }
+        
+        .dark .method-card.active {
+            border-color: #60a5fa;
+            background: linear-gradient(135deg, #1e40af, #1d4ed8);
+        }
+        
+        .sort-item {
+            padding: 15px;
+            margin: 8px 0;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            transition: all 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .dark .sort-item {
+            background: #374151;
+            border-color: #4b5563;
+        }
+        
+        .sort-item.moving {
+            transform: translateX(20px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-color: #3b82f6;
+            background: #dbeafe;
+        }
+        
+        .dark .sort-item.moving {
+            background: #1e40af;
+            border-color: #60a5fa;
+        }
+        
+        .horizontal-sort {
+            direction: ltr;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border-radius: 15px;
+            border: 2px solid #cbd5e1;
+            margin: 20px 0;
+        }
+        
+        .dark .horizontal-sort {
+            background: linear-gradient(135deg, #374151, #4b5563);
+            border-color: #6b7280;
+        }
+        
+        .number-box {
+            background: white;
+            border: 2px solid #3b82f6;
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            color: #1e40af;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2);
+        }
+        
+        .dark .number-box {
+            background: #1e40af;
+            color: white;
+            border-color: #60a5fa;
+        }
+        
+        .comparison-symbol {
+            font-size: 24px;
+            font-weight: bold;
+            color: #16a34a;
+            margin: 0 10px;
+        }
+        
+        .comparison-symbol.desc {
+            color: #dc2626;
+        }
+        
+        .section-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            text-align: center;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+        
+        .tab-button {
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+        
+        .tab-button:not(.active) {
+            background: #f1f5f9;
+            color: #64748b;
+            border-color: #e2e8f0;
+        }
+        
+        .dark .tab-button:not(.active) {
+            background: #374151;
+            color: #9ca3af;
+            border-color: #4b5563;
+        }
+        
+        .number-input {
+            border: 3px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .number-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .dark .number-input {
+            background: #374151;
+            border-color: #4b5563;
+            color: white;
+        }
+        
+        .compare-result {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            animation: fadeInScale 0.8s ease;
+        }
+        
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        
+        .steps-container {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #cbd5e1;
+        }
+        
+        .dark .steps-container {
+            background: linear-gradient(135deg, #374151, #4b5563);
+            border-color: #6b7280;
+        }
+        
+        .method-selector {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        
+        .method-btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #e2e8f0;
+            background: white;
+        }
+        
+        .method-btn.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .dark .method-btn {
+            background: #374151;
+            border-color: #4b5563;
+            color: #e5e7eb;
+        }
+        
+        .dark .method-btn.active {
+            background: #1d4ed8;
+            border-color: #1d4ed8;
+        }
+        
+        .add-number-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .add-number-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .comma-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+        
+        .comma-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+        }
+        
+        .remove-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .remove-btn:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        @media (max-width: 768px) {
+            .input-group {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 min-h-screen">
+<div class="min-h-screen p-3 sm:p-4 md:p-6 lg:p-8">
+<div class="max-w-7xl mx-auto">
+<!-- Header -->
+<div class="text-center mb-8">
+<h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold gradient-text mb-4 leading-tight floating">
+                    📊 مقارنة وترتيب الأعداد العشرية 🎯
+                </h1>
+<p class="text-lg text-gray-700 dark:text-gray-300 font-medium">
+                    تعلم مقارنة وترتيب الأعداد العشرية خطوة بخطوة! 🔢
+                </p>
+</div>
+<!-- Tabs -->
+<div class="flex justify-center mb-8">
+<div class="flex space-x-4 bg-white dark:bg-gray-800 rounded-2xl p-2 shadow-lg">
+<button class="tab-button active" id="compareTab">
+                        📐 مقارنة عددين
+                    </button>
+<button class="tab-button" id="sortTab">
+                        📋 ترتيب أعداد متعددة
+                    </button>
+</div>
+</div>
+<!-- Compare Section -->
+<div class="tab-content" id="compareSection">
+<div class="glass-card rounded-3xl p-8 mb-8 shadow-xl">
+<h3 class="section-title text-2xl font-bold mb-6">
+                        🔍 مقارنة عددين عشريين
+                    </h3>
+<!-- Input Numbers -->
+<div class="grid md:grid-cols-2 gap-8 mb-8">
+<div class="text-center">
+<label class="block text-lg font-bold text-gray-700 dark:text-gray-300 mb-3">
+                                العدد الأول
+                            </label>
+<div class="input-group">
+<input class="number-input flex-1" id="number1" placeholder="مثال: 12,34" type="text"/>
+<button class="comma-btn" id="commaBtn1">,</button>
+</div>
+</div>
+<div class="text-center">
+<label class="block text-lg font-bold text-gray-700 dark:text-gray-300 mb-3">
+                                العدد الثاني
+                            </label>
+<div class="input-group">
+<input class="number-input flex-1" id="number2" placeholder="مثال: 12,56" type="text"/>
+<button class="comma-btn" id="commaBtn2">,</button>
+</div>
+</div>
+</div>
+<!-- Method Selection -->
+<div class="text-center mb-6">
+<h4 class="text-lg font-bold mb-4 text-gray-700 dark:text-gray-300">اختر طريقة المقارنة:</h4>
+<div class="method-selector">
+<button class="method-btn active" id="methodPadding">
+                                📏 إضافة الأصفار
+                            </button>
+<button class="method-btn" id="methodDigitByDigit">
+                                🔍 رقم برقم
+                            </button>
+</div>
+</div>
+<!-- Compare Button -->
+<div class="text-center mb-8">
+<button class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-xl text-lg" id="compareBtn">
+                            🚀 قارن الأعداد
+                        </button>
+</div>
+<!-- Visual Comparison -->
+<div class="hidden" id="comparisonVisual">
+<div class="grid md:grid-cols-3 gap-8 items-center">
+<!-- Number 1 Display -->
+<div class="bg-blue-50 dark:bg-gray-700 rounded-xl p-6 border-2 border-blue-200 dark:border-blue-800">
+<h4 class="text-lg font-bold text-center mb-4 text-blue-800 dark:text-blue-300">العدد الأول</h4>
+<div class="number-display bg-white dark:bg-gray-800 rounded-lg p-4 border" id="number1Display"></div>
+</div>
+<!-- Comparison Result -->
+<div class="text-center">
+<div class="comparison-arrow" id="comparisonResult">⚖️</div>
+</div>
+<!-- Number 2 Display -->
+<div class="bg-green-50 dark:bg-gray-700 rounded-xl p-6 border-2 border-green-200 dark:border-green-800">
+<h4 class="text-lg font-bold text-center mb-4 text-green-800 dark:text-green-300">العدد الثاني</h4>
+<div class="number-display bg-white dark:bg-gray-800 rounded-lg p-4 border" id="number2Display"></div>
+</div>
+</div>
+<!-- Steps -->
+<div class="steps-container mt-8" id="comparisonSteps">
+<h4 class="text-xl font-bold text-center mb-4">خطوات المقارنة</h4>
+<div id="stepsContent"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sort Section -->
+<div class="tab-content hidden" id="sortSection">
+<div class="glass-card rounded-3xl p-8 mb-8 shadow-xl">
+<h3 class="section-title text-2xl font-bold mb-6">
+                        📈 ترتيب أعداد متعددة
+                    </h3>
+<!-- Numbers Input -->
+<div class="mb-6">
+<div class="flex flex-wrap items-center gap-4 mb-4">
+<div class="input-group flex-1 min-w-200">
+<input class="number-input flex-1" id="numberToAdd" placeholder="أدخل عدداً عشرياً" type="text"/>
+<button class="comma-btn" id="commaBtn3">,</button>
+</div>
+<button class="add-number-btn" id="addNumberBtn">
+                                ➕ إضافة
+                            </button>
+</div>
+<!-- Sort Options -->
+<div class="flex flex-wrap items-center gap-4">
+<select class="number-input" id="sortOrder">
+<option value="asc">ترتيب تصاعدي (من الأصغر للأكبر)</option>
+<option value="desc">ترتيب تنازلي (من الأكبر للأصغر)</option>
+</select>
+<button class="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg" id="sortBtn">
+                                🔄 ترتيب
+                            </button>
+<button class="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg" id="clearAllBtn">
+                                🗑️ مسح الكل
+                            </button>
+</div>
+</div>
+<!-- Numbers List -->
+<div class="mb-6" id="numbersContainer">
+<h4 class="text-lg font-bold mb-4">الأعداد المدخلة:</h4>
+<div class="space-y-2" id="numbersList"></div>
+</div>
+<!-- Standardization Display -->
+<div class="hidden mb-6" id="standardizationDisplay">
+<h4 class="text-lg font-bold mb-4 text-center">توحيد الأعداد (إضافة الأصفار):</h4>
+<div class="grid gap-4" id="standardizedNumbers"></div>
+</div>
+<!-- Sorted Result -->
+<div class="hidden" id="sortedResult">
+<h4 class="text-lg font-bold mb-4 text-center">النتيجة النهائية:</h4>
+<div class="horizontal-sort" id="horizontalSortDisplay"></div>
+</div>
+</div>
+</div>
+<!-- Rules Section -->
+<div class="glass-card rounded-3xl p-8 shadow-xl">
+<h3 class="section-title text-2xl font-bold mb-6">
+                    📖 قواعد مقارنة الأعداد العشرية
+                </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="bg-gradient-to-br from-blue-100 to-blue-200 dark:from-gray-700 dark:to-gray-600 rounded-xl p-6 border-l-4 border-blue-500">
+<h4 class="font-bold text-blue-800 dark:text-blue-300 mb-3 text-lg">
+                            🎯 الخطوة الأولى
+                        </h4>
+<p class="text-gray-700 dark:text-gray-300">
+                            قارن الجزء الصحيح أولاً. العدد الأكبر في الجزء الصحيح هو الأكبر
+                        </p>
+</div>
+<div class="bg-gradient-to-br from-green-100 to-green-200 dark:from-gray-700 dark:to-gray-600 rounded-xl p-6 border-l-4 border-green-500">
+<h4 class="font-bold text-green-800 dark:text-green-300 mb-3 text-lg">
+                            📏 طريقة الإضافة
+                        </h4>
+<p class="text-gray-700 dark:text-gray-300">
+                            أضف أصفاراً لجعل عدد الخانات العشرية متساوياً ثم قارن
+                        </p>
+</div>
+<div class="bg-gradient-to-br from-purple-100 to-purple-200 dark:from-gray-700 dark:to-gray-600 rounded-xl p-6 border-l-4 border-purple-500">
+<h4 class="font-bold text-purple-800 dark:text-purple-300 mb-3 text-lg">
+                            🔍 طريقة رقم برقم
+                        </h4>
+<p class="text-gray-700 dark:text-gray-300">
+                            قارن كل رقم عشري مع نظيره من اليسار لليمين
+                        </p>
+</div>
+<div class="bg-gradient-to-br from-orange-100 to-orange-200 dark:from-gray-700 dark:to-gray-600 rounded-xl p-6 border-l-4 border-orange-500">
+<h4 class="font-bold text-orange-800 dark:text-orange-300 mb-3 text-lg">
+                            📋 الترتيب
+                        </h4>
+<p class="text-gray-700 dark:text-gray-300">
+                            استخدم طريقة الإضافة لتوحيد جميع الأعداد ثم رتبها
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<pre id="result"></pre><button onclick="run()">تشغيل الدرس</button>
+<script>
+async function run() {
+    const res = await fetch("/.netlify/functions/comparing-decimal-numbers");
+    const text = await res.text();
+    document.getElementById("result").textContent = text;
+}
+</script>
+</body>
+</html>

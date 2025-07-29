@@ -1,0 +1,424 @@
+﻿<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>حل المعادلة</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap');
+        
+        body {
+            font-family: 'Almarai', Arial, sans-serif;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .glass-card {
+            background: rgba(31, 41, 55, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #5D5CDE, #059669, #dc2626, #d97706);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 4s ease-in-out infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        .section-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+        
+        .unknown-box {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            border: 3px solid #5D5CDE;
+            border-radius: 8px;
+            background: white;
+            position: relative;
+            vertical-align: middle;
+            margin: 0 3px;
+            box-shadow: 0 2px 4px rgba(93, 92, 222, 0.2);
+        }
+        
+        .dark .unknown-box {
+            background: #374151;
+            border-color: #818cf8;
+        }
+        
+        .unknown-box.filled {
+            background: #dcfce7;
+            border-color: #16a34a;
+            color: #166534;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .dark .unknown-box.filled {
+            background: #166534;
+            color: #dcfce7;
+        }
+        
+        .equation-step {
+            background: white;
+            border: 3px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 25px 20px;
+            margin: 20px 0;
+            font-size: 28px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #1f2937;
+            direction: ltr;
+            box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            transition: all 0.3s ease;
+        }
+        
+        .dark .equation-step {
+            background: #374151;
+            border-color: #4b5563;
+            color: #f9fafb;
+        }
+        
+        .equation-step.highlight {
+            border-color: #5D5CDE;
+            background: #f0f0ff;
+            animation: pulse 2s infinite;
+            transform: scale(1.02);
+        }
+        
+        .dark .equation-step.highlight {
+            background: #312e81;
+            border-color: #818cf8;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.95; }
+        }
+        
+        .action-btn {
+            background: linear-gradient(135deg, #5D5CDE, #4338ca);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(93, 92, 222, 0.3);
+            font-size: 16px;
+            min-height: 48px;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(93, 92, 222, 0.4);
+        }
+        
+        .action-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .solving {
+            background: linear-gradient(135deg, #9333ea, #7c3aed) !important;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .solving::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+        
+        @keyframes shimmer {
+            100% {
+                left: 100%;
+            }
+        }
+        
+        .animate-in {
+            animation: slideInUp 0.5s ease-out;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .equation-type {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 16px;
+            margin: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 14px;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .equation-type.active {
+            background: #5D5CDE;
+            color: white;
+            border-color: #5D5CDE;
+        }
+        
+        .dark .equation-type {
+            background: #374151;
+            border-color: #4b5563;
+            color: #e5e7eb;
+        }
+        
+        .dark .equation-type.active {
+            background: #4338ca;
+            border-color: #4338ca;
+        }
+        
+        @media (max-width: 768px) {
+            .equation-step {
+                font-size: 22px;
+                padding: 20px 15px;
+                gap: 10px;
+            }
+            
+            .unknown-box {
+                width: 30px;
+                height: 30px;
+                font-size: 16px;
+            }
+            
+            .action-btn {
+                padding: 12px 24px;
+                font-size: 15px;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .equation-step {
+                font-size: 20px;
+                padding: 18px 12px;
+                gap: 8px;
+            }
+            
+            .unknown-box {
+                width: 28px;
+                height: 28px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .equation-step {
+                font-size: 18px;
+                padding: 15px 10px;
+                gap: 6px;
+            }
+            
+            .unknown-box {
+                width: 26px;
+                height: 26px;
+                font-size: 12px;
+            }
+            
+            .action-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 min-h-screen">
+<div class="min-h-screen p-3 md:p-6">
+<div class="max-w-4xl mx-auto">
+<!-- Header -->
+<div class="text-center mb-6">
+<h1 class="text-2xl md:text-4xl font-bold gradient-text mb-3 leading-tight floating">
+                    🧮 إتمام مساواة - حل معادلات 📊
+                </h1>
+<p class="text-base md:text-lg text-gray-700 dark:text-gray-300 font-medium">
+                    تعلم حل المعادلات الرياضية خطوة بخطوة
+                </p>
+</div>
+<!-- Equation Types -->
+<div class="glass-card rounded-2xl p-4 md:p-6 mb-6 shadow-lg">
+<h3 class="section-title text-lg md:text-xl font-bold">
+                    📝 نوع المعادلة
+                </h3>
+<div class="flex flex-wrap justify-center gap-2" id="typeButtons">
+<button class="equation-type active" data-type="unknown_plus_number">□ + عدد = عدد</button>
+<button class="equation-type" data-type="unknown_minus_number">□ - عدد = عدد</button>
+<button class="equation-type" data-type="number_minus_unknown">عدد - □ = عدد</button>
+<button class="equation-type" data-type="number_plus_unknown">عدد + □ = عدد</button>
+</div>
+<div class="text-center mt-4">
+<button class="action-btn" id="generateBtn">
+                        🎲 إنشاء معادلة جديدة
+                    </button>
+</div>
+</div>
+<!-- Current Equation -->
+<div class="glass-card rounded-2xl p-4 md:p-6 mb-6 shadow-lg" id="equationSection">
+<h3 class="section-title text-lg md:text-xl font-bold">
+                    🎯 المعادلة الحالية
+                </h3>
+<div class="space-y-3" id="currentEquation">
+<div class="equation-step">
+<span>اضغط على "إنشاء معادلة جديدة" للبدء</span>
+</div>
+</div>
+<div class="text-center mt-4">
+<button class="action-btn" disabled="" id="solveBtn">
+                        ⚡ حل خطوة بخطوة
+                    </button>
+</div>
+</div>
+<!-- Solution Steps -->
+<div class="glass-card rounded-2xl p-4 md:p-6 mb-6 shadow-lg hidden" id="solutionSection">
+<h3 class="section-title text-lg md:text-xl font-bold">
+                    🔍 خطوات الحل
+                </h3>
+<div class="space-y-3" id="solutionSteps">
+<!-- ستظهر خطوات الحل هنا -->
+</div>
+</div>
+<!-- Final Answer -->
+<div class="glass-card rounded-2xl p-4 md:p-6 shadow-lg hidden" id="answerSection">
+<h3 class="section-title text-lg md:text-xl font-bold">
+                    🎉 الإجابة النهائية
+                </h3>
+<div class="text-center" id="finalAnswer">
+<!-- ستظهر الإجابة النهائية هنا -->
+</div>
+</div>
+<!-- Guide -->
+<div class="glass-card rounded-2xl p-4 md:p-6 mt-6 shadow-lg">
+<h3 class="section-title text-lg md:text-xl font-bold">
+                    📖 دليل أنواع المعادلات
+                </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-gradient-to-br from-blue-100 to-blue-200 dark:from-gray-700 dark:to-gray-600 rounded-xl p-4 border-l-4 border-blue-500">
+<h4 class="font-bold text-blue-800 dark:text-blue-300 mb-2">
+                            🔵 □ + عدد = عدد
+                        </h4>
+<p class="text-gray-700 dark:text-gray-300 text-sm">
+                            المجهول مضاف إليه عدد يساوي عدد آخر
+                        </p>
+<p class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                            الحل: □ = النتيجة - العدد المضاف
+                        </p>
+</div>
+<div class="bg-gradient-to-br from-green-100 to-green-200 dark:from-gray-700 dark:to-gray-600 rounded-xl p-4 border-l-4 border-green-500">
+<h4 class="font-bold text-green-800 dark:text-green-300 mb-2">
+                            🟢 □ - عدد = عدد
+                        </h4>
+<p class="text-gray-700 dark:text-gray-300 text-sm">
+                            المجهول منقوص منه عدد يساوي عدد آخر
+                        </p>
+<p class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                            الحل: □ = النتيجة + العدد المنقوص
+                        </p>
+</div>
+<div class="bg-gradient-to-br from-yellow-100 to-yellow-200 dark:from-gray-700 dark:to-gray-600 rounded-xl p-4 border-l-4 border-yellow-500">
+<h4 class="font-bold text-yellow-800 dark:text-yellow-300 mb-2">
+                            🟡 عدد - □ = عدد
+                        </h4>
+<p class="text-gray-700 dark:text-gray-300 text-sm">
+                            عدد منقوص منه المجهول يساوي عدد آخر
+                        </p>
+<p class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                            الحل: □ = العدد الأول - النتيجة
+                        </p>
+</div>
+<div class="bg-gradient-to-br from-purple-100 to-purple-200 dark:from-gray-700 dark:to-gray-600 rounded-xl p-4 border-l-4 border-purple-500">
+<h4 class="font-bold text-purple-800 dark:text-purple-300 mb-2">
+                            🟣 عدد + □ = عدد
+                        </h4>
+<p class="text-gray-700 dark:text-gray-300 text-sm">
+                            عدد مضاف إليه المجهول يساوي عدد آخر
+                        </p>
+<p class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                            الحل: □ = النتيجة - العدد المضاف
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<pre id="result"></pre><button onclick="run()">تشغيل الدرس</button>
+<script>
+async function run() {
+    const res = await fetch("/.netlify/functions/completing-equations");
+    const text = await res.text();
+    document.getElementById("result").textContent = text;
+}
+</script>
+</body>
+</html>

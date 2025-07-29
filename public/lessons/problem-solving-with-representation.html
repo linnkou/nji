@@ -1,0 +1,747 @@
+﻿<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>حل مشكل بالاستعانة بتمثيل مناسب</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap');
+        
+        body {
+            font-family: 'Almarai', Arial, sans-serif;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .glass-card {
+            background: rgba(31, 41, 55, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #1e40af, #059669, #dc2626, #d97706);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 4s ease-in-out infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        .section-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+        
+        /* التمثيل المرئي الموحد */
+        .visual-representation {
+            direction: ltr;
+            text-align: center;
+            padding: 40px 15px;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border-radius: 20px;
+            border: 2px solid #cbd5e1;
+            margin: 15px 0;
+            min-height: 280px;
+            position: relative;
+            overflow: visible;
+        }
+        
+        .dark .visual-representation {
+            background: linear-gradient(135deg, #374151, #4b5563);
+            border-color: #6b7280;
+        }
+        
+        /* حاوي المخطط الرئيسي */
+        .diagram-container {
+            position: relative;
+            margin: 60px auto;
+            max-width: 500px;
+            width: 85%;
+        }
+        
+        /* القطعة المستقيمة الموحدة */
+        .unified-line {
+            position: relative;
+            height: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+            border: 2px solid var(--main-border-color);
+            background: var(--main-bg-color);
+            z-index: 2;
+        }
+        
+        .dark .unified-line {
+            border-color: #f9fafb;
+        }
+        
+        /* الجزء المتقطع */
+        .dotted-section {
+            position: absolute;
+            height: 100%;
+            background: var(--accent-bg-color);
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 4px,
+                rgba(255, 255, 255, 0.7) 4px,
+                rgba(255, 255, 255, 0.7) 8px
+            );
+            border-radius: 0 10px 10px 0;
+            z-index: 3;
+        }
+        
+        .dotted-section.left {
+            left: 0;
+            border-radius: 10px 0 0 10px;
+        }
+        
+        /* الأقواس */
+        .arc-top {
+            position: absolute;
+            top: -35px;
+            height: 30px;
+            border: 2px solid var(--main-border-color);
+            border-bottom: none;
+            border-radius: 25px 25px 0 0;
+            z-index: 1;
+        }
+        
+        .arc-bottom-left {
+            position: absolute;
+            bottom: -35px;
+            height: 30px;
+            border: 2px solid var(--secondary-border-color);
+            border-top: none;
+            border-radius: 0 0 25px 25px;
+            z-index: 1;
+        }
+        
+        .arc-bottom-right {
+            position: absolute;
+            bottom: -35px;
+            height: 30px;
+            border: 2px solid var(--accent-border-color);
+            border-top: none;
+            border-radius: 0 0 25px 25px;
+            z-index: 1;
+        }
+        
+        /* التسميات */
+        .label {
+            position: absolute;
+            font-weight: bold;
+            font-size: 14px;
+            background: white;
+            padding: 6px 10px;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            white-space: nowrap;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            z-index: 5;
+        }
+        
+        .dark .label {
+            background: #374151;
+            border-color: #4b5563;
+            color: white;
+        }
+        
+        .label-top {
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--main-label-bg);
+            border-color: var(--main-border-color);
+            color: var(--main-label-color);
+        }
+        
+        .dark .label-top {
+            background: var(--main-border-color);
+            color: var(--main-label-bg);
+        }
+        
+        .label-bottom-left {
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--secondary-label-bg);
+            border-color: var(--secondary-border-color);
+            color: var(--secondary-label-color);
+        }
+        
+        .dark .label-bottom-left {
+            background: var(--secondary-border-color);
+            color: var(--secondary-label-bg);
+        }
+        
+        .label-bottom-right {
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-label-bg);
+            color: var(--accent-label-color);
+            border-color: var(--accent-border-color);
+            font-size: 12px;
+        }
+        
+        .dark .label-bottom-right {
+            background: var(--accent-border-color);
+            color: var(--accent-label-bg);
+        }
+        
+        .unknown-box {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 2px solid #6b7280;
+            border-radius: 4px;
+            background: white;
+            position: relative;
+            vertical-align: middle;
+            margin: 0 2px;
+        }
+        
+        .dark .unknown-box {
+            background: #374151;
+            border-color: #9ca3af;
+        }
+        
+        .unknown-box.filled {
+            background: #dcfce7;
+            border-color: #16a34a;
+            color: #166534;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        .dark .unknown-box.filled {
+            background: #166534;
+            color: #dcfce7;
+        }
+        
+        /* المعادلات */
+        .equation-step {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 20px 15px;
+            margin: 15px 0;
+            font-size: 24px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #1f2937;
+            direction: ltr;
+            box-shadow: 0 4px 8px -1px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .dark .equation-step {
+            background: #374151;
+            border-color: #4b5563;
+            color: #f9fafb;
+        }
+        
+        .equation-step.highlight {
+            border-color: #3b82f6;
+            background: #dbeafe;
+            animation: pulse 2s infinite;
+        }
+        
+        .dark .equation-step.highlight {
+            background: #1e40af;
+            border-color: #60a5fa;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.9; }
+        }
+        
+        /* أزرار */
+        .action-btn {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 6px -1px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            min-height: 48px;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+        
+        .action-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .solving {
+            background: linear-gradient(135deg, #9333ea, #7c3aed) !important;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .solving::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+        
+        @keyframes shimmer {
+            100% {
+                left: 100%;
+            }
+        }
+        
+        .problem-card {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .problem-card {
+            background: linear-gradient(135deg, #92400e, #b45309);
+            border-color: #d97706;
+            color: white;
+        }
+        
+        .animate-in {
+            animation: slideInUp 0.5s ease-out;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .category-btn {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 16px;
+            margin: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 14px;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .category-btn.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .dark .category-btn {
+            background: #374151;
+            border-color: #4b5563;
+            color: #e5e7eb;
+        }
+        
+        .dark .category-btn.active {
+            background: #1d4ed8;
+            border-color: #1d4ed8;
+        }
+        
+        /* تحسينات الهواتف المحمولة */
+        @media (max-width: 768px) {
+            .visual-representation {
+                padding: 35px 12px;
+                min-height: 250px;
+            }
+            
+            .diagram-container {
+                margin: 50px auto;
+                max-width: 90%;
+            }
+            
+            .equation-step {
+                font-size: 20px;
+                padding: 18px 12px;
+                gap: 8px;
+            }
+            
+            .unified-line {
+                height: 18px;
+            }
+            
+            .label {
+                font-size: 12px;
+                padding: 5px 8px;
+            }
+            
+            .label-bottom-right {
+                font-size: 11px;
+            }
+            
+            .unknown-box {
+                width: 28px;
+                height: 28px;
+                font-size: 14px;
+            }
+            
+            .action-btn {
+                padding: 10px 20px;
+                font-size: 15px;
+            }
+            
+            .category-btn {
+                padding: 8px 12px;
+                font-size: 13px;
+                margin: 3px;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .text-2xl { font-size: 1.3rem; }
+            .text-3xl { font-size: 1.6rem; }
+            .text-4xl { font-size: 1.9rem; }
+            .text-5xl { font-size: 2.2rem; }
+            
+            .equation-step {
+                font-size: 18px;
+                padding: 15px 10px;
+                gap: 6px;
+            }
+            
+            .visual-representation {
+                padding: 30px 10px;
+                min-height: 220px;
+            }
+            
+            .diagram-container {
+                margin: 45px auto;
+                max-width: 95%;
+            }
+            
+            .unified-line {
+                height: 16px;
+            }
+            
+            .arc-top, .arc-bottom-left, .arc-bottom-right {
+                height: 25px;
+                top: -30px;
+                bottom: -30px;
+            }
+            
+            .label {
+                font-size: 11px;
+                padding: 4px 6px;
+            }
+            
+            .label-top {
+                top: -55px;
+            }
+            
+            .label-bottom-left, .label-bottom-right {
+                bottom: -55px;
+            }
+            
+            .unknown-box {
+                width: 26px;
+                height: 26px;
+                font-size: 12px;
+            }
+            
+            .action-btn {
+                padding: 10px 18px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .text-lg { font-size: 1rem; }
+            .text-xl { font-size: 1.1rem; }
+            .text-2xl { font-size: 1.2rem; }
+            
+            .equation-step {
+                font-size: 16px;
+                padding: 12px 8px;
+                gap: 5px;
+            }
+            
+            .visual-representation {
+                padding: 25px 8px;
+                min-height: 200px;
+            }
+            
+            .diagram-container {
+                margin: 40px auto;
+            }
+            
+            .unified-line {
+                height: 14px;
+            }
+            
+            .arc-top, .arc-bottom-left, .arc-bottom-right {
+                height: 20px;
+                top: -25px;
+                bottom: -25px;
+            }
+            
+            .label {
+                font-size: 10px;
+                padding: 3px 5px;
+            }
+            
+            .label-top {
+                top: -50px;
+            }
+            
+            .label-bottom-left, .label-bottom-right {
+                bottom: -50px;
+            }
+            
+            .unknown-box {
+                width: 24px;
+                height: 24px;
+                font-size: 11px;
+            }
+            
+            .action-btn {
+                padding: 9px 16px;
+                font-size: 13px;
+            }
+            
+            .category-btn {
+                padding: 6px 10px;
+                font-size: 12px;
+                margin: 2px;
+            }
+            
+            .p-3 { padding: 0.5rem; }
+            .p-4 { padding: 0.75rem; }
+            .p-6 { padding: 1rem; }
+            .p-8 { padding: 1.25rem; }
+        }
+        
+        @media (max-width: 360px) {
+            .equation-step {
+                font-size: 14px;
+                padding: 10px 6px;
+                gap: 4px;
+            }
+            
+            .visual-representation {
+                padding: 20px 6px;
+                min-height: 180px;
+            }
+            
+            .unknown-box {
+                width: 22px;
+                height: 22px;
+                font-size: 10px;
+            }
+            
+            .action-btn {
+                padding: 8px 14px;
+                font-size: 12px;
+            }
+            
+            .category-btn {
+                padding: 5px 8px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 min-h-screen">
+<div class="min-h-screen p-2 sm:p-3 md:p-4 lg:p-6">
+<div class="max-w-6xl mx-auto">
+<!-- Header -->
+<div class="text-center mb-4 md:mb-6">
+<h1 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold gradient-text mb-2 md:mb-3 leading-tight floating">
+                    🎯 حل مشكل بالاستعانة بتمثيل مناسب 📊
+                </h1>
+<p class="text-base md:text-lg text-gray-700 dark:text-gray-300 font-medium">
+                    تعلم حل المسائل الرياضية بالتمثيل المرئي والمعادلات
+                </p>
+</div>
+<!-- Problem Categories -->
+<div class="glass-card rounded-2xl p-3 sm:p-4 md:p-6 mb-4 md:mb-6 shadow-lg">
+<h3 class="section-title text-lg md:text-xl font-bold">
+                    📚 نوع المسألة
+                </h3>
+<div class="flex flex-wrap justify-center gap-2" id="categoryButtons">
+<button class="category-btn active" data-category="age">👶 الأعمار</button>
+<button class="category-btn" data-category="weight">⚖️ الأوزان</button>
+<button class="category-btn" data-category="height">📏 الأطوال</button>
+<button class="category-btn" data-category="money">💰 الأموال</button>
+<button class="category-btn" data-category="score">🎯 النقاط</button>
+</div>
+<div class="text-center mt-4">
+<button class="action-btn" id="generateBtn">
+                        🎲 إنشاء مسألة جديدة
+                    </button>
+</div>
+</div>
+<!-- Problem Statement -->
+<div class="glass-card rounded-2xl p-3 sm:p-4 md:p-6 mb-4 md:mb-6 shadow-lg" id="problemSection">
+<h3 class="section-title text-lg md:text-xl font-bold">
+                    📝 نص المسألة
+                </h3>
+<div class="problem-card" id="problemStatement">
+<p class="text-base md:text-lg font-bold text-center">
+                        اضغط على "إنشاء مسألة جديدة" لبدء الحل
+                    </p>
+</div>
+</div>
+<!-- Visual Representation -->
+<div class="glass-card rounded-2xl p-3 sm:p-4 md:p-6 mb-4 md:mb-6 shadow-lg hidden" id="visualSection">
+<h3 class="section-title text-lg md:text-xl font-bold">
+                    🎨 التمثيل المرئي الموحد
+                </h3>
+<div class="visual-representation" id="visualRepresentation">
+<!-- سيتم إدراج التمثيل المرئي هنا -->
+</div>
+<div class="text-center mt-4">
+<button class="action-btn" id="showEquationBtn">
+                        ➡️ إظهار المعادلة
+                    </button>
+</div>
+</div>
+<!-- Equation Solution -->
+<div class="glass-card rounded-2xl p-3 sm:p-4 md:p-6 mb-4 md:mb-6 shadow-lg hidden" id="equationSection">
+<h3 class="section-title text-lg md:text-xl font-bold">
+                    🧮 حل المعادلة
+                </h3>
+<div class="space-y-3" id="equationSteps">
+<!-- سيتم إدراج خطوات حل المعادلة هنا -->
+</div>
+<div class="text-center mt-4">
+<button class="action-btn" id="solveStepBtn">
+                        ⚡ حل خطوة بخطوة
+                    </button>
+</div>
+</div>
+<!-- Final Answer -->
+<div class="glass-card rounded-2xl p-3 sm:p-4 md:p-6 shadow-lg hidden" id="answerSection">
+<h3 class="section-title text-lg md:text-xl font-bold">
+                    🎉 الإجابة النهائية
+                </h3>
+<div class="text-center" id="finalAnswer">
+<!-- سيتم إدراج الإجابة النهائية هنا -->
+</div>
+</div>
+<!-- Educational Guide -->
+<div class="glass-card rounded-2xl p-3 sm:p-4 md:p-6 mt-4 md:mt-6 shadow-lg">
+<h3 class="section-title text-lg md:text-xl font-bold">
+                    📖 دليل التمثيل المرئي الموحد
+                </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+<div class="bg-gradient-to-br from-blue-100 to-blue-200 dark:from-gray-700 dark:to-gray-600 rounded-xl p-3 md:p-4 border-l-4 border-blue-500">
+<h4 class="font-bold text-blue-800 dark:text-blue-300 mb-2 text-sm md:text-base">
+                            🔵 القطعة الأساسية
+                        </h4>
+<p class="text-gray-700 dark:text-gray-300 text-xs md:text-sm">
+                            تمثل القطعة المستقيمة الكاملة (القيمة الأكبر)
+                        </p>
+</div>
+<div class="bg-gradient-to-br from-green-100 to-green-200 dark:from-gray-700 dark:to-gray-600 rounded-xl p-3 md:p-4 border-l-4 border-green-500">
+<h4 class="font-bold text-green-800 dark:text-green-300 mb-2 text-sm md:text-base">
+                            🟢 القوس الثاني
+                        </h4>
+<p class="text-gray-700 dark:text-gray-300 text-xs md:text-sm">
+                            يمثل القطعة المتبقية (القيمة الأصغر)
+                        </p>
+</div>
+<div class="bg-gradient-to-br from-yellow-100 to-yellow-200 dark:from-gray-700 dark:to-gray-600 rounded-xl p-3 md:p-4 border-l-4 border-yellow-500">
+<h4 class="font-bold text-yellow-800 dark:text-yellow-300 mb-2 text-sm md:text-base">
+                            🟡 الجزء المتقطع
+                        </h4>
+<p class="text-gray-700 dark:text-gray-300 text-xs md:text-sm">
+                            يمثل الفرق (الزيادة أو النقصان) بين القيمتين
+                        </p>
+</div>
+<div class="bg-gradient-to-br from-purple-100 to-purple-200 dark:from-gray-700 dark:to-gray-600 rounded-xl p-3 md:p-4 border-l-4 border-purple-500">
+<h4 class="font-bold text-purple-800 dark:text-purple-300 mb-2 text-sm md:text-base">
+                            📦 المربع الفارغ
+                        </h4>
+<p class="text-gray-700 dark:text-gray-300 text-xs md:text-sm">
+                            يمثل المجهول في المعادلة الرياضية
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<pre id="result"></pre><button onclick="run()">تشغيل الدرس</button>
+<script>
+async function run() {
+    const res = await fetch("/.netlify/functions/problem-solving-with-representation");
+    const text = await res.text();
+    document.getElementById("result").textContent = text;
+}
+</script>
+</body>
+</html>
