@@ -1,561 +1,0 @@
-﻿<!DOCTYPE html>
-
-<html dir="rtl" lang="ar">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>🎓 مختبر الأشكال الهندسية المتكامل - السنة الأولى متوسط</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com"></script>
-
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
-<style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #1e293b;
-        }
-        
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease;
-        }
-        
-        .shape-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
-        }
-        
-        .shape-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
-        }
-        
-        .nav-btn {
-            transition: all 0.2s ease;
-            border: none;
-            color: white;
-            font-weight: 700;
-        }
-        
-        .nav-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        
-        .construction-canvas {
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .shape-icon {
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 16px;
-            font-size: 24px;
-            color: white;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-        
-        .progress-bar {
-            height: 6px;
-            background: linear-gradient(90deg, #5D5CDE, #ec4899);
-            border-radius: 3px;
-            transition: width 0.3s ease;
-        }
-        
-        @media (max-width: 768px) {
-            .shape-icon {
-                width: 50px;
-                height: 50px;
-                font-size: 20px;
-            }
-            
-            .nav-btn {
-                font-size: 0.875rem;
-                padding: 0.75rem;
-            }
-            
-            .glass-panel {
-                backdrop-filter: blur(8px);
-            }
-        }
-
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-                color: #e2e8f0;
-            }
-            
-            .glass-panel {
-                background: rgba(15, 23, 42, 0.95);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-            }
-            
-            .shape-card {
-                background: rgba(30, 41, 59, 0.9);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-            }
-        }
-    </style>
-</head>
-<body class="font-arabic">
-<!-- Header -->
-<header class="bg-gradient-to-r from-primary to-purple-600 py-6 text-white shadow-lg">
-<div class="container mx-auto px-4">
-<div class="text-center">
-<div class="flex flex-col items-center">
-<div class="flex items-center justify-center mb-4">
-<div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center mr-4">
-<i class="fas fa-shapes text-2xl"></i>
-</div>
-<h1 class="text-2xl md:text-4xl font-bold"> الأشكال الهندسية</h1>
-<div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center ml-4">
-<i class="fas fa-compass text-2xl"></i>
-</div>
-</div>
-<p class="text-lg md:text-xl text-purple-100 mb-3">المثلثات • الرباعيات • الدائرة</p>
-<div class="bg-white/20 px-6 py-2 rounded-full font-bold">
-<i class="fas fa-graduation-cap mr-2 text-yellow-300"></i>
-                        السنة الأولى متوسط
-                    </div>
-</div>
-</div>
-</div>
-</header>
-<div class="container mx-auto px-4 py-6">
-<!-- Navigation -->
-<nav class="mb-8">
-<div class="glass-panel rounded-2xl p-4">
-<div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-<button class="nav-btn bg-gradient-to-r from-purple-500 to-purple-600 px-4 py-3 rounded-xl" onclick="showSection('triangles')">
-<i class="fas fa-triangle mr-2"></i>
-<span>المثلثات</span>
-</button>
-<button class="nav-btn bg-gradient-to-r from-emerald-500 to-emerald-600 px-4 py-3 rounded-xl" onclick="showSection('quadrilaterals')">
-<i class="fas fa-square mr-2"></i>
-<span>الرباعيات</span>
-</button>
-<button class="nav-btn bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-3 rounded-xl" onclick="showSection('circles')">
-<i class="fas fa-circle mr-2"></i>
-<span>الدائرة</span>
-</button>
-</div>
-</div>
-</nav>
-<!-- المثلثات -->
-<section class="lesson-section" id="triangles">
-<div class="glass-panel rounded-2xl p-6 mb-8">
-<div class="text-center mb-6">
-<h2 class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">
-<i class="fas fa-triangle mr-3"></i>المثلثات
-                    </h2>
-<p class="text-lg text-gray-600 dark:text-gray-400">أنواع المثلثات الأساسية وخصائصها</p>
-</div>
-<div class="grid lg:grid-cols-2 gap-8">
-<!-- قائمة المثلثات -->
-<div class="space-y-6">
-<!-- مثلث متقايس الأضلاع -->
-<div class="shape-card rounded-xl p-6">
-<div class="flex items-center gap-4 mb-4">
-<div class="shape-icon bg-gradient-to-r from-emerald-500 to-emerald-600">
-<i class="fas fa-triangle"></i>
-</div>
-<div>
-<h3 class="text-xl font-bold text-emerald-600">مثلث متقايس الأضلاع</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400">جميع الأضلاع متساوية</p>
-</div>
-</div>
-<div class="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-lg">
-<p class="text-gray-700 dark:text-gray-300 text-sm mb-2">
-<span class="font-bold">التعريف:</span> مثلث له ثلاثة أضلاع متساوية وثلاث زوايا متساوية (60°)
-                                </p>
-<div class="text-xs text-emerald-700 dark:text-emerald-300">
-<span class="font-bold">الخصائص:</span> AB = BC = CA، جميع الزوايا = 60°، يرمز للأضلاع المتساوية بعلامات متطابقة
-                                </div>
-</div>
-</div>
-<!-- مثلث متساوي الساقين -->
-<div class="shape-card rounded-xl p-6">
-<div class="flex items-center gap-4 mb-4">
-<div class="shape-icon bg-gradient-to-r from-indigo-500 to-indigo-600">
-<i class="fas fa-triangle"></i>
-</div>
-<div>
-<h3 class="text-xl font-bold text-indigo-600">مثلث متساوي الساقين</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400">ضلعان متساويان</p>
-</div>
-</div>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-lg">
-<p class="text-gray-700 dark:text-gray-300 text-sm mb-2">
-<span class="font-bold">التعريف:</span> مثلث له ضلعان متساويان وزاويتان متساويتان
-                                </p>
-<div class="text-xs text-indigo-700 dark:text-indigo-300">
-<span class="font-bold">الخصائص:</span> AB = AC (الساقان)، ∠B = ∠C، يرمز للساقين بعلامة واحدة
-                                </div>
-</div>
-</div>
-<!-- مثلث قائم الزاوية -->
-<div class="shape-card rounded-xl p-6">
-<div class="flex items-center gap-4 mb-4">
-<div class="shape-icon bg-gradient-to-r from-red-500 to-red-600">
-<i class="fas fa-triangle"></i>
-</div>
-<div>
-<h3 class="text-xl font-bold text-red-600">مثلث قائم الزاوية</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400">زاوية واحدة 90°</p>
-</div>
-</div>
-<div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
-<p class="text-gray-700 dark:text-gray-300 text-sm mb-2">
-<span class="font-bold">التعريف:</span> مثلث إحدى زواياه قائمة (90°)
-                                </p>
-<div class="text-xs text-red-700 dark:text-red-300">
-<span class="font-bold">الخصائص:</span> زاوية واحدة = 90°، الوتر أطول ضلع، يرمز للزاوية القائمة بمربع صغير
-                                </div>
-</div>
-</div>
-<!-- مثلث قائم ومتساوي الساقين -->
-<div class="shape-card rounded-xl p-6">
-<div class="flex items-center gap-4 mb-4">
-<div class="shape-icon bg-gradient-to-r from-pink-500 to-pink-600">
-<i class="fas fa-triangle"></i>
-</div>
-<div>
-<h3 class="text-xl font-bold text-pink-600">مثلث قائم ومتساوي الساقين</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400">90° وضلعان متساويان</p>
-</div>
-</div>
-<div class="bg-pink-50 dark:bg-pink-900/20 p-4 rounded-lg">
-<p class="text-gray-700 dark:text-gray-300 text-sm mb-2">
-<span class="font-bold">التعريف:</span> مثلث قائم الزاوية وله ضلعان متساويان (الساقان)
-                                </p>
-<div class="text-xs text-pink-700 dark:text-pink-300">
-<span class="font-bold">الخصائص:</span> زاوية قائمة، الساقان متساويان، الزاويتان الحادتان = 45°
-                                </div>
-</div>
-</div>
-</div>
-<!-- منطقة الرسم -->
-<div class="glass-panel rounded-2xl p-6">
-<div class="flex justify-between items-center mb-6">
-<h3 class="text-xl font-bold text-purple-600">إنشاء المثلثات</h3>
-<div class="grid grid-cols-2 gap-2">
-<button class="px-3 py-2 bg-emerald-500 text-white rounded-lg text-xs font-bold hover:bg-emerald-600" onclick="animateTriangle('equilateral')">
-                                    متقايس الأضلاع
-                                </button>
-<button class="px-3 py-2 bg-indigo-500 text-white rounded-lg text-xs font-bold hover:bg-indigo-600" onclick="animateTriangle('isosceles')">
-                                    متساوي الساقين
-                                </button>
-<button class="px-3 py-2 bg-red-500 text-white rounded-lg text-xs font-bold hover:bg-red-600" onclick="animateTriangle('right')">
-                                    قائم الزاوية
-                                </button>
-<button class="px-3 py-2 bg-pink-500 text-white rounded-lg text-xs font-bold hover:bg-pink-600" onclick="animateTriangle('right_isosceles')">
-                                    قائم ومتساوي الساقين
-                                </button>
-</div>
-</div>
-<div class="flex items-center justify-center mb-4">
-<canvas class="construction-canvas w-full max-w-lg" height="400" id="triangleCanvas" width="500"></canvas>
-</div>
-<div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-xl">
-<div class="flex items-center justify-between mb-2">
-<span class="text-gray-700 dark:text-gray-300 font-medium">تقدم الإنشاء</span>
-<span class="text-gray-700 dark:text-gray-300 font-bold" id="triangleProgress">0%</span>
-</div>
-<div class="w-full bg-white dark:bg-gray-700 rounded-full h-2">
-<div class="progress-bar h-2 rounded-full w-0" id="triangleProgressBar"></div>
-</div>
-<div class="mt-2 text-center">
-<span class="text-gray-600 dark:text-gray-400 text-sm" id="triangleStatus">اختر نوع المثلث لبدء الإنشاء</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- الرباعيات -->
-<section class="lesson-section hidden" id="quadrilaterals">
-<div class="glass-panel rounded-2xl p-6 mb-8">
-<div class="text-center mb-6">
-<h2 class="text-3xl md:text-4xl font-bold text-emerald-600 mb-2">
-<i class="fas fa-square mr-3"></i>الرباعيات الخاصة
-                    </h2>
-<p class="text-lg text-gray-600 dark:text-gray-400">الرباعيات الأساسية وخصائصها</p>
-</div>
-<div class="grid lg:grid-cols-2 gap-8">
-<!-- قائمة الرباعيات -->
-<div class="space-y-6">
-<!-- المربع -->
-<div class="shape-card rounded-xl p-6">
-<div class="flex items-center gap-4 mb-4">
-<div class="shape-icon bg-gradient-to-r from-emerald-500 to-emerald-600">
-<i class="fas fa-square-full"></i>
-</div>
-<div>
-<h3 class="text-xl font-bold text-emerald-600">المربع</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400">أضلاع متساوية وزوايا قائمة</p>
-</div>
-</div>
-<div class="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-lg">
-<p class="text-gray-700 dark:text-gray-300 text-sm mb-2">
-<span class="font-bold">التعريف:</span> رباعي له أربعة أضلاع متساوية وأربع زوايا قائمة
-                                </p>
-<div class="text-xs text-emerald-700 dark:text-emerald-300">
-<span class="font-bold">الخصائص:</span> جميع الأضلاع متساوية، جميع الزوايا = 90°، يرمز لجميع الأضلاع بعلامة واحدة
-                                </div>
-</div>
-</div>
-<!-- المستطيل -->
-<div class="shape-card rounded-xl p-6">
-<div class="flex items-center gap-4 mb-4">
-<div class="shape-icon bg-gradient-to-r from-blue-500 to-blue-600">
-<i class="fas fa-square"></i>
-</div>
-<div>
-<h3 class="text-xl font-bold text-blue-600">المستطيل</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400">أربع زوايا قائمة</p>
-</div>
-</div>
-<div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-<p class="text-gray-700 dark:text-gray-300 text-sm mb-2">
-<span class="font-bold">التعريف:</span> رباعي له أربع زوايا قائمة والأضلاع المتقابلة متساوية
-                                </p>
-<div class="text-xs text-blue-700 dark:text-blue-300">
-<span class="font-bold">الخصائص:</span> جميع الزوايا = 90°، الأضلاع المتقابلة متساوية، يرمز للأضلاع المتقابلة بنفس العلامة
-                                </div>
-</div>
-</div>
-<!-- المعين -->
-<div class="shape-card rounded-xl p-6">
-<div class="flex items-center gap-4 mb-4">
-<div class="shape-icon bg-gradient-to-r from-purple-500 to-purple-600">
-<i class="fas fa-gem"></i>
-</div>
-<div>
-<h3 class="text-xl font-bold text-purple-600">المعين</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400">أربعة أضلاع متساوية</p>
-</div>
-</div>
-<div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-<p class="text-gray-700 dark:text-gray-300 text-sm mb-2">
-<span class="font-bold">التعريف:</span> رباعي له أربعة أضلاع متساوية والأضلاع المتقابلة متوازية
-                                </p>
-<div class="text-xs text-purple-700 dark:text-purple-300">
-<span class="font-bold">الخصائص:</span> جميع الأضلاع متساوية، القطران متعامدان، يرمز لجميع الأضلاع بعلامة واحدة
-                                </div>
-</div>
-</div>
-</div>
-<!-- منطقة الرسم -->
-<div class="glass-panel rounded-2xl p-6">
-<div class="flex justify-between items-center mb-6">
-<h3 class="text-xl font-bold text-emerald-600">إنشاء الرباعيات</h3>
-<div class="grid grid-cols-2 gap-2">
-<button class="px-3 py-2 bg-emerald-500 text-white rounded-lg text-xs font-bold hover:bg-emerald-600" onclick="animateQuadrilateral('square')">
-                                    مربع
-                                </button>
-<button class="px-3 py-2 bg-blue-500 text-white rounded-lg text-xs font-bold hover:bg-blue-600" onclick="animateQuadrilateral('rectangle')">
-                                    مستطيل
-                                </button>
-<button class="px-3 py-2 bg-purple-500 text-white rounded-lg text-xs font-bold hover:bg-purple-600" onclick="animateQuadrilateral('rhombus')">
-                                    معين
-                                </button>
-</div>
-</div>
-<div class="flex items-center justify-center mb-4">
-<canvas class="construction-canvas w-full max-w-lg" height="400" id="quadrilateralCanvas" width="500"></canvas>
-</div>
-<div class="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-xl">
-<div class="flex items-center justify-between mb-2">
-<span class="text-gray-700 dark:text-gray-300 font-medium">تقدم الإنشاء</span>
-<span class="text-gray-700 dark:text-gray-300 font-bold" id="quadrilateralProgress">0%</span>
-</div>
-<div class="w-full bg-white dark:bg-gray-700 rounded-full h-2">
-<div class="progress-bar h-2 rounded-full w-0" id="quadrilateralProgressBar"></div>
-</div>
-<div class="mt-2 text-center">
-<span class="text-gray-600 dark:text-gray-400 text-sm" id="quadrilateralStatus">اختر نوع الرباعي لبدء الإنشاء</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- الدائرة -->
-<section class="lesson-section hidden" id="circles">
-<div class="glass-panel rounded-2xl p-6 mb-8">
-<div class="text-center mb-6">
-<h2 class="text-3xl md:text-4xl font-bold text-orange-600 mb-2">
-<i class="fas fa-circle mr-3"></i>الدائرة وعناصرها
-                    </h2>
-<p class="text-lg text-gray-600 dark:text-gray-400">تعرف على عناصر الدائرة وتسمياتها</p>
-</div>
-<div class="grid lg:grid-cols-2 gap-8">
-<!-- عناصر الدائرة -->
-<div class="space-y-6">
-<!-- الدائرة -->
-<div class="shape-card rounded-xl p-6">
-<div class="flex items-center gap-4 mb-4">
-<div class="shape-icon bg-gradient-to-r from-orange-500 to-orange-600">
-<i class="fas fa-circle"></i>
-</div>
-<div>
-<h3 class="text-xl font-bold text-orange-600">الدائرة</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400">الشكل الأساسي</p>
-</div>
-</div>
-<div class="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg">
-<p class="text-gray-700 dark:text-gray-300 text-sm">
-<span class="font-bold">التعريف:</span> مجموعة النقاط على مسافة ثابتة من نقطة المركز
-                                </p>
-</div>
-</div>
-<!-- نصف القطر -->
-<div class="shape-card rounded-xl p-6">
-<div class="flex items-center gap-4 mb-4">
-<div class="shape-icon bg-gradient-to-r from-blue-500 to-blue-600">
-<i class="fas fa-minus"></i>
-</div>
-<div>
-<h3 class="text-xl font-bold text-blue-600">نصف القطر</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400">من المركز إلى المحيط</p>
-</div>
-</div>
-<div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-<p class="text-gray-700 dark:text-gray-300 text-sm">
-<span class="font-bold">التعريف:</span> القطعة من مركز الدائرة إلى أي نقطة على الدائرة
-                                </p>
-</div>
-</div>
-<!-- القطر -->
-<div class="shape-card rounded-xl p-6">
-<div class="flex items-center gap-4 mb-4">
-<div class="shape-icon bg-gradient-to-r from-red-500 to-red-600">
-<i class="fas fa-arrows-alt-h"></i>
-</div>
-<div>
-<h3 class="text-xl font-bold text-red-600">القطر</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400">يمر بالمركز</p>
-</div>
-</div>
-<div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
-<p class="text-gray-700 dark:text-gray-300 text-sm">
-<span class="font-bold">التعريف:</span> قطعة تصل نقطتين على الدائرة وتمر بالمركز
-                                </p>
-</div>
-</div>
-<!-- الوتر -->
-<div class="shape-card rounded-xl p-6">
-<div class="flex items-center gap-4 mb-4">
-<div class="shape-icon bg-gradient-to-r from-purple-500 to-purple-600">
-<i class="fas fa-horizontal-rule"></i>
-</div>
-<div>
-<h3 class="text-xl font-bold text-purple-600">الوتر</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400">بين نقطتين على الدائرة</p>
-</div>
-</div>
-<div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-<p class="text-gray-700 dark:text-gray-300 text-sm">
-<span class="font-bold">التعريف:</span> قطعة تصل أي نقطتين على الدائرة
-                                </p>
-</div>
-</div>
-<!-- قوس الدائرة -->
-<div class="shape-card rounded-xl p-6">
-<div class="flex items-center gap-4 mb-4">
-<div class="shape-icon bg-gradient-to-r from-emerald-500 to-emerald-600">
-<i class="fas fa-moon"></i>
-</div>
-<div>
-<h3 class="text-xl font-bold text-emerald-600">قوس الدائرة</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400">جزء من المحيط</p>
-</div>
-</div>
-<div class="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-lg">
-<p class="text-gray-700 dark:text-gray-300 text-sm">
-<span class="font-bold">التعريف:</span> جزء من محيط الدائرة بين نقطتين
-                                </p>
-</div>
-</div>
-<!-- داخل وخارج الدائرة -->
-<div class="shape-card rounded-xl p-6">
-<div class="flex items-center gap-4 mb-4">
-<div class="shape-icon bg-gradient-to-r from-indigo-500 to-indigo-600">
-<i class="fas fa-bullseye"></i>
-</div>
-<div>
-<h3 class="text-xl font-bold text-indigo-600">داخل وخارج الدائرة</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400">موقع النقاط</p>
-</div>
-</div>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-lg">
-<p class="text-gray-700 dark:text-gray-300 text-sm">
-<span class="font-bold">التعريف:</span> النقاط داخل أو خارج الدائرة حسب بُعدها من المركز
-                                </p>
-</div>
-</div>
-</div>
-<!-- منطقة الرسم -->
-<div class="glass-panel rounded-2xl p-6">
-<div class="flex justify-between items-center mb-6">
-<h3 class="text-xl font-bold text-orange-600">رسم الدائرة وعناصرها</h3>
-<div class="flex gap-2">
-<button class="px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-bold hover:bg-orange-600" onclick="animateCircle('basic')">
-                                    الدائرة الأساسية
-                                </button>
-<button class="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-bold hover:bg-red-600" onclick="animateCircle('elements')">
-                                    جميع العناصر
-                                </button>
-</div>
-</div>
-<div class="flex items-center justify-center mb-4">
-<canvas class="construction-canvas w-full max-w-lg" height="400" id="circleCanvas" width="500"></canvas>
-</div>
-<div class="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-xl">
-<div class="flex items-center justify-between mb-2">
-<span class="text-gray-700 dark:text-gray-300 font-medium">تقدم الرسم</span>
-<span class="text-gray-700 dark:text-gray-300 font-bold" id="circleProgress">0%</span>
-</div>
-<div class="w-full bg-white dark:bg-gray-700 rounded-full h-2">
-<div class="progress-bar h-2 rounded-full w-0" id="circleProgressBar"></div>
-</div>
-<div class="mt-2 text-center">
-<span class="text-gray-600 dark:text-gray-400 text-sm" id="circleStatus">اختر نوع الرسم لبدء العرض</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-</div>
-
-<pre id="result"></pre><button onclick="run()">تشغيل الدرس</button>
-<script>
-async function run() {
-    const res = await fetch("/.netlify/functions/geometric-shapes");
-    const text = await res.text();
-    document.getElementById("result").textContent = text;
-}
-</script>
-</body>
-</html>
